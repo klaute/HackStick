@@ -94,7 +94,7 @@ CDEFS =
 
 # Place -I options here
 CINCS  = -Iusbdrv
-CINCS += -I../avrlib
+CINCS += -I../../avrlib
 #CINCS += -I"C:\Users\klaute\Documents\My Dropbox\Privat\developing\avr\avrlib"
 
 
