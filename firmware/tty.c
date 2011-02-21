@@ -299,7 +299,7 @@ void tty_getVendorName()
     // Ausgeben des Herstellers.
     uint8_t i = 0;
     int j = ( ( usbDescriptorStringVendor[0] & 0x00ff ) -2 ) / 2;
-    //printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringVendor[0]);
+    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringVendor[0]);
     for ( i = 1; i <= j; i++ )
     {
         printf_P(PSTR("%c"), (unsigned int)usbDescriptorStringVendor[i]);
@@ -311,7 +311,7 @@ void tty_getDeviceName()
     // Ausgeben des Gerätenamen und Headers
     uint8_t i = 0;
     uint8_t j = ( ( usbDescriptorStringDevice[0] & 0x00FF ) -2 ) / 2;
-    //printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringDevice[0]);
+    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringDevice[0]);
     for ( i = 1; i <= j; i++ )
     {
         printf_P(PSTR("%c"), usbDescriptorStringDevice[i]);
@@ -324,7 +324,7 @@ void tty_getSerialNumber()
     uint8_t i = 0;
     // Stringlänge ermitteln.
     char j = ( ( usbDescriptorStringSerialNumber[0] & 0x00FF ) -2 ) / 2;
-    //printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringSerialNumber[0]);
+    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringSerialNumber[0]);
     for ( i = 1; i <= j; i++ )
     {
         printf_P(PSTR("%c"), (unsigned int)usbDescriptorStringSerialNumber[i]);
