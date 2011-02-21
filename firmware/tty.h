@@ -48,7 +48,7 @@
 // Verschiebung der EEPROM-Konstanten
 #define TTY_EEP_CFG_USB_OFFSET 16
 
-const char WELCOME_MSG[] PROGMEM = "\r\n------------------\r\n\r\nklaute's HackStick\r\nv0.06 (by klaute)\r\n>";
+const char WELCOME_MSG[] PROGMEM = "\r\n------------------\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";
 
 /*----------------------------------------------------------------------------*/
 // Externe USB-Daten
