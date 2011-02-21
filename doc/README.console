@@ -4,15 +4,15 @@ sdta = Datenbytes festlegen, zeilenweise als 0xNN, mit "E" als Abschluss in eien
 
 gvn  = Get Vendor
 svn  = Set Vendor (<cmd> Hersteller-Bezeichnung)
-#svnh = Set Vendor Header
+svnh = Set Vendor Header
 
 gsn  = Get Seriennummer
 ssn  = Set Seriennummer (<cmd> Versionsnummer)
-#ssnh = Set Seriennummer Header
+ssnh = Set Seriennummer Header
 
 gn  = Get Name
 sn  = Set Name (<cmd> Name des Gerätes)
-#snh = Set Name Header
+snh = Set Name Header
 
 gdsc = Get USB Hid Decice Desctiptor
 sdsc = Set USB Hid Device Descriptor. Daten werden wie bei sdta übergeben.
