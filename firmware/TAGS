@@ -25,34 +25,37 @@ uchar usbFunctionRead(uchar *data, uchar len)usbFunctionRead169,5597
 uchar usbFunctionDescriptor(usbRequest_t *rq)usbFunctionDescriptor243,8300
 usbMsgLen_t usbFunctionSetup(uchar data[8])usbFunctionSetup288,10064
 
-tty.c,1541
+tty.c,1748
 void tty_init()tty_init21,885
 static int _uart_putc(char c, FILE *stream)_uart_putc34,1197
 void tty_pollTerminal(void)tty_pollTerminal41,1358
-int tty_executeCmd(const char *buffer)tty_executeCmd194,7396
-void tty_ledRedOn()tty_ledRedOn257,9358
-void tty_ledRedOff()tty_ledRedOff262,9439
-void tty_ledGreenOn()tty_ledGreenOn267,9520
-void tty_ledGreenOff()tty_ledGreenOff272,9609
-void tty_ledYellowOn()tty_ledYellowOn277,9698
-void tty_ledYellowOff()tty_ledYellowOff282,9791
-void tty_setInterrupt()tty_setInterrupt288,9964
-void tty_setInterrupt3()tty_setInterrupt3297,10136
-void tty_getUSBReportData()tty_getUSBReportData306,10276
-void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor317,10575
-void tty_getVendorName()tty_getVendorName328,10927
-void tty_getDeviceName()tty_getDeviceName340,11259
-void tty_getSerialNumber()tty_getSerialNumber352,11593
-void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID365,11993
-void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID370,12116
-void tty_setUSBReportData()tty_setUSBReportData375,12241
-void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor381,12326
-void tty_setVendorName(char* t)tty_setVendorName386,12425
-void tty_setDeviceName(char* t)tty_setDeviceName403,13026
-void tty_setSerialNumber(char* t)tty_setSerialNumber418,13477
-void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID433,13941
-void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID443,14188
-void tty_setEcho(char* t)tty_setEcho455,14518
+int tty_executeCmd(const char *buffer)tty_executeCmd163,6049
+void tty_ledRedOn()tty_ledRedOn226,8011
+void tty_ledRedOff()tty_ledRedOff231,8092
+void tty_ledGreenOn()tty_ledGreenOn236,8173
+void tty_ledGreenOff()tty_ledGreenOff241,8262
+void tty_ledYellowOn()tty_ledYellowOn246,8351
+void tty_ledYellowOff()tty_ledYellowOff251,8444
+void tty_setInterrupt()tty_setInterrupt257,8617
+void tty_setInterrupt3()tty_setInterrupt3266,8789
+void tty_getUSBReportData()tty_getUSBReportData275,8929
+void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor286,9228
+void tty_getVendorName()tty_getVendorName297,9580
+void tty_getDeviceName()tty_getDeviceName309,9912
+void tty_getSerialNumber()tty_getSerialNumber321,10246
+void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID334,10646
+void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID339,10769
+void tty_setUSBReportData()tty_setUSBReportData344,10894
+void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor350,10979
+void tty_setVendorName(char* t)tty_setVendorName355,11078
+void tty_setDeviceName(char* t)tty_setDeviceName372,11679
+void tty_setSerialNumber(char* t)tty_setSerialNumber387,12130
+void tty_setVendorHeader(char *t)tty_setVendorHeader402,12594
+void tty_setSerialNumberHeader(char *t)tty_setSerialNumberHeader412,12801
+void tty_setDeviceNameHeader(char *t)tty_setDeviceNameHeader422,13022
+void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID431,13218
+void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID441,13465
+void tty_setEcho(char* t)tty_setEcho453,13795
 
 eeprom.h,832
 #define EEPROM_HEEPROM_H19,804
@@ -93,36 +96,36 @@ globals.h,1382
 #define EEP_CFG_VALUE_ON EEP_CFG_VALUE_ON54,1979
 #define EEP_CFG_VALUE_OFF EEP_CFG_VALUE_OFF55,2007
 
-main.h,1671
+main.h,1645
 #define MAIN_HMAIN_H19,806
 uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;maxUSBDataBytes84,2637
 static uchar bytesRemaining;bytesRemaining87,2739
 uint8_t dataBytes[USB_MAX_DATA_BYTES];dataBytes90,2783
-static uchar idleRate; /* in 4 ms units */idleRate92,2823
-uint8_t USBCfgDeviceClass    = 0;USBCfgDeviceClass98,3048
-uint8_t USBCfgDeviceSubClass = 0;USBCfgDeviceSubClass99,3082
-uint8_t USBCfgInterfaceClass    = 3;USBCfgInterfaceClass101,3149
-uint8_t USBCfgInterfaceSubClass = 0;USBCfgInterfaceSubClass102,3186
-uint8_t USBCfgInterfaceProtocol = 0;USBCfgInterfaceProtocol103,3223
-typedef struct tupeltupel105,3261
-	uint8_t index;index107,3284
-	uint8_t value;value108,3300
-typedef struct t_blockt_block111,3320
-	t_tupel tupel*;tupel113,3345
-typedef struct t_sequencet_sequence116,3366
-	uint8_t delayStart;delayStart118,3394
-	uint8_8 delayNext;delayNext119,3415
-	t_block blocks*;blocks120,3435
-} dataSequence;dataSequence121,3453
-uint8_t maxUSBHidReportDescriptorBytes = 22;maxUSBHidReportDescriptorBytes123,3470
-char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] = {usbHidReportDescriptor126,3578
-int usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringVendor142,4270
-int usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringDevice144,4339
-int usbDescriptorStringSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringSerialNumber146,4408
-char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice148,4483
-char usbDescriptorConfiguration[] = {    // USB configuration descriptorusbDescriptorConfiguration169,5596
+static uchar idleRate; // in 4 ms unitsidleRate92,2823
+uint8_t USBCfgDeviceClass    = 0;USBCfgDeviceClass98,3045
+uint8_t USBCfgDeviceSubClass = 0;USBCfgDeviceSubClass99,3079
+uint8_t USBCfgInterfaceClass    = 3;USBCfgInterfaceClass101,3146
+uint8_t USBCfgInterfaceSubClass = 0;USBCfgInterfaceSubClass102,3183
+uint8_t USBCfgInterfaceProtocol = 0;USBCfgInterfaceProtocol103,3220
+	uint8_t index;index107,3275
+	uint8_t value;value108,3291
+} t_tupel;t_tupel109,3307
+	t_tupel *tupel;tupel113,3336
+} t_block;t_block114,3353
+	uint8_t delayStart;delayStart118,3382
+	uint8_t delayNext;delayNext119,3403
+	t_block *blocks;blocks120,3423
+} t_sequence;t_sequence121,3441
+t_sequence dataSequence;dataSequence123,3456
+uint8_t maxUSBHidReportDescriptorBytes = 22;maxUSBHidReportDescriptorBytes125,3482
+char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] = {usbHidReportDescriptor128,3590
+int usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringVendor144,4282
+int usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringDevice146,4351
+int usbDescriptorStringSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringSerialNumber148,4420
+char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice150,4495
+char usbDescriptorConfiguration[] = {    // USB configuration descriptorusbDescriptorConfiguration171,5608
 
-tty.h,4001
+tty.h,4152
 #define TTY_HTTY_H19,801
 #define TTY_MAX_CMD_LINE_LEN TTY_MAX_CMD_LINE_LEN36,1185
 #define TTY_CMD_WITHOUT_PARAMETER TTY_CMD_WITHOUT_PARAMETER38,1218
@@ -146,54 +149,57 @@ char tty_buff[TTY_MAX_CMD_LINE_LEN];tty_buff113,3722
    int type;         // das Argument, das mitübergeben wirdtype120,3941
    char *command;    // Zeiger auf das Kommando im FLASHcommand121,4002
 } tty_command_t;tty_command_t122,4059
-static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);_stdout175,5476
-const prog_char _rledon[]  = "rledon";_rledon180,5680
-const prog_char _rledoff[] = "rledoff";_rledoff181,5719
-const prog_char _yledon[]  = "yledon";_yledon182,5759
-const prog_char _yledoff[] = "yledoff";_yledoff183,5798
-const prog_char _gledon[]  = "gledon";_gledon184,5838
-const prog_char _gledoff[] = "gledoff";_gledoff185,5877
-const prog_char _urst[] = "urst";_urst186,5917
-const prog_char _sint[] = "sint";_sint187,5951
-const prog_char _sint3[] = "sint3";_sint3189,6026
-const prog_char _gdsc[] = "gdsc";_gdsc191,6069
-const prog_char _gdta[] = "gdta";_gdta192,6103
-const prog_char _sdsc[] = "sdsc";_sdsc194,6138
-const prog_char _sdta[] = "sdta";_sdta195,6172
-const prog_char _erdta[] = "erdta";_erdta197,6207
-const prog_char _esdta[] = "esdta";_esdta198,6243
-const prog_char _erdsc[] = "erdsc";_erdsc199,6279
-const prog_char _esdsc[] = "esdsc";_esdsc200,6315
-const prog_char _ervn[]  = "ervn";_ervn202,6352
-const prog_char _esvn[]  = "esvn";_esvn203,6387
-const prog_char _ern[]   = "ern";_ern204,6422
-const prog_char _esn[]   = "esn";_esn205,6456
-const prog_char _ersn[]  = "ersn";_ersn206,6490
-const prog_char _essn[]  = "essn";_essn207,6525
-const prog_char _ercvid[] = "ercvid";_ercvid209,6561
-const prog_char _escvid[] = "escvid";_escvid210,6599
-const prog_char _ercdid[] = "ercdid";_ercdid211,6637
-const prog_char _escdid[] = "escdid";_escdid212,6675
-const prog_char _tlosdsc[]  = "tlosdsc";_tlosdsc214,6714
-const prog_char _tlosdta[]  = "tlosdta";_tlosdta215,6755
-const prog_char _tlosvn[]   = "tlosvn";_tlosvn216,6796
-const prog_char _tlosn[]    = "tlosn";_tlosn217,6836
-const prog_char _tlossn[]   = "tlossn";_tlossn218,6875
-const prog_char _tloscvid[] = "tloscvid";_tloscvid219,6915
-const prog_char _tloscdid[] = "tloscdid";_tloscdid220,6957
-const prog_char _edcfg[]  = "edcfg";_edcfg222,7000
-const prog_char _gvn[]   = "gvn";_gvn224,7038
-const prog_char _gn[]    = "gn";_gn225,7072
-const prog_char _gsn[]   = "gsn";_gsn226,7105
-const prog_char _gcvid[] = "gcvid";_gcvid227,7139
-const prog_char _gcdid[] = "gcdid";_gcdid228,7175
-const prog_char _svn[]   = "svn";_svn229,7211
-const prog_char _sn[]    = "sn";_sn230,7245
-const prog_char _ssn[]   = "ssn";_ssn231,7278
-const prog_char _scvid[] = "scvid";_scvid232,7312
-const prog_char _scdid[] = "scdid";_scdid233,7348
-const prog_char _ttye[] = "ttye";_ttye235,7385
-const tty_command_t tty_commands[] PROGMEM = {PROGMEM239,7508
+static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);_stdout179,5592
+const prog_char _rledon[]  = "rledon";_rledon184,5796
+const prog_char _rledoff[] = "rledoff";_rledoff185,5835
+const prog_char _yledon[]  = "yledon";_yledon186,5875
+const prog_char _yledoff[] = "yledoff";_yledoff187,5914
+const prog_char _gledon[]  = "gledon";_gledon188,5954
+const prog_char _gledoff[] = "gledoff";_gledoff189,5993
+const prog_char _urst[] = "urst";_urst190,6033
+const prog_char _sint[] = "sint";_sint191,6067
+const prog_char _sint3[] = "sint3";_sint3193,6142
+const prog_char _gdsc[] = "gdsc";_gdsc195,6185
+const prog_char _gdta[] = "gdta";_gdta196,6219
+const prog_char _sdsc[] = "sdsc";_sdsc198,6254
+const prog_char _sdta[] = "sdta";_sdta199,6288
+const prog_char _erdta[] = "erdta";_erdta201,6323
+const prog_char _esdta[] = "esdta";_esdta202,6359
+const prog_char _erdsc[] = "erdsc";_erdsc203,6395
+const prog_char _esdsc[] = "esdsc";_esdsc204,6431
+const prog_char _ervn[]  = "ervn";_ervn206,6468
+const prog_char _esvn[]  = "esvn";_esvn207,6503
+const prog_char _ern[]   = "ern";_ern208,6538
+const prog_char _esn[]   = "esn";_esn209,6572
+const prog_char _ersn[]  = "ersn";_ersn210,6606
+const prog_char _essn[]  = "essn";_essn211,6641
+const prog_char _ercvid[] = "ercvid";_ercvid213,6677
+const prog_char _escvid[] = "escvid";_escvid214,6715
+const prog_char _ercdid[] = "ercdid";_ercdid215,6753
+const prog_char _escdid[] = "escdid";_escdid216,6791
+const prog_char _tlosdsc[]  = "tlosdsc";_tlosdsc218,6830
+const prog_char _tlosdta[]  = "tlosdta";_tlosdta219,6871
+const prog_char _tlosvn[]   = "tlosvn";_tlosvn220,6912
+const prog_char _tlosn[]    = "tlosn";_tlosn221,6952
+const prog_char _tlossn[]   = "tlossn";_tlossn222,6991
+const prog_char _tloscvid[] = "tloscvid";_tloscvid223,7031
+const prog_char _tloscdid[] = "tloscdid";_tloscdid224,7073
+const prog_char _edcfg[]  = "edcfg";_edcfg226,7116
+const prog_char _gvn[]   = "gvn";_gvn228,7154
+const prog_char _gn[]    = "gn";_gn229,7188
+const prog_char _gsn[]   = "gsn";_gsn230,7221
+const prog_char _gcvid[] = "gcvid";_gcvid231,7255
+const prog_char _gcdid[] = "gcdid";_gcdid232,7291
+const prog_char _svn[]   = "svn";_svn233,7327
+const prog_char _sn[]    = "sn";_sn234,7361
+const prog_char _ssn[]   = "ssn";_ssn235,7394
+const prog_char _svnh[]   = "svnh";_svnh237,7429
+const prog_char _snh[]    = "snh";_snh238,7465
+const prog_char _ssnh[]   = "ssnh";_ssnh239,7500
+const prog_char _scvid[] = "scvid";_scvid241,7537
+const prog_char _scdid[] = "scdid";_scdid242,7573
+const prog_char _ttye[] = "ttye";_ttye244,7610
+const tty_command_t tty_commands[] PROGMEM = {PROGMEM248,7733
 
 usbconfig.h,2981
 #define __usbconfig_h_included____usbconfig_h_included__12,391
@@ -572,221 +578,3 @@ static inline void  sei(void)sei104,3427
 #define endm endm135,4383
 #define nop2 nop2136,4405
 #   define PRG_RDB(PRG_RDB142,4570
-
-../avrlib/lcd_lib.h,0
-
-../avrlib/minimexle.h,0
-
-../avrlib/servo.h,573
-#define SERVO_MAXPULSFREQ SERVO_MAXPULSFREQ46,1283
-#define SERVO_TIMER_MAXPULS SERVO_TIMER_MAXPULS47,1353
-#define SERVO_MINPULS SERVO_MINPULS48,1438
-#define SERVO_MAXPULS SERVO_MAXPULS49,1516
-#define SERVO0	SERVO052,1646
-#define SERVO1	SERVO153,1674
-#define SERVO2	SERVO254,1695
-#define SERVO3	SERVO355,1716
-#define SERVO4	SERVO456,1737
-#define SERVO5	SERVO557,1758
-#define SERVO6	SERVO658,1779
-#define SERVO7	SERVO759,1800
-#define SERVO8	SERVO860,1821
-#define SERVO9	SERVO961,1842
-inline uint16_t servo_pulslength[20];servo_pulslength64,1908
-
-../avrlib/uart.h,563
-#define UART_HUART_H2,16
-#define UART_BAUD_SELECT(UART_BAUD_SELECT64,2462
-#define UART_BAUD_SELECT_DOUBLE_SPEED(UART_BAUD_SELECT_DOUBLE_SPEED70,2754
-#define UART_RX_BUFFER_SIZE UART_RX_BUFFER_SIZE75,2947
-#define UART_TX_BUFFER_SIZE UART_TX_BUFFER_SIZE79,3081
-#define UART_FRAME_ERROR UART_FRAME_ERROR90,3406
-#define UART_OVERRUN_ERROR UART_OVERRUN_ERROR91,3491
-#define UART_BUFFER_OVERFLOW UART_BUFFER_OVERFLOW92,3576
-#define UART_NO_DATA UART_NO_DATA93,3661
-#define uart_puts_P(uart_puts_P173,6294
-#define uart1_puts_P(uart1_puts_P188,7230
-
-../avrlib/lcd_lib.c,769
-#define E E25,603
-#define RS RS26,617
-#define LCD_PC LCD_PC34,895
-#define P_DATA	P_DATA39,946
-#define P_DATA	P_DATA42,991
-#define P_STEUER P_STEUER45,1023
-static void enable (void)enable50,1221
-static void lcd_write (unsigned char byte)lcd_write59,1487
-void lcd_init (void)lcd_init103,2851
-void lcd_putc (unsigned char zeichen)lcd_putc182,4832
-void lcd_putstr (char *string)lcd_putstr222,5496
-void lcd_putsubstr (char *string, unsigned char start, unsigned char end)lcd_putsubstr235,5827
-void lcd_gotoxy (unsigned char pos, unsigned char line)lcd_gotoxy251,6249
-void lcd_clearDisplay(void)lcd_clearDisplay258,6369
-void lcd_clearline (unsigned char line)lcd_clearline276,6564
-void wait_ms (unsigned long int millisekunden)wait_ms301,6866
-
-../avrlib/minimexle.c,248
-void mm_LEDCode(uint8_t LEDCode)mm_LEDCode25,855
-void mm_BeepCode(uint8_t BeepCode)mm_BeepCode63,1613
-int8_t mm_btnchk(uint8_t tnum)mm_btnchk110,2426
-void mm_adcInit(char ref)mm_adcInit144,3405
-uint16_t mm_adc(uint8_t ionr)mm_adc174,3960
-
-../avrlib/servo.c,290
-inline void servo_set(uint8_t ionr, uint8_t value)servo_set24,864
-inline void servo_portinit(void)servo_portinit38,1204
-inline void servo_init(void)servo_init120,2922
-ISR(TIMER1_OVF_vect)ISR146,3411
-inline void servo_init(void)servo_init272,5742
-ISR(TIMER1_OVF_vect)ISR298,6240
-
-../avrlib/uart.c,7933
-#define UART_RX_BUFFER_MASK UART_RX_BUFFER_MASK50,1808
-#define UART_TX_BUFFER_MASK UART_TX_BUFFER_MASK51,1864
- #define AT90_UARTAT90_UART65,2373
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT66,2393
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT67,2443
- #define UART0_STATUS UART0_STATUS68,2493
- #define UART0_CONTROL UART0_CONTROL69,2522
- #define UART0_DATA UART0_DATA70,2551
- #define UART0_UDRIE UART0_UDRIE71,2582
- #define AT90_UARTAT90_UART74,2715
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT75,2735
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT76,2785
- #define UART0_STATUS UART0_STATUS77,2835
- #define UART0_CONTROL UART0_CONTROL78,2866
- #define UART0_DATA UART0_DATA79,2897
- #define UART0_UDRIE UART0_UDRIE80,2927
- #define ATMEGA_USARTATMEGA_USART85,3183
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT86,3206
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT87,3256
- #define UART0_STATUS UART0_STATUS88,3306
- #define UART0_CONTROL UART0_CONTROL89,3337
- #define UART0_DATA UART0_DATA90,3368
- #define UART0_UDRIE UART0_UDRIE91,3397
- #define ATMEGA_UARTATMEGA_UART94,3496
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT95,3518
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT96,3568
- #define UART0_STATUS UART0_STATUS97,3618
- #define UART0_CONTROL UART0_CONTROL98,3649
- #define UART0_DATA UART0_DATA99,3680
- #define UART0_UDRIE UART0_UDRIE100,3709
- #define ATMEGA_USART0ATMEGA_USART0103,3805
- #define ATMEGA_USART1ATMEGA_USART1104,3829
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT105,3853
- #define UART1_RECEIVE_INTERRUPT UART1_RECEIVE_INTERRUPT106,3905
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT107,3957
- #define UART1_TRANSMIT_INTERRUPT UART1_TRANSMIT_INTERRUPT108,4009
- #define UART0_STATUS UART0_STATUS109,4061
- #define UART0_CONTROL UART0_CONTROL110,4093
- #define UART0_DATA UART0_DATA111,4125
- #define UART0_UDRIE UART0_UDRIE112,4155
- #define UART1_STATUS UART1_STATUS113,4187
- #define UART1_CONTROL UART1_CONTROL114,4219
- #define UART1_DATA UART1_DATA115,4251
- #define UART1_UDRIE UART1_UDRIE116,4281
- #define ATMEGA_USART0ATMEGA_USART0119,4407
- #define ATMEGA_USART1ATMEGA_USART1120,4431
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT121,4455
- #define UART1_RECEIVE_INTERRUPT UART1_RECEIVE_INTERRUPT122,4506
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT123,4557
- #define UART1_TRANSMIT_INTERRUPT UART1_TRANSMIT_INTERRUPT124,4608
- #define UART0_STATUS UART0_STATUS125,4659
- #define UART0_CONTROL UART0_CONTROL126,4691
- #define UART0_DATA UART0_DATA127,4723
- #define UART0_UDRIE UART0_UDRIE128,4753
- #define UART1_STATUS UART1_STATUS129,4785
- #define UART1_CONTROL UART1_CONTROL130,4817
- #define UART1_DATA UART1_DATA131,4849
- #define UART1_UDRIE UART1_UDRIE132,4879
- #define ATMEGA_USARTATMEGA_USART138,5102
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT139,5125
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT140,5176
- #define UART0_STATUS UART0_STATUS141,5227
- #define UART0_CONTROL UART0_CONTROL142,5258
- #define UART0_DATA UART0_DATA143,5289
- #define UART0_UDRIE UART0_UDRIE144,5318
- #define ATMEGA_USART0ATMEGA_USART0147,5470
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT148,5494
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT149,5545
- #define UART0_STATUS UART0_STATUS150,5596
- #define UART0_CONTROL UART0_CONTROL151,5628
- #define UART0_DATA UART0_DATA152,5660
- #define UART0_UDRIE UART0_UDRIE153,5690
- #define ATMEGA_USARTATMEGA_USART155,5757
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT156,5780
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT157,5831
- #define UART0_STATUS UART0_STATUS158,5883
- #define UART0_CONTROL UART0_CONTROL159,5914
- #define UART0_DATA UART0_DATA160,5945
- #define UART0_UDRIE UART0_UDRIE161,5974
-  #define ATMEGA_USART0ATMEGA_USART0167,6304
-  #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT168,6329
-  #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT169,6380
-  #define UART0_STATUS UART0_STATUS170,6431
-  #define UART0_CONTROL UART0_CONTROL171,6464
-  #define UART0_DATA UART0_DATA172,6497
-  #define UART0_UDRIE UART0_UDRIE173,6528
-  #define ATMEGA_USART0ATMEGA_USART0176,6686
-  #define ATMEGA_USART1ATMEGA_USART1177,6711
-  #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT178,6736
-  #define UART1_RECEIVE_INTERRUPT UART1_RECEIVE_INTERRUPT179,6789
-  #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT180,6842
-  #define UART1_TRANSMIT_INTERRUPT UART1_TRANSMIT_INTERRUPT181,6895
-  #define UART0_STATUS UART0_STATUS182,6948
-  #define UART0_CONTROL UART0_CONTROL183,6981
-  #define UART0_DATA UART0_DATA184,7014
-  #define UART0_UDRIE UART0_UDRIE185,7045
-  #define UART1_STATUS UART1_STATUS186,7078
-  #define UART1_CONTROL UART1_CONTROL187,7111
-  #define UART1_DATA UART1_DATA188,7144
-  #define UART1_UDRIE UART1_UDRIE189,7175
- #define ATMEGA_USART0ATMEGA_USART0192,7274
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT193,7298
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT194,7349
- #define UART0_STATUS UART0_STATUS195,7400
- #define UART0_CONTROL UART0_CONTROL196,7432
- #define UART0_DATA UART0_DATA197,7464
- #define UART0_UDRIE UART0_UDRIE198,7494
- #define ATMEGA_USART0ATMEGA_USART0201,7653
- #define ATMEGA_USART1ATMEGA_USART1202,7677
- #define UART0_RECEIVE_INTERRUPT UART0_RECEIVE_INTERRUPT203,7701
- #define UART1_RECEIVE_INTERRUPT UART1_RECEIVE_INTERRUPT204,7752
- #define UART0_TRANSMIT_INTERRUPT UART0_TRANSMIT_INTERRUPT205,7804
- #define UART1_TRANSMIT_INTERRUPT UART1_TRANSMIT_INTERRUPT206,7855
- #define UART0_STATUS UART0_STATUS207,7907
- #define UART0_CONTROL UART0_CONTROL208,7939
- #define UART0_DATA UART0_DATA209,7971
- #define UART0_UDRIE UART0_UDRIE210,8001
- #define UART1_STATUS UART1_STATUS211,8033
- #define UART1_CONTROL UART1_CONTROL212,8065
- #define UART1_DATA UART1_DATA213,8097
- #define UART1_UDRIE UART1_UDRIE214,8127
-static volatile unsigned char UART_TxBuf[UART_TX_BUFFER_SIZE];UART_TxBuf223,8264
-static volatile unsigned char UART_RxBuf[UART_RX_BUFFER_SIZE];UART_RxBuf224,8328
-static volatile unsigned char UART_TxHead;UART_TxHead225,8392
-static volatile unsigned char UART_TxTail;UART_TxTail226,8436
-static volatile unsigned char UART_RxHead;UART_RxHead227,8480
-static volatile unsigned char UART_RxTail;UART_RxTail228,8524
-static volatile unsigned char UART_LastRxError;UART_LastRxError229,8568
-static volatile unsigned char UART1_TxBuf[UART_TX_BUFFER_SIZE];UART1_TxBuf232,8649
-static volatile unsigned char UART1_RxBuf[UART_RX_BUFFER_SIZE];UART1_RxBuf233,8714
-static volatile unsigned char UART1_TxHead;UART1_TxHead234,8779
-static volatile unsigned char UART1_TxTail;UART1_TxTail235,8824
-static volatile unsigned char UART1_RxHead;UART1_RxHead236,8869
-static volatile unsigned char UART1_RxTail;UART1_RxTail237,8914
-static volatile unsigned char UART1_LastRxError;UART1_LastRxError238,8959
-SIGNAL(UART0_RECEIVE_INTERRUPT)SIGNAL243,9023
-SIGNAL(UART0_TRANSMIT_INTERRUPT)SIGNAL286,10329
-void uart_init(unsigned int baudrate)uart_init314,11395
-unsigned int uart_getc(void)uart_getc392,13678
-void uart_putc(unsigned char data)uart_putc420,14459
-void uart_puts(const char *s )uart_puts446,15131
-void uart_puts_p(const char *progmem_s )uart_puts_p460,15531
-SIGNAL(UART1_RECEIVE_INTERRUPT)SIGNAL475,15797
-SIGNAL(UART1_TRANSMIT_INTERRUPT)SIGNAL510,16838
-void uart1_init(unsigned int baudrate)uart1_init538,17913
-unsigned int uart1_getc(void)uart1_getc573,18954
-void uart1_putc(unsigned char data)uart1_putc601,19744
-void uart1_puts(const char *s )uart1_puts627,20424
-void uart1_puts_p(const char *progmem_s )uart1_puts_p641,20829
