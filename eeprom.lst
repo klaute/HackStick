@@ -1,0 +1,515 @@
+   1               		.file	"eeprom.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.global	eep_deleteUSBConfigBits
+  11               	eep_deleteUSBConfigBits:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14               	.L2:
+  15 0000 F999      		sbic 63-32,1
+  16 0002 00C0      		rjmp .L2
+  17 0004 80E0      		ldi r24,lo8(eep_usbConfig)
+  18 0006 90E0      		ldi r25,hi8(eep_usbConfig)
+  19 0008 60E0      		ldi r22,lo8(0)
+  20 000a 0E94 0000 		call __eewr_byte_m168
+  21 000e 80E0      		ldi r24,lo8(eep_usbConfig)
+  22 0010 90E0      		ldi r25,hi8(eep_usbConfig)
+  23 0012 0E94 0000 		call __eerd_byte_m168
+  24 0016 00D0      		rcall .
+  25 0018 00D0      		rcall .
+  26 001a EDB7      		in r30,__SP_L__
+  27 001c FEB7      		in r31,__SP_H__
+  28 001e 3196      		adiw r30,1
+  29 0020 20E0      		ldi r18,lo8(__c.2048)
+  30 0022 30E0      		ldi r19,hi8(__c.2048)
+  31 0024 ADB7      		in r26,__SP_L__
+  32 0026 BEB7      		in r27,__SP_H__
+  33 0028 1296      		adiw r26,1+1
+  34 002a 3C93      		st X,r19
+  35 002c 2E93      		st -X,r18
+  36 002e 1197      		sbiw r26,1
+  37 0030 8283      		std Z+2,r24
+  38 0032 1382      		std Z+3,__zero_reg__
+  39 0034 0E94 0000 		call printf_P
+  40 0038 0F90      		pop __tmp_reg__
+  41 003a 0F90      		pop __tmp_reg__
+  42 003c 0F90      		pop __tmp_reg__
+  43 003e 0F90      		pop __tmp_reg__
+  44               	/* epilogue start */
+  45 0040 0895      		ret
+  47               	.global	eep_toggleUSBConfigBit
+  49               	eep_toggleUSBConfigBit:
+  50 0042 1F93      		push r17
+  51               	/* prologue: function */
+  52               	/* frame size = 0 */
+  53 0044 182F      		mov r17,r24
+  54               	.L6:
+  55 0046 F999      		sbic 63-32,1
+  56 0048 00C0      		rjmp .L6
+  57 004a 80E0      		ldi r24,lo8(eep_usbConfig)
+  58 004c 90E0      		ldi r25,hi8(eep_usbConfig)
+  59 004e 0E94 0000 		call __eerd_byte_m168
+  60 0052 21E0      		ldi r18,lo8(1)
+  61 0054 30E0      		ldi r19,hi8(1)
+  62 0056 00C0      		rjmp 2f
+  63 0058 220F      	1:	lsl r18
+  64 005a 331F      		rol r19
+  65 005c 1A95      	2:	dec r17
+  66 005e 02F4      		brpl 1b
+  67 0060 182F      		mov r17,r24
+  68 0062 1227      		eor r17,r18
+  69               	.L7:
+  70 0064 F999      		sbic 63-32,1
+  71 0066 00C0      		rjmp .L7
+  72 0068 80E0      		ldi r24,lo8(eep_usbConfig)
+  73 006a 90E0      		ldi r25,hi8(eep_usbConfig)
+  74 006c 612F      		mov r22,r17
+  75 006e 0E94 0000 		call __eewr_byte_m168
+  76 0072 00D0      		rcall .
+  77 0074 00D0      		rcall .
+  78 0076 EDB7      		in r30,__SP_L__
+  79 0078 FEB7      		in r31,__SP_H__
+  80 007a 3196      		adiw r30,1
+  81 007c 80E0      		ldi r24,lo8(__c.2027)
+  82 007e 90E0      		ldi r25,hi8(__c.2027)
+  83 0080 ADB7      		in r26,__SP_L__
+  84 0082 BEB7      		in r27,__SP_H__
+  85 0084 1296      		adiw r26,1+1
+  86 0086 9C93      		st X,r25
+  87 0088 8E93      		st -X,r24
+  88 008a 1197      		sbiw r26,1
+  89 008c 1283      		std Z+2,r17
+  90 008e 1382      		std Z+3,__zero_reg__
+  91 0090 0E94 0000 		call printf_P
+  92 0094 0F90      		pop __tmp_reg__
+  93 0096 0F90      		pop __tmp_reg__
+  94 0098 0F90      		pop __tmp_reg__
+  95 009a 0F90      		pop __tmp_reg__
+  96               	/* epilogue start */
+  97 009c 1F91      		pop r17
+  98 009e 0895      		ret
+ 100               	.global	eep_saveUSBCfgDeviceID
+ 102               	eep_saveUSBCfgDeviceID:
+ 103 00a0 DF93      		push r29
+ 104 00a2 CF93      		push r28
+ 105 00a4 00D0      		rcall .
+ 106 00a6 CDB7      		in r28,__SP_L__
+ 107 00a8 DEB7      		in r29,__SP_H__
+ 108               	/* prologue: function */
+ 109               	/* frame size = 2 */
+ 110 00aa 9091 0000 		lds r25,usbDescriptorDevice+10
+ 111 00ae 8091 0000 		lds r24,usbDescriptorDevice+11
+ 112               	.L12:
+ 113 00b2 F999      		sbic 63-32,1
+ 114 00b4 00C0      		rjmp .L12
+ 115 00b6 8A83      		std Y+2,r24
+ 116 00b8 9983      		std Y+1,r25
+ 117 00ba CE01      		movw r24,r28
+ 118 00bc 0196      		adiw r24,1
+ 119 00be 60E0      		ldi r22,lo8(eep_usbCfgDeviceID)
+ 120 00c0 70E0      		ldi r23,hi8(eep_usbCfgDeviceID)
+ 121 00c2 42E0      		ldi r20,lo8(2)
+ 122 00c4 50E0      		ldi r21,hi8(2)
+ 123 00c6 0E94 0000 		call __eewr_block_m168
+ 124               	/* epilogue start */
+ 125 00ca 2296      		adiw r28,2
+ 126 00cc CDBF      		out __SP_L__,r28
+ 127 00ce CF91      		pop r28
+ 128 00d0 DF91      		pop r29
+ 129 00d2 0895      		ret
+ 131               	.global	eep_saveUSBCfgVendorID
+ 133               	eep_saveUSBCfgVendorID:
+ 134 00d4 DF93      		push r29
+ 135 00d6 CF93      		push r28
+ 136 00d8 00D0      		rcall .
+ 137 00da CDB7      		in r28,__SP_L__
+ 138 00dc DEB7      		in r29,__SP_H__
+ 139               	/* prologue: function */
+ 140               	/* frame size = 2 */
+ 141 00de 9091 0000 		lds r25,usbDescriptorDevice+8
+ 142 00e2 8091 0000 		lds r24,usbDescriptorDevice+9
+ 143               	.L16:
+ 144 00e6 F999      		sbic 63-32,1
+ 145 00e8 00C0      		rjmp .L16
+ 146 00ea 8A83      		std Y+2,r24
+ 147 00ec 9983      		std Y+1,r25
+ 148 00ee CE01      		movw r24,r28
+ 149 00f0 0196      		adiw r24,1
+ 150 00f2 60E0      		ldi r22,lo8(eep_usbCfgVendorID)
+ 151 00f4 70E0      		ldi r23,hi8(eep_usbCfgVendorID)
+ 152 00f6 42E0      		ldi r20,lo8(2)
+ 153 00f8 50E0      		ldi r21,hi8(2)
+ 154 00fa 0E94 0000 		call __eewr_block_m168
+ 155               	/* epilogue start */
+ 156 00fe 2296      		adiw r28,2
+ 157 0100 CDBF      		out __SP_L__,r28
+ 158 0102 CF91      		pop r28
+ 159 0104 DF91      		pop r29
+ 160 0106 0895      		ret
+ 162               	.global	eep_saveUSBDescriptorStringSerialNumber
+ 164               	eep_saveUSBDescriptorStringSerialNumber:
+ 165               	/* prologue: function */
+ 166               	/* frame size = 0 */
+ 167               	.L20:
+ 168 0108 F999      		sbic 63-32,1
+ 169 010a 00C0      		rjmp .L20
+ 170 010c 80E0      		ldi r24,lo8(usbDescriptorStringSerialNumber)
+ 171 010e 90E0      		ldi r25,hi8(usbDescriptorStringSerialNumber)
+ 172 0110 60E0      		ldi r22,lo8(eep_usbDescriptorSerialNumber)
+ 173 0112 70E0      		ldi r23,hi8(eep_usbDescriptorSerialNumber)
+ 174 0114 48E2      		ldi r20,lo8(40)
+ 175 0116 50E0      		ldi r21,hi8(40)
+ 176 0118 0E94 0000 		call __eewr_block_m168
+ 177               	/* epilogue start */
+ 178 011c 0895      		ret
+ 180               	.global	eep_saveUSBDescriptorStringDevice
+ 182               	eep_saveUSBDescriptorStringDevice:
+ 183               	/* prologue: function */
+ 184               	/* frame size = 0 */
+ 185               	.L24:
+ 186 011e F999      		sbic 63-32,1
+ 187 0120 00C0      		rjmp .L24
+ 188 0122 80E0      		ldi r24,lo8(usbDescriptorStringDevice)
+ 189 0124 90E0      		ldi r25,hi8(usbDescriptorStringDevice)
+ 190 0126 60E0      		ldi r22,lo8(eep_usbDescriptorStringDevice)
+ 191 0128 70E0      		ldi r23,hi8(eep_usbDescriptorStringDevice)
+ 192 012a 48E2      		ldi r20,lo8(40)
+ 193 012c 50E0      		ldi r21,hi8(40)
+ 194 012e 0E94 0000 		call __eewr_block_m168
+ 195               	/* epilogue start */
+ 196 0132 0895      		ret
+ 198               	.global	eep_saveUSBDescriptorStringVendor
+ 200               	eep_saveUSBDescriptorStringVendor:
+ 201               	/* prologue: function */
+ 202               	/* frame size = 0 */
+ 203               	.L28:
+ 204 0134 F999      		sbic 63-32,1
+ 205 0136 00C0      		rjmp .L28
+ 206 0138 80E0      		ldi r24,lo8(usbDescriptorStringVendor)
+ 207 013a 90E0      		ldi r25,hi8(usbDescriptorStringVendor)
+ 208 013c 60E0      		ldi r22,lo8(eep_usbDescriptorStringVendor)
+ 209 013e 70E0      		ldi r23,hi8(eep_usbDescriptorStringVendor)
+ 210 0140 48E2      		ldi r20,lo8(40)
+ 211 0142 50E0      		ldi r21,hi8(40)
+ 212 0144 0E94 0000 		call __eewr_block_m168
+ 213               	/* epilogue start */
+ 214 0148 0895      		ret
+ 216               	.global	eep_saveUSBHidReportData
+ 218               	eep_saveUSBHidReportData:
+ 219               	/* prologue: function */
+ 220               	/* frame size = 0 */
+ 221               	.L32:
+ 222 014a F999      		sbic 63-32,1
+ 223 014c 00C0      		rjmp .L32
+ 224 014e 80E0      		ldi r24,lo8(eep_maxUSBDataBytes)
+ 225 0150 90E0      		ldi r25,hi8(eep_maxUSBDataBytes)
+ 226 0152 6091 0000 		lds r22,maxUSBDataBytes
+ 227 0156 0E94 0000 		call __eewr_byte_m168
+ 228               	.L33:
+ 229 015a F999      		sbic 63-32,1
+ 230 015c 00C0      		rjmp .L33
+ 231 015e 80E0      		ldi r24,lo8(dataBytes)
+ 232 0160 90E0      		ldi r25,hi8(dataBytes)
+ 233 0162 60E0      		ldi r22,lo8(eep_dataBytes)
+ 234 0164 70E0      		ldi r23,hi8(eep_dataBytes)
+ 235 0166 40E8      		ldi r20,lo8(128)
+ 236 0168 50E0      		ldi r21,hi8(128)
+ 237 016a 0E94 0000 		call __eewr_block_m168
+ 238               	/* epilogue start */
+ 239 016e 0895      		ret
+ 241               	.global	eep_saveUSBHidReportDescriptor
+ 243               	eep_saveUSBHidReportDescriptor:
+ 244               	/* prologue: function */
+ 245               	/* frame size = 0 */
+ 246               	.L38:
+ 247 0170 F999      		sbic 63-32,1
+ 248 0172 00C0      		rjmp .L38
+ 249 0174 80E0      		ldi r24,lo8(eep_maxUSBHidReportDescriptorBytes)
+ 250 0176 90E0      		ldi r25,hi8(eep_maxUSBHidReportDescriptorBytes)
+ 251 0178 6091 0000 		lds r22,maxUSBHidReportDescriptorBytes
+ 252 017c 0E94 0000 		call __eewr_byte_m168
+ 253               	.L39:
+ 254 0180 F999      		sbic 63-32,1
+ 255 0182 00C0      		rjmp .L39
+ 256 0184 80E0      		ldi r24,lo8(usbHidReportDescriptor)
+ 257 0186 90E0      		ldi r25,hi8(usbHidReportDescriptor)
+ 258 0188 60E0      		ldi r22,lo8(eep_usbHidReportDescriptor)
+ 259 018a 70E0      		ldi r23,hi8(eep_usbHidReportDescriptor)
+ 260 018c 44E6      		ldi r20,lo8(100)
+ 261 018e 50E0      		ldi r21,hi8(100)
+ 262 0190 0E94 0000 		call __eewr_block_m168
+ 263               	/* epilogue start */
+ 264 0194 0895      		ret
+ 266               	.global	eep_readUSBCfgDeviceID
+ 268               	eep_readUSBCfgDeviceID:
+ 269 0196 DF93      		push r29
+ 270 0198 CF93      		push r28
+ 271 019a 00D0      		rcall .
+ 272 019c CDB7      		in r28,__SP_L__
+ 273 019e DEB7      		in r29,__SP_H__
+ 274               	/* prologue: function */
+ 275               	/* frame size = 2 */
+ 276               	.L44:
+ 277 01a0 F999      		sbic 63-32,1
+ 278 01a2 00C0      		rjmp .L44
+ 279 01a4 CE01      		movw r24,r28
+ 280 01a6 0196      		adiw r24,1
+ 281 01a8 60E0      		ldi r22,lo8(eep_usbCfgDeviceID)
+ 282 01aa 70E0      		ldi r23,hi8(eep_usbCfgDeviceID)
+ 283 01ac 42E0      		ldi r20,lo8(2)
+ 284 01ae 50E0      		ldi r21,hi8(2)
+ 285 01b0 0E94 0000 		call __eerd_block_m168
+ 286 01b4 8981      		ldd r24,Y+1
+ 287 01b6 8093 0000 		sts usbDescriptorDevice+10,r24
+ 288 01ba 8A81      		ldd r24,Y+2
+ 289 01bc 8093 0000 		sts usbDescriptorDevice+11,r24
+ 290               	/* epilogue start */
+ 291 01c0 2296      		adiw r28,2
+ 292 01c2 CDBF      		out __SP_L__,r28
+ 293 01c4 CF91      		pop r28
+ 294 01c6 DF91      		pop r29
+ 295 01c8 0895      		ret
+ 297               	.global	eep_readUSBCfgVendorID
+ 299               	eep_readUSBCfgVendorID:
+ 300 01ca DF93      		push r29
+ 301 01cc CF93      		push r28
+ 302 01ce 00D0      		rcall .
+ 303 01d0 CDB7      		in r28,__SP_L__
+ 304 01d2 DEB7      		in r29,__SP_H__
+ 305               	/* prologue: function */
+ 306               	/* frame size = 2 */
+ 307               	.L48:
+ 308 01d4 F999      		sbic 63-32,1
+ 309 01d6 00C0      		rjmp .L48
+ 310 01d8 CE01      		movw r24,r28
+ 311 01da 0196      		adiw r24,1
+ 312 01dc 60E0      		ldi r22,lo8(eep_usbCfgVendorID)
+ 313 01de 70E0      		ldi r23,hi8(eep_usbCfgVendorID)
+ 314 01e0 42E0      		ldi r20,lo8(2)
+ 315 01e2 50E0      		ldi r21,hi8(2)
+ 316 01e4 0E94 0000 		call __eerd_block_m168
+ 317 01e8 8981      		ldd r24,Y+1
+ 318 01ea 8093 0000 		sts usbDescriptorDevice+8,r24
+ 319 01ee 8A81      		ldd r24,Y+2
+ 320 01f0 8093 0000 		sts usbDescriptorDevice+9,r24
+ 321               	/* epilogue start */
+ 322 01f4 2296      		adiw r28,2
+ 323 01f6 CDBF      		out __SP_L__,r28
+ 324 01f8 CF91      		pop r28
+ 325 01fa DF91      		pop r29
+ 326 01fc 0895      		ret
+ 328               	.global	eep_readUSBDescriptorStringSerialNumber
+ 330               	eep_readUSBDescriptorStringSerialNumber:
+ 331               	/* prologue: function */
+ 332               	/* frame size = 0 */
+ 333               	.L52:
+ 334 01fe F999      		sbic 63-32,1
+ 335 0200 00C0      		rjmp .L52
+ 336 0202 80E0      		ldi r24,lo8(usbDescriptorStringSerialNumber)
+ 337 0204 90E0      		ldi r25,hi8(usbDescriptorStringSerialNumber)
+ 338 0206 60E0      		ldi r22,lo8(eep_usbDescriptorSerialNumber)
+ 339 0208 70E0      		ldi r23,hi8(eep_usbDescriptorSerialNumber)
+ 340 020a 48E2      		ldi r20,lo8(40)
+ 341 020c 50E0      		ldi r21,hi8(40)
+ 342 020e 0E94 0000 		call __eerd_block_m168
+ 343               	/* epilogue start */
+ 344 0212 0895      		ret
+ 346               	.global	eep_readUSBDescriptorStringDevice
+ 348               	eep_readUSBDescriptorStringDevice:
+ 349               	/* prologue: function */
+ 350               	/* frame size = 0 */
+ 351               	.L56:
+ 352 0214 F999      		sbic 63-32,1
+ 353 0216 00C0      		rjmp .L56
+ 354 0218 80E0      		ldi r24,lo8(usbDescriptorStringDevice)
+ 355 021a 90E0      		ldi r25,hi8(usbDescriptorStringDevice)
+ 356 021c 60E0      		ldi r22,lo8(eep_usbDescriptorStringDevice)
+ 357 021e 70E0      		ldi r23,hi8(eep_usbDescriptorStringDevice)
+ 358 0220 48E2      		ldi r20,lo8(40)
+ 359 0222 50E0      		ldi r21,hi8(40)
+ 360 0224 0E94 0000 		call __eerd_block_m168
+ 361               	/* epilogue start */
+ 362 0228 0895      		ret
+ 364               	.global	eep_readUSBDescriptorStringVendor
+ 366               	eep_readUSBDescriptorStringVendor:
+ 367               	/* prologue: function */
+ 368               	/* frame size = 0 */
+ 369               	.L60:
+ 370 022a F999      		sbic 63-32,1
+ 371 022c 00C0      		rjmp .L60
+ 372 022e 80E0      		ldi r24,lo8(usbDescriptorStringVendor)
+ 373 0230 90E0      		ldi r25,hi8(usbDescriptorStringVendor)
+ 374 0232 60E0      		ldi r22,lo8(eep_usbDescriptorStringVendor)
+ 375 0234 70E0      		ldi r23,hi8(eep_usbDescriptorStringVendor)
+ 376 0236 48E2      		ldi r20,lo8(40)
+ 377 0238 50E0      		ldi r21,hi8(40)
+ 378 023a 0E94 0000 		call __eerd_block_m168
+ 379               	/* epilogue start */
+ 380 023e 0895      		ret
+ 382               	.global	eep_readUSBHidReportData
+ 384               	eep_readUSBHidReportData:
+ 385               	/* prologue: function */
+ 386               	/* frame size = 0 */
+ 387               	.L64:
+ 388 0240 F999      		sbic 63-32,1
+ 389 0242 00C0      		rjmp .L64
+ 390 0244 80E0      		ldi r24,lo8(eep_maxUSBDataBytes)
+ 391 0246 90E0      		ldi r25,hi8(eep_maxUSBDataBytes)
+ 392 0248 0E94 0000 		call __eerd_byte_m168
+ 393 024c 8093 0000 		sts maxUSBDataBytes,r24
+ 394               	.L65:
+ 395 0250 F999      		sbic 63-32,1
+ 396 0252 00C0      		rjmp .L65
+ 397 0254 80E0      		ldi r24,lo8(dataBytes)
+ 398 0256 90E0      		ldi r25,hi8(dataBytes)
+ 399 0258 60E0      		ldi r22,lo8(eep_dataBytes)
+ 400 025a 70E0      		ldi r23,hi8(eep_dataBytes)
+ 401 025c 40E8      		ldi r20,lo8(128)
+ 402 025e 50E0      		ldi r21,hi8(128)
+ 403 0260 0E94 0000 		call __eerd_block_m168
+ 404               	/* epilogue start */
+ 405 0264 0895      		ret
+ 407               	.global	eep_readUSBHidReportDescriptor
+ 409               	eep_readUSBHidReportDescriptor:
+ 410               	/* prologue: function */
+ 411               	/* frame size = 0 */
+ 412               	.L70:
+ 413 0266 F999      		sbic 63-32,1
+ 414 0268 00C0      		rjmp .L70
+ 415 026a 80E0      		ldi r24,lo8(eep_maxUSBHidReportDescriptorBytes)
+ 416 026c 90E0      		ldi r25,hi8(eep_maxUSBHidReportDescriptorBytes)
+ 417 026e 0E94 0000 		call __eerd_byte_m168
+ 418 0272 8093 0000 		sts maxUSBHidReportDescriptorBytes,r24
+ 419               	.L71:
+ 420 0276 F999      		sbic 63-32,1
+ 421 0278 00C0      		rjmp .L71
+ 422 027a 80E0      		ldi r24,lo8(usbHidReportDescriptor)
+ 423 027c 90E0      		ldi r25,hi8(usbHidReportDescriptor)
+ 424 027e 60E0      		ldi r22,lo8(eep_usbHidReportDescriptor)
+ 425 0280 70E0      		ldi r23,hi8(eep_usbHidReportDescriptor)
+ 426 0282 44E6      		ldi r20,lo8(100)
+ 427 0284 50E0      		ldi r21,hi8(100)
+ 428 0286 0E94 0000 		call __eerd_block_m168
+ 429 028a 8091 0000 		lds r24,maxUSBHidReportDescriptorBytes
+ 430 028e 8093 0000 		sts usbDescriptorConfiguration+25,r24
+ 431               	/* epilogue start */
+ 432 0292 0895      		ret
+ 434               		.section	.progmem.data,"a",@progbits
+ 437               	__c.2048:
+ 438 0000 0D0A 4366 		.string	"\r\nCfg: 0x%02x"
+ 438      673A 2030 
+ 438      7825 3032 
+ 438      7800 
+ 441               	__c.2027:
+ 442 000e 0D0A 4366 		.string	"\r\nCfg: 0x%02x"
+ 442      673A 2030 
+ 442      7825 3032 
+ 442      7800 
+ 443               	.global	eep_usbConfig
+ 444               		.section	.eeprom,"aw",@progbits
+ 447               	eep_usbConfig:
+ 448 0000 00        		.skip 1,0
+ 449               	.global	eep_maxUSBHidReportDescriptorBytes
+ 452               	eep_maxUSBHidReportDescriptorBytes:
+ 453 0001 00        		.skip 1,0
+ 454               	.global	eep_usbHidReportDescriptor
+ 457               	eep_usbHidReportDescriptor:
+ 458 0002 0000 0000 		.skip 100,0
+ 458      0000 0000 
+ 458      0000 0000 
+ 458      0000 0000 
+ 458      0000 0000 
+ 459               	.global	eep_usbDescriptorStringVendor
+ 462               	eep_usbDescriptorStringVendor:
+ 463 0066 0000 0000 		.skip 40,0
+ 463      0000 0000 
+ 463      0000 0000 
+ 463      0000 0000 
+ 463      0000 0000 
+ 464               	.global	eep_usbDescriptorStringDevice
+ 467               	eep_usbDescriptorStringDevice:
+ 468 008e 0000 0000 		.skip 40,0
+ 468      0000 0000 
+ 468      0000 0000 
+ 468      0000 0000 
+ 468      0000 0000 
+ 469               	.global	eep_usbDescriptorSerialNumber
+ 472               	eep_usbDescriptorSerialNumber:
+ 473 00b6 0000 0000 		.skip 40,0
+ 473      0000 0000 
+ 473      0000 0000 
+ 473      0000 0000 
+ 473      0000 0000 
+ 474               	.global	eep_usbCfgVendorID
+ 477               	eep_usbCfgVendorID:
+ 478 00de 0000      		.skip 2,0
+ 479               	.global	eep_usbCfgDeviceID
+ 482               	eep_usbCfgDeviceID:
+ 483 00e0 0000      		.skip 2,0
+ 484               	.global	eep_maxUSBDataBytes
+ 487               	eep_maxUSBDataBytes:
+ 488 00e2 00        		.skip 1,0
+ 489               	.global	eep_dataBytes
+ 492               	eep_dataBytes:
+ 493 00e3 0000 0000 		.skip 128,0
+ 493      0000 0000 
+ 493      0000 0000 
+ 493      0000 0000 
+ 493      0000 0000 
+DEFINED SYMBOLS
+                            *ABS*:00000000 eeprom.c
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:2      *ABS*:0000003f __SREG__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:3      *ABS*:0000003e __SP_H__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:4      *ABS*:0000003d __SP_L__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:5      *ABS*:00000034 __CCP__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:11     .text:00000000 eep_deleteUSBConfigBits
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:447    .eeprom:00000000 eep_usbConfig
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:437    .progmem.data:00000000 __c.2048
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:49     .text:00000042 eep_toggleUSBConfigBit
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:441    .progmem.data:0000000e __c.2027
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:102    .text:000000a0 eep_saveUSBCfgDeviceID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:482    .eeprom:000000e0 eep_usbCfgDeviceID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:133    .text:000000d4 eep_saveUSBCfgVendorID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:477    .eeprom:000000de eep_usbCfgVendorID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:164    .text:00000108 eep_saveUSBDescriptorStringSerialNumber
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:472    .eeprom:000000b6 eep_usbDescriptorSerialNumber
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:182    .text:0000011e eep_saveUSBDescriptorStringDevice
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:467    .eeprom:0000008e eep_usbDescriptorStringDevice
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:200    .text:00000134 eep_saveUSBDescriptorStringVendor
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:462    .eeprom:00000066 eep_usbDescriptorStringVendor
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:218    .text:0000014a eep_saveUSBHidReportData
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:487    .eeprom:000000e2 eep_maxUSBDataBytes
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:492    .eeprom:000000e3 eep_dataBytes
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:243    .text:00000170 eep_saveUSBHidReportDescriptor
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:452    .eeprom:00000001 eep_maxUSBHidReportDescriptorBytes
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:457    .eeprom:00000002 eep_usbHidReportDescriptor
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:268    .text:00000196 eep_readUSBCfgDeviceID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:299    .text:000001ca eep_readUSBCfgVendorID
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:330    .text:000001fe eep_readUSBDescriptorStringSerialNumber
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:348    .text:00000214 eep_readUSBDescriptorStringDevice
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:366    .text:0000022a eep_readUSBDescriptorStringVendor
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:384    .text:00000240 eep_readUSBHidReportData
+C:\Users\klaute\AppData\Local\Temp/ccFWiSTj.s:409    .text:00000266 eep_readUSBHidReportDescriptor
+
+UNDEFINED SYMBOLS
+__eewr_byte_m168
+__eerd_byte_m168
+printf_P
+usbDescriptorDevice
+__eewr_block_m168
+usbDescriptorStringSerialNumber
+usbDescriptorStringDevice
+usbDescriptorStringVendor
+maxUSBDataBytes
+dataBytes
+maxUSBHidReportDescriptorBytes
+usbHidReportDescriptor
+__eerd_block_m168
+usbDescriptorConfiguration
