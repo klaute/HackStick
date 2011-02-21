@@ -32,8 +32,7 @@
       Circuit &quot;with-zener.sch&quot; (20100715)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1298298310499" ID="ID_345804981" MODIFIED="1298298321760" TEXT="Kompatibel mit Firmware 0.6"/>
 <node CREATED="1298298323107" ID="ID_759932449" MODIFIED="1298298331640" TEXT="USART Interface">
@@ -49,8 +48,7 @@
       Anbindung von USB-Chip, zur umsetzung<br />von USB&lt;--&gt;RS232, m&#246;glich.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1298300341016" ID="ID_588032577" MODIFIED="1298300348753" TEXT="momentan als Lochrsterplatine aufgebaut"/>
@@ -75,8 +73,7 @@
       Leider nicht SMD, daher wird dieser<br />nur zur Programmierung aufgesteckt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1298300057826" ID="ID_1670243666" MODIFIED="1298300079847" TEXT="FTDI FT242RL mit USART verbunden">
@@ -112,8 +109,7 @@
       (ab HW 0.2) gesettz wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1298296939010" ID="ID_209101390" MODIFIED="1298298285975">
 <richcontent TYPE="NODE"><html>
@@ -125,8 +121,7 @@
       Nach &#220;bertragung von Daten wird die<br />Firmware des HC gestartet.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1298301807737" ID="ID_630767864" MODIFIED="1298301827040" TEXT="Kann zum Flashen des AVR verwendet werden"/>
 <node CREATED="1298301827721" ID="ID_1199338263" MODIFIED="1298301842214" TEXT="Ben&#xf6;tigt 2 kB des internen Flash des AVR"/>
@@ -145,7 +140,7 @@
 </node>
 </node>
 <node CREATED="1298296502020" ID="ID_715302329" MODIFIED="1298296504685" TEXT="Firmware">
-<node CREATED="1298296449708" ID="ID_390351284" MODIFIED="1298296457093" TEXT="0.6">
+<node CREATED="1298296449708" ID="ID_390351284" MODIFIED="1298306904982" TEXT="v0.6">
 <node CREATED="1298296901385" ID="ID_1909981689" MODIFIED="1298302289262" TEXT="V-USB 20100715 (USB Treiber)">
 <node CREATED="1298297010496" ID="ID_106058487" MODIFIED="1298297033536" TEXT="dynamische Daten">
 <node CREATED="1298296993857" ID="ID_1157537372" MODIFIED="1298297140682" TEXT="DescriptorHIDConfiguration">
@@ -186,14 +181,21 @@
 </node>
 </node>
 <node CREATED="1298301671666" ID="ID_1538543109" MODIFIED="1298301674260" TEXT="TODO">
-<node CREATED="1298301674810" ID="ID_339579297" MODIFIED="1298301718006" TEXT="Mitsniffen von Daten erm&#xf6;glichen"/>
-<node CREATED="1298302457599" ID="ID_123431349" MODIFIED="1298302566425" TEXT="CDC (Communicatins Device Class) m&#xf6;glich,&#xa;durch Implementierung weiterer Logik in den&#xa;USB Function-/Device-Setup Funktionen."/>
 <node CREATED="1298303383185" ID="ID_1219740300" MODIFIED="1298303435356" TEXT="Alle Daten dynamisch verwalten um RAM zu sparen"/>
 </node>
 </node>
 <node CREATED="1298298470922" ID="ID_501071082" MODIFIED="1298302191566" TEXT="TTY (Teletype Terminal)">
 <node CREATED="1298298478386" ID="ID_1534536221" MODIFIED="1298299021386" TEXT="Kommandos siehe README.console"/>
-<node CREATED="1298299083055" ID="ID_660115113" MODIFIED="1298299123740" TEXT="Setzen und auslesen der dynamischen Daten inm V-USB Treiber"/>
+<node CREATED="1298299083055" ID="ID_660115113" MODIFIED="1298307282847" TEXT="Setzen und auslesen der dynamischen Daten im V-USB Treiber">
+<node CREATED="1298307116105" ID="ID_410634060" MODIFIED="1298307118202" TEXT="TODO">
+<node CREATED="1298298139681" HGAP="21" ID="ID_1792048888" MODIFIED="1298298150391" TEXT="Interface Class" VSHIFT="-7"/>
+<node CREATED="1298298125978" ID="ID_1949515104" MODIFIED="1298298131048" TEXT="Interface Subclass"/>
+<node CREATED="1298298012764" ID="ID_14845151" MODIFIED="1298298151229" TEXT="Interface Protocol"/>
+<node CREATED="1298297811044" ID="ID_1107672572" MODIFIED="1298297827110" TEXT="Device Class"/>
+<node CREATED="1298297815284" ID="ID_647272611" MODIFIED="1298297824057" TEXT="Device Subclass"/>
+<node CREATED="1298307134017" ID="ID_1265651360" MODIFIED="1298307186416" TEXT="Anzahl der Interfaces und deren Konfiguration etc."/>
+</node>
+</node>
 <node CREATED="1298299125478" ID="ID_672405486" MODIFIED="1298299153169" TEXT="Speichern und laden der dynamischen Daten in und aus dem EEPROM"/>
 <node CREATED="1298299156590" ID="ID_1220315294" MODIFIED="1298299167523" TEXT="Resetten der USB Verbindung"/>
 <node CREATED="1298299168606" ID="ID_468835473" MODIFIED="1298299225829" TEXT="Senden von Interrupts an jedem Endpoint (USB Daten werden gesendet)"/>
@@ -210,6 +212,13 @@
 <node CREATED="1298301726233" ID="ID_1589087946" MODIFIED="1298301742441" TEXT="EEPROM Verwaltung">
 <node CREATED="1298301742985" ID="ID_560610702" MODIFIED="1298301776050" TEXT="dynamischen Daten aus V-USB"/>
 <node CREATED="1298301776642" ID="ID_582272275" MODIFIED="1298302145373" TEXT="Sequenzen von USB Daten"/>
+<node CREATED="1298307313968" ID="ID_454765890" MODIFIED="1298307338274" TEXT="Startverhalten der Firmware wird hier abgelegt"/>
+</node>
+</node>
+<node CREATED="1298307208145" ID="ID_1496767637" MODIFIED="1298307211577" TEXT="v0.7">
+<node CREATED="1298307230591" ID="ID_391451052" MODIFIED="1298307232688" TEXT="Ideen">
+<node CREATED="1298301674810" ID="ID_339579297" MODIFIED="1298301718006" TEXT="Mitsniffen von Daten erm&#xf6;glichen"/>
+<node CREATED="1298302457599" ID="ID_123431349" MODIFIED="1298302566425" TEXT="CDC (Communicatins Device Class) m&#xf6;glich,&#xa;durch Implementierung weiterer Logik in den&#xa;USB Function-/Device-Setup Funktionen."/>
 </node>
 </node>
 </node>
@@ -232,7 +241,24 @@
 <node CREATED="1298303269691" ID="ID_969702734" MODIFIED="1298303328845" TEXT="Anzahl der Bet&#xe4;tigung der CapsLock-Taste"/>
 <node CREATED="1298303331402" ID="ID_201219351" MODIFIED="1298303343529" TEXT="Anzahl der Klicks einer anderen Maus"/>
 </node>
-<node CREATED="1298303446202" ID="ID_1505704259" MODIFIED="1298303455273" TEXT="fuzzer schreiben"/>
+<node CREATED="1298303446202" ID="ID_1505704259" MODIFIED="1298303455273" TEXT="fuzzer schreiben">
+<node CREATED="1298306925844" ID="ID_258709964" MODIFIED="1298306978455">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      tty muss angepasst werden bzw.
+    </p>
+    <p>
+      passendes Protokoll implementiert werden.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </map>
