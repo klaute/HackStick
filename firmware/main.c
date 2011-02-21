@@ -41,13 +41,13 @@ int __attribute__((noreturn)) main(void)
 void init(void)
 {
 
-    DDRB  |= (1 << PB1); // Grüne LED dran als Ausgang
+    DDRB  |= (1 << PB1); // Grüne LED als Ausgang
     LED_GREEN_PORT = LED_GREEN_PORT | (1 << LED_GREEN_PIN);
 
-    DDRC  |= (1 << PC4); // Rote LED dran als Ausgang
+    DDRC  |= (1 << PC4); // Rote LED als Ausgang
     LED_RED_PORT = LED_RED_PORT | (1 << LED_RED_PIN);
 
-    DDRC  |= (1 << PC5); // Gelbe LED dran als Ausgang
+    DDRC  |= (1 << PC5); // Gelbe LED als Ausgang
     LED_YELLOW_PORT = LED_YELLOW_PORT | (1 << LED_YELLOW_PIN);
 
     // PD3, PD2 Eingang ohne PullUp, PD6 mit PullUp
@@ -159,7 +159,8 @@ void usbReset( void )
     } while ( --i );
 
     usbDeviceConnect();
-    LED_GREEN_PORT = LED_GREEN_PORT | (1 << LED_GREEN_PIN);
+    //LED_GREEN_PORT = LED_GREEN_PORT | (1 << LED_GREEN_PIN);
+    LED_GREEN_PORT = LED_GREEN_PORT ^ (1 << LED_GREEN_PIN); // Grüne LED blinken lassen
 
 }
 
