@@ -109,6 +109,8 @@ CFLAGS = #-g$(DEBUG)
 CFLAGS += $(CDEFS) $(CINCS)
 CFLAGS += -O$(OPT)
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -mtiny-stack
+CFLAGS += -fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions
+CFLAGS += -ffunction-sections -fdata-sections -fno-tree-scev-cprop
 CFLAGS += -Wall -Wstrict-prototypes
 CFLAGS += -Wa,-adhlns=$(<:.c=.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
@@ -167,6 +169,7 @@ EXTMEMOPTS =
 LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
 LDFLAGS += $(EXTMEMOPTS)
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
+LDFLAGS += -Wl,--relax
 
 
 

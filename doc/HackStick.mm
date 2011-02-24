@@ -217,14 +217,14 @@
 </node>
 <node CREATED="1298307208145" ID="ID_1496767637" MODIFIED="1298307211577" TEXT="v0.7">
 <node CREATED="1298307230591" ID="ID_391451052" MODIFIED="1298307232688" TEXT="Ideen">
-<node CREATED="1298301674810" ID="ID_339579297" MODIFIED="1298301718006" TEXT="Mitsniffen von Daten erm&#xf6;glichen"/>
+<node CREATED="1298301674810" ID="ID_339579297" MODIFIED="1298382862977" TEXT="Mit sniffen von Daten erm&#xf6;glichen"/>
 <node CREATED="1298302457599" ID="ID_123431349" MODIFIED="1298302566425" TEXT="CDC (Communicatins Device Class) m&#xf6;glich,&#xa;durch Implementierung weiterer Logik in den&#xa;USB Function-/Device-Setup Funktionen."/>
 </node>
 </node>
 </node>
 </node>
 <node CREATED="1298302972564" ID="ID_1840845403" MODIFIED="1298303368696" POSITION="right" TEXT="Ideen">
-<node CREATED="1298302975539" ID="ID_1615847548" MODIFIED="1298302990220" TEXT="Daten am USB-Bus mitsniffen">
+<node CREATED="1298302975539" ID="ID_1615847548" MODIFIED="1298382809403" TEXT="Daten am USB-Bus mit sniffen">
 <node CREATED="1298303134395" ID="ID_1730945440" MODIFIED="1298303155665" TEXT="Als vorhandenes Ger&#xe4;t ausgeben und Daten senden"/>
 <node CREATED="1298303163819" ID="ID_1021258689" MODIFIED="1298303180332" TEXT="Loggen von Daten spezieller Device Klassen wie Keyboard"/>
 <node CREATED="1298303200211" ID="ID_1017297009" MODIFIED="1298303228218" TEXT="Filter f&#xfc;r zu schnelle Ger&#xe4;te implementieren"/>
@@ -255,8 +255,7 @@
       passendes Protokoll implementiert werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

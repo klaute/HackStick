@@ -41,11 +41,7 @@
 
 /*----------------------------------------------------------------------------*/
 
-#define USB_CFG_ID_BYTE_CNT 2
-
-/*----------------------------------------------------------------------------*/
-
-extern uchar dataBytes[];
+extern uint8_t usbDataSequence[];
 extern char usbHidReportDescriptor[];
 extern uint8_t maxUSBDataBytes;
 extern uint8_t maxUSBHidReportDescriptorBytes;
@@ -62,8 +58,7 @@ int eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 int eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
-uint8_t eep_maxUSBDataBytes EEMEM;
-uchar eep_dataBytes[USB_MAX_DATA_BYTES] EEMEM;
+uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
 
 /*----------------------------------------------------------------------------*/
 
@@ -71,8 +66,8 @@ uchar eep_dataBytes[USB_MAX_DATA_BYTES] EEMEM;
 void eep_readUSBHidReportDescriptor(void);
 void eep_saveUSBHidReportDescriptor(void);
 
-void eep_readUSBHidReportData(void);
-void eep_saveUSBHidReportData(void);
+void eep_readUSBDataSequence(void);
+void eep_saveUSBDataSequence(void);
 
 void eep_readUSBDescriptorStringVendor(void);
 void eep_saveUSBDescriptorStringVendor(void);

@@ -128,8 +128,9 @@ void tty_pollTerminal(void)
                     usbDescriptorConfiguration[25] = maxUSBHidReportDescriptorBytes & 0xFF;
                     usbDescriptorConfiguration[26] = maxUSBHidReportDescriptorBytes >> 8;
                 }
-                else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA ) // Falls wir im Mode 2 sind muss die Länge gespeichert werden.
-                    maxUSBDataBytes = tty_ud_pos;
+                // TODO prüfen ob dies noh benötigt wird.
+                //else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA ) // Falls wir im Mode 2 sind muss die Länge gespeichert werden.
+                    //maxUSBDataBytes = tty_ud_pos;
 
                 tty_ud_pos = 0;
                 tty_config.read_mode = TTY_READ_MODE_COMMAND; // In den Kommandomdus zurückspringen
@@ -143,7 +144,7 @@ void tty_pollTerminal(void)
 
                     if ( tty_config.read_mode == TTY_READ_MODE_HID_DESCRIPTOR )
                         usbHidReportDescriptor[tty_ud_pos] = tmp; // In USB HID Descriptor eintragen.
-                    else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA )
+                    else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ )
                         dataBytes[tty_ud_pos] = tmp; // In das Datenarray eintragen.
 
                     tty_ud_pos++;
@@ -272,13 +273,15 @@ void tty_setInterrupt3()
 }
 #endif
 
-void tty_getUSBReportData()
+void tty_getUSBDataSequence()
 {
     uint8_t i = 0;
-    for ( i = 0; i < maxUSBDataBytes; i++ )
+    // TODO Hier die maximale Anzahl durch parsen der Daten herausfinden
+    // und strukturiert anzeigen.
+    for ( i = 0; i < USB_MAX_DATA_SEQ_SIZE; i++ )
     {
-        printf_P(PSTR("0x%02X "), dataBytes[i]); // Byteweises ausgeben der Daten
-        if (((i+1)%20)==0) // Alle 20 Werteeinen Zeilenumbruch einfügen
+        printf_P(PSTR("0x%02X "), usbDataSequence[i]); // Byteweises ausgeben der Daten
+        if (((i+1)%20)==0) // Alle 20 Werte einen Zeilenumbruch einfügen
             printf_P(PSTR("\r\n"));
     }
 }
@@ -341,9 +344,9 @@ void tty_getUSBConfigDeviceID()
     printf_P(PSTR("DID=0x%02x%02x"), usbDescriptorDevice[11], usbDescriptorDevice[10]);
 }
 
-void tty_setUSBReportData()
+void tty_setUSBDataSequence()
 {
-    tty_config.read_mode = TTY_READ_MODE_HID_DATA;
+    tty_config.read_mode = TTY_READ_MODE_USB_DATA_SEQ;
 }
 
 

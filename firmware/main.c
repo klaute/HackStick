@@ -58,7 +58,24 @@ void init(void)
 
     tty_init();
 
-    // USB-Konfiguartion aus dem EEPROM laden
+    _loadEEPROMConfig();
+
+    // USB initialisieren
+    usbInit();
+
+    usbReset(); // USB Verbindung resetten
+
+    sei(); // Interruptupts global einschalten
+
+    printf_P(WELCOME_MSG);
+    
+}
+
+/* ------------------------------------------------------------------------- */
+/* Laden der Startup Konfiguration aus dem EEPROM */
+void _loadEEPROMConfig()
+{
+// USB-Konfiguartion aus dem EEPROM laden
     uint8_t config = eeprom_read_byte(&eep_usbConfig);
 
     // TODO aus EEPROM laden oder festlegen der USB Geräteinformationen setzen
@@ -127,20 +144,10 @@ void init(void)
         //usbDescriptorDevice[10] = 0xdf; // Low-Byte der Device ID
         //usbDescriptorDevice[11] = 0x05;
     }
-    if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_HID_REPORT_DATA)) )
+    if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_DATA_SEQ)) )
     {
-        eep_readUSBHidReportData();
+        eep_readUSBDataSequence();
     }
-
-    // USB initialisieren
-    usbInit();
-
-    usbReset(); // USB Verbindung resetten
-
-    sei(); // Interruptupts global einschalten
-
-    printf_P(WELCOME_MSG);
-    
 }
 
 /* ------------------------------------------------------------------------- */

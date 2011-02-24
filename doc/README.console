@@ -29,7 +29,7 @@ sint3 = Send Interrupt an Endpoint 3 (nur vorhanden wenn in usbconfig definiert)
 
 ttye = Set TTY Echo 
 
-# Optional zum Testen der LED's
+# zum Testen der LED's
 rledon  = Rote LED einschalten
 rledoff = Rote LED ausschalten
 gledon  = Grüne LED einsschalten

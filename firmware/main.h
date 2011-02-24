@@ -40,11 +40,14 @@ int __attribute__((noreturn)) main(void);
 // Init Methode der Firmware.
 void init(void);
 
+void _loadEEPROMConfig(void);
+
 void usbReset(void);
 
 /*----------------------------------------------------------------------------*/
 
 extern uint8_t eep_usbConfig EEMEM;
+
 extern const char WELCOME_MSG[] PROGMEM;
 
 /*----------------------------------------------------------------------------*/
@@ -55,8 +58,8 @@ extern void tty_pollTerminal(void);
 extern void eep_readUSBHidReportDescriptor(void);
 extern void eep_saveUSBHidReportDescriptor(void);
 
-extern void eep_readUSBHidReportData(void);
-extern void eep_saveUSBHidReportData(void);
+extern void eep_readUSBDataSequence(void);
+extern void eep_saveUSBDataSequence(void);
 
 extern void eep_readUSBDescriptorStringVendor(void);
 extern void eep_saveUSBDescriptorStringVendor(void);
@@ -86,8 +89,10 @@ uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;
 // Statusvariable zum steuern der übertragenen Bytes.
 static uchar bytesRemaining;
 
-// DatenBytes
+// Daten die an den Host gesendet werden.
 uint8_t dataBytes[USB_MAX_DATA_BYTES];
+// Sequence der Daten die an den Host gesendet werden sollen.
+uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];
 
 static uchar idleRate; // in 4 ms units
 
@@ -102,25 +107,7 @@ uint8_t USBCfgInterfaceClass    = 3;
 uint8_t USBCfgInterfaceSubClass = 0;
 uint8_t USBCfgInterfaceProtocol = 0;
 
-typedef struct
-{
-	uint8_t index;
-	uint8_t value;
-} t_tupel;
-
-typedef struct
-{
-	t_tupel *tupel;
-} t_block;
-
-typedef struct
-{
-	uint8_t delayStart;
-	uint8_t delayNext;
-	t_block *blocks;
-} t_sequence;
-
-t_sequence dataSequence;
+/*----------------------------------------------------------------------------*/
 
 uint8_t maxUSBHidReportDescriptorBytes = 22;
 

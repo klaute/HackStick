@@ -41,23 +41,19 @@ void eep_saveUSBHidReportDescriptor()
                 sizeof(eep_usbHidReportDescriptor));
 }
 
-void eep_readUSBHidReportData()
+void eep_readUSBDataSequence()
 {
     while (!eeprom_is_ready()) {}
-    maxUSBDataBytes = eeprom_read_byte(&eep_maxUSBDataBytes);
-    while (!eeprom_is_ready()) {}
-    eeprom_read_block(dataBytes,
-                eep_dataBytes,
-                sizeof(eep_dataBytes));
+    eeprom_read_block(usbDataSequence,
+                eep_usbDataSequence,
+                sizeof(eep_usbDataSequence));
 }
-void eep_saveUSBHidReportData()
+void eep_saveUSBDataSequence()
 {
     while (!eeprom_is_ready()) {}
-    eeprom_write_byte(&eep_maxUSBDataBytes, maxUSBDataBytes);
-    while (!eeprom_is_ready()) {}
-    eeprom_write_block(dataBytes,
-                eep_dataBytes,
-                sizeof(eep_dataBytes));
+    eeprom_write_block(usbDataSequence,
+                eep_usbDataSequence,
+                sizeof(eep_usbDataSequence));
 }
 
 void eep_readUSBDescriptorStringVendor()

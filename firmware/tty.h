@@ -40,7 +40,7 @@
 
 #define TTY_READ_MODE_COMMAND        0
 #define TTY_READ_MODE_HID_DESCRIPTOR 1
-#define TTY_READ_MODE_HID_DATA       2
+#define TTY_READ_MODE_USB_DATA_SEQ   2
 
 #define TTY_ECHO_ON  1
 #define TTY_ECHO_OFF 0
@@ -53,6 +53,7 @@ const char WELCOME_MSG[] PROGMEM = "\r\n------------------\r\n\r\nklaute's HackS
 /*----------------------------------------------------------------------------*/
 // Externe USB-Daten
 extern uint8_t dataBytes[];
+extern uint8_t usbDataSequence[];
 extern uint8_t maxUSBDataBytes;
 extern uint8_t maxUSBHidReportDescriptorBytes;
 extern char usbHidReportDescriptor[];
@@ -70,8 +71,8 @@ extern void usbReset(void);
 extern void eep_readUSBHidReportDescriptor(void);
 extern void eep_saveUSBHidReportDescriptor(void);
 
-extern void eep_readUSBHidReportData(void);
-extern void eep_saveUSBHidReportData(void);
+extern void eep_readUSBDataSequence(void);
+extern void eep_saveUSBDataSequence(void);
 
 extern void eep_readUSBDescriptorStringVendor(void);
 extern void eep_saveUSBDescriptorStringVendor(void);
@@ -147,7 +148,7 @@ void tty_setInterrupt(void);
 void tty_setInterrupt3(void);
 #endif
 
-void tty_setUSBReportData(void);
+void tty_setUSBDataSequence(void);
 void tty_setUSBHidDeviceDescriptor(void);
 
 void tty_setVendorName(char*);
@@ -162,7 +163,7 @@ void tty_setUSBConfigVendorID(char*);
 void tty_setUSBConfigDeviceID(char*);
 
 void tty_getUSBHidDeviceDescriptor(void);
-void tty_getUSBReportData(void);
+void tty_getUSBDataSequence(void);
 
 void tty_getVendorName(void);
 void tty_getDeviceName(void);
@@ -263,13 +264,13 @@ const tty_command_t tty_commands[] PROGMEM = {
 #endif
 
     { tty_getUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _gdsc },
-    { tty_getUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _gdta },
+    { tty_getUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _gdta },
 
     { tty_setUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _sdsc },
-    { tty_setUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _sdta },
+    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _sdta },
 
-    { eep_readUSBHidReportData,                TTY_CMD_WITHOUT_PARAMETER, _erdta  },
-    { eep_saveUSBHidReportData,                TTY_CMD_WITHOUT_PARAMETER, _esdta  },
+    { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _erdta  },
+    { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _esdta  },
     { eep_readUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _erdsc  },
     { eep_saveUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _esdsc  },
     { eep_readUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _ervn   },
@@ -284,7 +285,7 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _escdid },
 
     { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlosdsc  },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DATA + TTY_EEP_CFG_USB_OFFSET,                 _tlosdta  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlosdta  },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlosvn   },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlosn    },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlossn   },
