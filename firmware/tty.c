@@ -145,7 +145,7 @@ void tty_pollTerminal(void)
                     if ( tty_config.read_mode == TTY_READ_MODE_HID_DESCRIPTOR )
                         usbHidReportDescriptor[tty_ud_pos] = tmp; // In USB HID Descriptor eintragen.
                     else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ )
-                        dataBytes[tty_ud_pos] = tmp; // In das Datenarray eintragen.
+                        usbDataSequence[tty_ud_pos] = tmp; // In das Datenarray eintragen.
 
                     tty_ud_pos++;
                     printf_P(PSTR(" +")); // Byte wurde übernommen
