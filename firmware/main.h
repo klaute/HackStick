@@ -19,7 +19,6 @@
 #define MAIN_H
 
 /*----------------------------------------------------------------------------*/
-#include "globals.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -31,6 +30,8 @@
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
+
+#include "globals.h"
 
 #include "usbdrv.h"
 
@@ -45,6 +46,13 @@ void _loadEEPROMConfig(void);
 void usbReset(void);
 
 /*----------------------------------------------------------------------------*/
+/* Sequenz Daten Funktionen */
+
+#ifdef WITH_INTERPRETER
+void interpretUSBDataSequence(void);
+#endif
+
+/*----------------------------------------------------------------------------*/
 
 extern uint8_t eep_usbConfig EEMEM;
 
@@ -54,58 +62,65 @@ extern const char WELCOME_MSG[] PROGMEM;
 // Methoden zum Zugriff auf die Variablen im EEPROM
 extern void tty_init(void);
 extern void tty_pollTerminal(void);
+extern void tty_setInterrupt(void);
+#if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
+extern void tty_setInterrupt3(void);
+#endif
 
 extern void eep_readUSBHidReportDescriptor(void);
-extern void eep_saveUSBHidReportDescriptor(void);
 
+#ifdef WITH_INTERPRETER
 extern void eep_readUSBDataSequence(void);
-extern void eep_saveUSBDataSequence(void);
+#endif
 
 extern void eep_readUSBDescriptorStringVendor(void);
-extern void eep_saveUSBDescriptorStringVendor(void);
 
 extern void eep_readUSBDescriptorStringDevice(void);
-extern void eep_saveUSBDescriptorStringDevice(void);
 
 extern void eep_readUSBDescriptorStringSerialNumber(void);
-extern void eep_saveUSBDescriptorStringSerialNumber(void);
 
 extern void eep_readUSBCfgVendorID(void);
-extern void eep_saveUSBCfgVendorID(void);
 
 extern void eep_readUSBCfgDeviceID(void);
-extern void eep_saveUSBCfgDeviceID(void);
-
-extern void eep_toggleUSBConfigBit(uint8_t);
-
-extern void eep_deleteUSBConfigBits(void);
 
 /*----------------------------------------------------------------------------*/
 /* USB */
 
 // Maximale Anzahl der zu übertragenden DatenBytes festlegen
 uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;
+#ifdef WITH_INTERPRETER
+// Vorhandene Anzahl von Sequenzbytes
+uint8_t usbDataSequenceBytes;
+#endif
 
 // Statusvariable zum steuern der übertragenen Bytes.
 static uchar bytesRemaining;
 
+static uchar idleRate; // in 4 ms units
+
 // Daten die an den Host gesendet werden.
 uint8_t dataBytes[USB_MAX_DATA_BYTES];
+#ifdef WITH_INTERPRETER
 // Sequence der Daten die an den Host gesendet werden sollen.
-uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];
-
-static uchar idleRate; // in 4 ms units
+uint8_t *usbDataSequence; //[USB_MAX_DATA_SEQ_SIZE];
+#endif
 
 /*----------------------------------------------------------------------------*/
 /* USB report descriptor */
 
-// TODO In EEPROM ablegen und per Kommandozeile konfigurierbar machen.
-uint8_t USBCfgDeviceClass    = 0;
-uint8_t USBCfgDeviceSubClass = 0;
-// Für die Device Configuration
-uint8_t USBCfgInterfaceClass    = 3;
-uint8_t USBCfgInterfaceSubClass = 0;
-uint8_t USBCfgInterfaceProtocol = 0;
+typedef struct USB_Descr
+{
+    // TODO In EEPROM ablegen und per Kommandozeile konfigurierbar machen.
+    // Hid Informationen
+    uint8_t USBCfgDeviceClass;
+    uint8_t USBCfgDeviceSubClass;
+    // Für die Device Configuration
+    uint8_t USBCfgInterfaceClass; // 3
+    uint8_t USBCfgInterfaceSubClass;
+    uint8_t USBCfgInterfaceProtocol;
+} USB_Descr_t;
+
+USB_Descr_t usb_descr;
 
 /*----------------------------------------------------------------------------*/
 
@@ -176,7 +191,7 @@ char usbDescriptorConfiguration[] = {    // USB configuration descriptor
     USBDESCR_INTERFACE, // descriptor type
     0,          // index of this interface
     0,          // alternate setting for this interface
-	// endpoints excl 0: number of endpoint descriptors to follow
+    // endpoints excl 0: number of endpoint descriptors to follow
     USB_CFG_HAVE_INTRIN_ENDPOINT + USB_CFG_HAVE_INTRIN_ENDPOINT3,
     0, // wird per USBCfgInterfaceClass in der init gesetzt
     0, // wird per USBCfgInterfaceSubClass in der init gesetzt
@@ -184,15 +199,15 @@ char usbDescriptorConfiguration[] = {    // USB configuration descriptor
     0,          // string index for interface
 // da USB_CFG_DESCR_PROPS_HID == 0 ist wird dieser Block niermal eingefügt.
 //#if (USB_CFG_DESCR_PROPS_HID & 0xff)
-	// HID descriptor
+    // HID descriptor
     9,          // sizeof(usbDescrHID): length of descriptor in bytes
     USBDESCR_HID,   // descriptor type: HID
     0x01, 0x01, // BCD representation of HID version
     0x00,       // target country code
     0x01,       // number of HID Report (or other HID class) Descriptor infos to follow
     0x22,       // descriptor type: report
-	// Länge des Hid Report Descriptors: Der standard wird in der init gesetzt,
-	// hier nur ein statischer dummy
+    // Länge des Hid Report Descriptors: Der standard wird in der init gesetzt,
+    // hier nur ein statischer dummy
     USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH, 0, // lowByte, highByte
 //#endif
 #if USB_CFG_HAVE_INTRIN_ENDPOINT    // endpoint descriptor for endpoint 1

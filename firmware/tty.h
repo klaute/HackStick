@@ -41,6 +41,7 @@
 #define TTY_READ_MODE_COMMAND        0
 #define TTY_READ_MODE_HID_DESCRIPTOR 1
 #define TTY_READ_MODE_USB_DATA_SEQ   2
+#define TTY_READ_MODE_HID_DATA       3
 
 #define TTY_ECHO_ON  1
 #define TTY_ECHO_OFF 0
@@ -48,31 +49,44 @@
 // Verschiebung der EEPROM-Konstanten
 #define TTY_EEP_CFG_USB_OFFSET 16
 
-const char WELCOME_MSG[] PROGMEM = "\r\n------------------\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";
+const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";
 
 /*----------------------------------------------------------------------------*/
 // Externe USB-Daten
 extern uint8_t dataBytes[];
-extern uint8_t usbDataSequence[];
+#ifdef WITH_INTERPRETER
+extern uint8_t *usbDataSequence; //[];
+#endif
+
 extern uint8_t maxUSBDataBytes;
+#ifdef WITH_INTERPRETER
+extern uint8_t usbDataSequenceBytes;
+#endif
 extern uint8_t maxUSBHidReportDescriptorBytes;
+
 extern char usbHidReportDescriptor[];
 extern char usbDescriptorConfiguration[];
 
-extern int usbDescriptorStringVendor[];
-extern int usbDescriptorStringDevice[];
-extern int usbDescriptorStringSerialNumber[];
+extern int  usbDescriptorStringVendor[];
+extern int  usbDescriptorStringDevice[];
+extern int  usbDescriptorStringSerialNumber[];
 
 /*----------------------------------------------------------------------------*/
 // Externe Methoden zum Zugriff auf Daten
 
 extern void usbReset(void);
 
+#ifdef WITH_INTERPRETER
+extern void interpretUSBDataSequence(void);
+#endif
+
 extern void eep_readUSBHidReportDescriptor(void);
 extern void eep_saveUSBHidReportDescriptor(void);
 
+#ifdef WITH_INTERPRETER
 extern void eep_readUSBDataSequence(void);
 extern void eep_saveUSBDataSequence(void);
+#endif
 
 extern void eep_readUSBDescriptorStringVendor(void);
 extern void eep_saveUSBDescriptorStringVendor(void);
@@ -111,7 +125,7 @@ unsigned char tty_cb_pos; // Position im Kommando Buffer
 unsigned char tty_ud_pos; // Position in den zu verändernden Daten
 
 // Puffer der eingegeben Kommandos und deren Parameter.
-char tty_buff[TTY_MAX_CMD_LINE_LEN];
+char *tty_buff; //[TTY_MAX_CMD_LINE_LEN];
 
 // Typendefinition zur verinfachten Zuordnung von Kommandos zu
 // den damit verbundenen Funktionen.
@@ -148,8 +162,11 @@ void tty_setInterrupt(void);
 void tty_setInterrupt3(void);
 #endif
 
-void tty_setUSBDataSequence(void);
 void tty_setUSBHidDeviceDescriptor(void);
+#ifdef WITH_INTERPRETER
+void tty_setUSBDataSequence(void);
+#endif
+void tty_setUSBReportData(void);
 
 void tty_setVendorName(char*);
 void tty_setDeviceName(char*);
@@ -164,6 +181,7 @@ void tty_setUSBConfigDeviceID(char*);
 
 void tty_getUSBHidDeviceDescriptor(void);
 void tty_getUSBDataSequence(void);
+void tty_getUSBReportData(void);
 
 void tty_getVendorName(void);
 void tty_getDeviceName(void);
@@ -180,6 +198,25 @@ void tty_setEcho(char*);
 static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);
 
 /*----------------------------------------------------------------------------*/
+// Liste der Strings im FLASH
+
+const prog_char _str_gt[]      = ">";
+const prog_char _str_minus[]   = " -";
+const prog_char _str_plus[]    = " +";
+const prog_char _str_char[]    = "%c";
+const prog_char _str_decimal[] = "%d";
+const prog_char _str_end[]     = "E";
+const prog_char _str_error[]   = "ERR";
+const prog_char _str_bb[]      = "\b \b";
+const prog_char _str_ret[]     = "\r\n";
+const prog_char _str_ret_gt[]  = "\r\n>";
+const prog_char _str_2hex[]    = "0x%02X ";
+const prog_char _str_4hex[]    = "0x%04x";
+const prog_char _str_header[]  = "H=0x%02X\r\n";
+const prog_char _str_vid[]     = "VID=0x%02x%02x";
+const prog_char _str_did[]     = "DID=0x%02x%02x";
+
+/*----------------------------------------------------------------------------*/
 
 // Liste der Kommandos, abgelegt im Flash.
 const prog_char _rledon[]  = "rledon";
@@ -188,19 +225,32 @@ const prog_char _yledon[]  = "yledon";
 const prog_char _yledoff[] = "yledoff";
 const prog_char _gledon[]  = "gledon";
 const prog_char _gledoff[] = "gledoff";
+
 const prog_char _urst[] = "urst";
-const prog_char _sint[] = "sint";
+
+const prog_char _sint[]  = "sint";
 #if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
 const prog_char _sint3[] = "sint3";
 #endif
+
+#ifdef WITH_INTERPRETER
+const prog_char _isd[] = "isd";
+#endif
+
 const prog_char _gdsc[] = "gdsc";
+#ifdef WITH_INTERPRETER
+const prog_char _gsd[]  = "gsd";
+#endif
 const prog_char _gdta[] = "gdta";
 
 const prog_char _sdsc[] = "sdsc";
+#ifdef WITH_INTERPRETER
+const prog_char _ssd[]  = "ssd";
+#endif
 const prog_char _sdta[] = "sdta";
 
-const prog_char _erdta[] = "erdta";
-const prog_char _esdta[] = "esdta";
+const prog_char _ersd[]  = "ersd";
+const prog_char _essd[]  = "essd";
 const prog_char _erdsc[] = "erdsc";
 const prog_char _esdsc[] = "esdsc";
 
@@ -217,14 +267,19 @@ const prog_char _ercdid[] = "ercdid";
 const prog_char _escdid[] = "escdid";
 
 const prog_char _tlosdsc[]  = "tlosdsc";
-const prog_char _tlosdta[]  = "tlosdta";
+#ifdef WITH_INTERPRETER
+const prog_char _tlossd[]   = "tlossd";
+#endif
 const prog_char _tlosvn[]   = "tlosvn";
 const prog_char _tlosn[]    = "tlosn";
 const prog_char _tlossn[]   = "tlossn";
 const prog_char _tloscvid[] = "tloscvid";
 const prog_char _tloscdid[] = "tloscdid";
+#ifdef WITH_INTERPRETER
+const prog_char _tiossd[]   = "tiossd";
+#endif
 
-const prog_char _edcfg[]  = "edcfg";
+const prog_char _edcfg[] = "edcfg";
 
 const prog_char _gvn[]   = "gvn";
 const prog_char _gn[]    = "gn";
@@ -235,9 +290,9 @@ const prog_char _svn[]   = "svn";
 const prog_char _sn[]    = "sn";
 const prog_char _ssn[]   = "ssn";
 
-const prog_char _svnh[]   = "svnh";
-const prog_char _snh[]    = "snh";
-const prog_char _ssnh[]   = "ssnh";
+const prog_char _svnh[] = "svnh";
+const prog_char _snh[]  = "snh";
+const prog_char _ssnh[] = "ssnh";
 
 const prog_char _scvid[] = "scvid";
 const prog_char _scdid[] = "scdid";
@@ -263,14 +318,25 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_setInterrupt3, TTY_CMD_WITHOUT_PARAMETER, _sint3 },
 #endif
 
+#ifdef WITH_INTERPRETER
+    { interpretUSBDataSequence, TTY_CMD_WITHOUT_PARAMETER, _isd },
+#endif
+
     { tty_getUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _gdsc },
-    { tty_getUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _gdta },
-
+#ifdef WITH_INTERPRETER
+    { tty_getUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _gsd  },
+#endif
+	{ tty_getUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _gdta },
     { tty_setUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _sdsc },
-    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _sdta },
+#ifdef WITH_INTERPRETER
+    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _ssd  },
+#endif
+	{ tty_setUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _sdta },
 
-    { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _erdta  },
-    { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _esdta  },
+#ifdef WITH_INTERPRETER
+    { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _ersd   },
+    { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _essd   },
+#endif
     { eep_readUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _erdsc  },
     { eep_saveUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _esdsc  },
     { eep_readUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _ervn   },
@@ -285,12 +351,18 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _escdid },
 
     { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlosdsc  },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlosdta  },
+    // TODO Datenm auf andere Art laden
+#ifdef WITH_INTERPRETER
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlossd   },
+#endif
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlosvn   },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlosn    },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlossn   },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tloscvid },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tloscdid },
+#ifdef WITH_INTERPRETER
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tiossd   },
+#endif
 
     { eep_deleteUSBConfigBits, TTY_CMD_WITHOUT_PARAMETER, _edcfg },
 

@@ -108,9 +108,20 @@ CINCS += -I../../avrlib
 CFLAGS = #-g$(DEBUG)
 CFLAGS += $(CDEFS) $(CINCS)
 CFLAGS += -O$(OPT)
-CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -mtiny-stack
-CFLAGS += -fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions
-CFLAGS += -ffunction-sections -fdata-sections -fno-tree-scev-cprop
+CFLAGS += -funsigned-char
+#CFLAGS += -funsigned-bitfields
+#CFLAGS += -fpack-struct
+#CFLAGS += -fshort-enums
+CFLAGS += -fno-split-wide-types
+CFLAGS += -fno-move-loop-invariants
+CFLAGS += -fno-tree-scev-cprop
+#CFLAGS += -fno-inline-small-functions
+#CFLAGS += -fno-tree-loop-optimize
+#CFLAGS += -ffunction-sections
+#CFLAGS += -fdata-sections
+CFLAGS += -mcall-prologues
+CFLAGS += -mtiny-stack
+#CFLAGS += -mint8
 CFLAGS += -Wall -Wstrict-prototypes
 CFLAGS += -Wa,-adhlns=$(<:.c=.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
@@ -309,11 +320,12 @@ end:
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
 #ELFSIZE = $(SIZE) -A $(TARGET).elf
 ELFSIZE = $(SIZE) --mcu=$(MCU) -C $(TARGET).elf
+OBJSIZE = $(SIZE) -x *.o **/*.o
 sizebefore:
 	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); echo; $(HEXSIZE); echo; fi
 
 sizeafter:
-	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; $(HEXSIZE); echo; fi
+	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); $(OBJSIZE); echo; $(HEXSIZE); echo; fi
 
 
 

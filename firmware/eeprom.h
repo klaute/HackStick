@@ -41,21 +41,35 @@
 
 /*----------------------------------------------------------------------------*/
 
-extern uint8_t usbDataSequence[];
-extern char usbHidReportDescriptor[];
+const prog_char _str_cfg[] = "\r\nCfg: 0x%02x";
+
+/*----------------------------------------------------------------------------*/
+
+#ifdef WITH_INTERPRETER
+extern uint8_t *usbDataSequence; //[];
+#endif
+extern char     usbHidReportDescriptor[];
+
 extern uint8_t maxUSBDataBytes;
+#ifdef WITH_INTERPRETER
+extern uint8_t usbDataSequenceBytes;
+#endif
 extern uint8_t maxUSBHidReportDescriptorBytes;
+
+extern int usbDescriptorStringVendor[];
+extern int usbDescriptorStringDevice[];
+extern int usbDescriptorStringSerialNumber[];
 
 /*----------------------------------------------------------------------------*/
 
 // Variablen im EEPROM
 uint8_t eep_usbConfig EEMEM;
 uint8_t eep_maxUSBHidReportDescriptorBytes EEMEM;
-char eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
+char    eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
 
-int eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
-int eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
-int eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int     eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int     eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int     eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
@@ -66,8 +80,10 @@ uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
 void eep_readUSBHidReportDescriptor(void);
 void eep_saveUSBHidReportDescriptor(void);
 
+#ifdef WITH_INTERPRETER
 void eep_readUSBDataSequence(void);
 void eep_saveUSBDataSequence(void);
+#endif
 
 void eep_readUSBDescriptorStringVendor(void);
 void eep_saveUSBDescriptorStringVendor(void);

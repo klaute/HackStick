@@ -1,123 +1,133 @@
 
-eeprom.c,1186
+eeprom.c,1190
 void eep_readUSBHidReportDescriptor()eep_readUSBHidReportDescriptor24,970
-void eep_saveUSBHidReportDescriptor()eep_saveUSBHidReportDescriptor34,1384
-void eep_readUSBDataSequence()eep_readUSBDataSequence44,1731
-void eep_saveUSBDataSequence()eep_saveUSBDataSequence51,1922
-void eep_readUSBDescriptorStringVendor()eep_readUSBDescriptorStringVendor59,2115
-void eep_saveUSBDescriptorStringVendor()eep_saveUSBDescriptorStringVendor66,2346
-void eep_readUSBDescriptorStringDevice()eep_readUSBDescriptorStringDevice74,2579
-void eep_saveUSBDescriptorStringDevice()eep_saveUSBDescriptorStringDevice81,2810
-void eep_readUSBDescriptorStringSerialNumber()eep_readUSBDescriptorStringSerialNumber89,3043
-void eep_saveUSBDescriptorStringSerialNumber()eep_saveUSBDescriptorStringSerialNumber96,3286
-void eep_readUSBCfgVendorID()eep_readUSBCfgVendorID104,3531
-void eep_saveUSBCfgVendorID()eep_saveUSBCfgVendorID113,3800
-void eep_readUSBCfgDeviceID()eep_readUSBCfgDeviceID120,4015
-void eep_saveUSBCfgDeviceID()eep_saveUSBCfgDeviceID129,4286
-void eep_toggleUSBConfigBit(uint8_t bit)eep_toggleUSBConfigBit136,4503
-void eep_deleteUSBConfigBits()eep_deleteUSBConfigBits148,4805
+void eep_saveUSBHidReportDescriptor()eep_saveUSBHidReportDescriptor35,1435
+void eep_readUSBDataSequence()eep_readUSBDataSequence49,1938
+void eep_saveUSBDataSequence()eep_saveUSBDataSequence76,2704
+void eep_readUSBDescriptorStringVendor()eep_readUSBDescriptorStringVendor88,3026
+void eep_saveUSBDescriptorStringVendor()eep_saveUSBDescriptorStringVendor95,3257
+void eep_readUSBDescriptorStringDevice()eep_readUSBDescriptorStringDevice105,3571
+void eep_saveUSBDescriptorStringDevice()eep_saveUSBDescriptorStringDevice112,3802
+void eep_readUSBDescriptorStringSerialNumber()eep_readUSBDescriptorStringSerialNumber122,4116
+void eep_saveUSBDescriptorStringSerialNumber()eep_saveUSBDescriptorStringSerialNumber129,4359
+void eep_readUSBCfgVendorID()eep_readUSBCfgVendorID139,4685
+void eep_saveUSBCfgVendorID()eep_saveUSBCfgVendorID148,4954
+void eep_readUSBCfgDeviceID()eep_readUSBCfgDeviceID157,5250
+void eep_saveUSBCfgDeviceID()eep_saveUSBCfgDeviceID166,5521
+void eep_toggleUSBConfigBit(uint8_t bit)eep_toggleUSBConfigBit175,5819
+void eep_deleteUSBConfigBits()eep_deleteUSBConfigBits187,6107
 
-main.c,392
+main.c,459
 int __attribute__((noreturn)) main(void)main21,891
 void init(void)init41,1202
-void _loadEEPROMConfig()_loadEEPROMConfig76,2139
-void usbReset( void )usbReset155,5195
-uchar usbFunctionRead(uchar *data, uchar len)usbFunctionRead177,5849
-uchar usbFunctionDescriptor(usbRequest_t *rq)usbFunctionDescriptor251,8552
-usbMsgLen_t usbFunctionSetup(uchar data[8])usbFunctionSetup296,10316
+void _loadEEPROMConfig()_loadEEPROMConfig91,2828
+void interpretUSBDataSequence()interpretUSBDataSequence179,6320
+void usbReset( void )usbReset236,8073
+uchar usbFunctionRead(uchar *data, uchar len)usbFunctionRead259,8742
+uchar usbFunctionDescriptor(usbRequest_t *rq)usbFunctionDescriptor333,11445
+usbMsgLen_t usbFunctionSetup(uchar data[8])usbFunctionSetup378,13209
 
-tty.c,1757
+tty.c,1877
 void tty_init()tty_init21,885
-static int _uart_putc(char c, FILE *stream)_uart_putc34,1197
-void tty_pollTerminal(void)tty_pollTerminal41,1358
-int tty_executeCmd(const char *buffer)tty_executeCmd164,6117
-void tty_ledRedOn()tty_ledRedOn227,8079
-void tty_ledRedOff()tty_ledRedOff232,8160
-void tty_ledGreenOn()tty_ledGreenOn237,8241
-void tty_ledGreenOff()tty_ledGreenOff242,8330
-void tty_ledYellowOn()tty_ledYellowOn247,8419
-void tty_ledYellowOff()tty_ledYellowOff252,8512
-void tty_setInterrupt()tty_setInterrupt258,8685
-void tty_setInterrupt3()tty_setInterrupt3267,8857
-void tty_getUSBDataSequence()tty_getUSBDataSequence276,8997
-void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor289,9418
-void tty_getVendorName()tty_getVendorName300,9770
-void tty_getDeviceName()tty_getDeviceName312,10100
-void tty_getSerialNumber()tty_getSerialNumber324,10432
-void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID337,10830
-void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID342,10953
-void tty_setUSBDataSequence()tty_setUSBDataSequence347,11078
-void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor353,11169
-void tty_setVendorName(char* t)tty_setVendorName358,11268
-void tty_setDeviceName(char* t)tty_setDeviceName375,11869
-void tty_setSerialNumber(char* t)tty_setSerialNumber390,12320
-void tty_setVendorHeader(char *t)tty_setVendorHeader405,12784
-void tty_setSerialNumberHeader(char *t)tty_setSerialNumberHeader415,12991
-void tty_setDeviceNameHeader(char *t)tty_setDeviceNameHeader425,13212
-void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID434,13408
-void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID444,13655
-void tty_setEcho(char* t)tty_setEcho456,13985
+static int _uart_putc(char c, FILE *stream)_uart_putc37,1238
+void tty_pollTerminal(void)tty_pollTerminal44,1399
+int tty_executeCmd(const char *buffer)tty_executeCmd184,6850
+void tty_ledRedOn()tty_ledRedOn247,8812
+void tty_ledRedOff()tty_ledRedOff252,8893
+void tty_ledGreenOn()tty_ledGreenOn257,8974
+void tty_ledGreenOff()tty_ledGreenOff262,9063
+void tty_ledYellowOn()tty_ledYellowOn267,9152
+void tty_ledYellowOff()tty_ledYellowOff272,9245
+void tty_setInterrupt()tty_setInterrupt278,9418
+void tty_setInterrupt3()tty_setInterrupt3287,9609
+void tty_getUSBReportData()tty_getUSBReportData296,9768
+void tty_getUSBDataSequence()tty_getUSBDataSequence308,10085
+void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor322,10502
+void tty_getVendorName()tty_getVendorName333,10844
+void tty_getDeviceName()tty_getDeviceName347,11220
+void tty_getSerialNumber()tty_getSerialNumber361,11598
+void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID376,12048
+void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID381,12157
+void tty_setUSBReportData()tty_setUSBReportData386,12268
+void tty_setUSBDataSequence()tty_setUSBDataSequence392,12376
+void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor398,12473
+void tty_setVendorName(char* t)tty_setVendorName403,12572
+void tty_setDeviceName(char* t)tty_setDeviceName421,13217
+void tty_setSerialNumber(char* t)tty_setSerialNumber437,13715
+void tty_setVendorHeader(char *t)tty_setVendorHeader453,14233
+void tty_setSerialNumberHeader(char *t)tty_setSerialNumberHeader463,14464
+void tty_setDeviceNameHeader(char *t)tty_setDeviceNameHeader473,14709
+void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID482,14923
+void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID492,15165
+void tty_setEcho(char* t)tty_setEcho504,15490
 
-eeprom.h,737
+eeprom.h,817
 #define EEPROM_HEEPROM_H19,804
 #define EEMEM EEMEM39,1259
-uint8_t eep_usbConfig EEMEM;EEMEM52,1659
-uint8_t eep_maxUSBHidReportDescriptorBytes EEMEM;EEMEM53,1688
-char eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;EEMEM54,1738
-int eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM56,1813
-int eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM57,1889
-int eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM58,1965
-uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;EEMEM59,2041
-uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;EEMEM60,2096
-uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;EEMEM61,2151
+const prog_char _str_cfg[] = "\r\nCfg: 0x%02x";_str_cfg44,1402
+uint8_t eep_usbConfig EEMEM;EEMEM66,2026
+uint8_t eep_maxUSBHidReportDescriptorBytes EEMEM;EEMEM67,2055
+char    eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;EEMEM68,2105
+int     eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM70,2183
+int     eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM71,2263
+int     eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;EEMEM72,2343
+uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;EEMEM73,2423
+uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;EEMEM74,2478
+uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;EEMEM75,2533
 
-globals.h,1487
+globals.h,1618
 #define __GLOBAL_H____GLOBAL_H__19,812
 #define F_CPU F_CPU23,929
-#define USB_CFG_HID_REPORT_DESCRIPTOR_LEN USB_CFG_HID_REPORT_DESCRIPTOR_LEN27,1043
-#define USB_DEVICE_STRING_DESCRIPTION_LEN USB_DEVICE_STRING_DESCRIPTION_LEN30,1143
-#define USB_MAX_DATA_BYTES USB_MAX_DATA_BYTES33,1250
-#define USB_CFG_ID_BYTE_CNT USB_CFG_ID_BYTE_CNT36,1339
-#define USB_MAX_DATA_SEQ_SIZE USB_MAX_DATA_SEQ_SIZE40,1569
-#define LED_RED_PORT LED_RED_PORT45,1883
-#define LED_YELLOW_PORT LED_YELLOW_PORT46,1913
-#define LED_GREEN_PORT LED_GREEN_PORT47,1943
-#define LED_RED_PIN LED_RED_PIN48,1973
-#define LED_YELLOW_PIN LED_YELLOW_PIN49,2001
-#define LED_GREEN_PIN LED_GREEN_PIN50,2029
-#define EEP_CFG_USB_HID_REPORT_DESCRIPTOR EEP_CFG_USB_HID_REPORT_DESCRIPTOR54,2198
-#define EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR55,2252
-#define EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE56,2306
-#define EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER57,2360
-#define EEP_CFG_USB_CONFIG_VENDOR_ID EEP_CFG_USB_CONFIG_VENDOR_ID58,2414
-#define EEP_CFG_USB_CONFIG_DEVICE_ID EEP_CFG_USB_CONFIG_DEVICE_ID59,2468
-#define EEP_CFG_USB_DATA_SEQ EEP_CFG_USB_DATA_SEQ60,2522
-#define EEP_CFG_USB_TYPES EEP_CFG_USB_TYPES62,2577
-#define EEP_CFG_USB_STARTS_WITH EEP_CFG_USB_STARTS_WITH63,2652
-#define EEP_CFG_VALUE_ON EEP_CFG_VALUE_ON65,2687
-#define EEP_CFG_VALUE_OFF EEP_CFG_VALUE_OFF66,2715
+#define WITH_INTERPRETERWITH_INTERPRETER33,1216
+#define USB_CFG_HID_REPORT_DESCRIPTOR_LEN USB_CFG_HID_REPORT_DESCRIPTOR_LEN37,1324
+#define USB_DEVICE_STRING_DESCRIPTION_LEN USB_DEVICE_STRING_DESCRIPTION_LEN40,1426
+#define USB_MAX_DATA_BYTES USB_MAX_DATA_BYTES43,1534
+#define USB_CFG_ID_BYTE_CNT USB_CFG_ID_BYTE_CNT46,1624
+#define USB_MAX_DATA_SEQ_SIZE USB_MAX_DATA_SEQ_SIZE50,1855
+#define LED_RED_PORT LED_RED_PORT55,2170
+#define LED_YELLOW_PORT LED_YELLOW_PORT56,2200
+#define LED_GREEN_PORT LED_GREEN_PORT57,2230
+#define LED_RED_PIN LED_RED_PIN58,2260
+#define LED_YELLOW_PIN LED_YELLOW_PIN59,2288
+#define LED_GREEN_PIN LED_GREEN_PIN60,2316
+#define EEP_CFG_USB_HID_REPORT_DESCRIPTOR EEP_CFG_USB_HID_REPORT_DESCRIPTOR64,2485
+#define EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR65,2539
+#define EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE66,2593
+#define EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER67,2647
+#define EEP_CFG_USB_CONFIG_VENDOR_ID EEP_CFG_USB_CONFIG_VENDOR_ID68,2701
+#define EEP_CFG_USB_CONFIG_DEVICE_ID EEP_CFG_USB_CONFIG_DEVICE_ID69,2755
+#define EEP_CFG_USB_DATA_SEQ EEP_CFG_USB_DATA_SEQ70,2809
+#define EEP_CFG_USB_CONFIG_INTERPRET_ID EEP_CFG_USB_CONFIG_INTERPRET_ID71,2863
+#define EEP_CFG_USB_TYPES EEP_CFG_USB_TYPES73,2918
+#define EEP_CFG_USB_STARTS_WITH EEP_CFG_USB_STARTS_WITH74,2993
+#define EEP_CFG_VALUE_ON EEP_CFG_VALUE_ON76,3028
+#define EEP_CFG_VALUE_OFF EEP_CFG_VALUE_OFF77,3056
 
-main.h,1374
+main.h,1561
 #define MAIN_HMAIN_H19,806
-uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;maxUSBDataBytes87,2667
-static uchar bytesRemaining;bytesRemaining90,2769
-uint8_t dataBytes[USB_MAX_DATA_BYTES];dataBytes93,2841
-uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];usbDataSequence95,2942
-static uchar idleRate; // in 4 ms unitsidleRate97,2991
-uint8_t USBCfgDeviceClass    = 0;USBCfgDeviceClass103,3213
-uint8_t USBCfgDeviceSubClass = 0;USBCfgDeviceSubClass104,3247
-uint8_t USBCfgInterfaceClass    = 3;USBCfgInterfaceClass106,3314
-uint8_t USBCfgInterfaceSubClass = 0;USBCfgInterfaceSubClass107,3351
-uint8_t USBCfgInterfaceProtocol = 0;USBCfgInterfaceProtocol108,3388
-uint8_t maxUSBHidReportDescriptorBytes = 22;maxUSBHidReportDescriptorBytes112,3508
-char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] = {usbHidReportDescriptor115,3616
-int usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringVendor131,4308
-int usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringDevice133,4377
-int usbDescriptorStringSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringSerialNumber135,4446
-char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice137,4521
-char usbDescriptorConfiguration[] = {    // USB configuration descriptorusbDescriptorConfiguration158,5634
+uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;maxUSBDataBytes90,2570
+uint8_t usbDataSequenceBytes;usbDataSequenceBytes93,2678
+static uchar bytesRemaining;bytesRemaining97,2771
+static uchar idleRate; // in 4 ms unitsidleRate99,2801
+uint8_t dataBytes[USB_MAX_DATA_BYTES];dataBytes102,2884
+uint8_t *usbDataSequence; //[USB_MAX_DATA_SEQ_SIZE];usbDataSequence105,3009
+typedef struct USB_DescrUSB_Descr111,3180
+    uint8_t USBCfgDeviceClass;USBCfgDeviceClass115,3307
+    uint8_t USBCfgDeviceSubClass;USBCfgDeviceSubClass116,3338
+    uint8_t USBCfgInterfaceClass; // 3USBCfgInterfaceClass118,3409
+    uint8_t USBCfgInterfaceSubClass;USBCfgInterfaceSubClass119,3448
+    uint8_t USBCfgInterfaceProtocol;USBCfgInterfaceProtocol120,3485
+} USB_Descr_t;USB_Descr_t121,3522
+USB_Descr_t usb_descr;usb_descr123,3538
+uint8_t maxUSBHidReportDescriptorBytes = 22;maxUSBHidReportDescriptorBytes127,3644
+char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] = {usbHidReportDescriptor130,3752
+int usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringVendor146,4444
+int usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringDevice148,4513
+int usbDescriptorStringSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN+1];usbDescriptorStringSerialNumber150,4582
+char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice152,4657
+char usbDescriptorConfiguration[] = {    // USB configuration descriptorusbDescriptorConfiguration173,5770
 
-tty.h,4159
+tty.h,5312
 #define TTY_HTTY_H19,801
 #define TTY_MAX_CMD_LINE_LEN TTY_MAX_CMD_LINE_LEN36,1185
 #define TTY_CMD_WITHOUT_PARAMETER TTY_CMD_WITHOUT_PARAMETER38,1218
@@ -125,73 +135,93 @@ tty.h,4159
 #define TTY_READ_MODE_COMMAND TTY_READ_MODE_COMMAND41,1299
 #define TTY_READ_MODE_HID_DESCRIPTOR TTY_READ_MODE_HID_DESCRIPTOR42,1338
 #define TTY_READ_MODE_USB_DATA_SEQ TTY_READ_MODE_USB_DATA_SEQ43,1377
-#define TTY_ECHO_ON TTY_ECHO_ON45,1417
-#define TTY_ECHO_OFF TTY_ECHO_OFF46,1440
-#define TTY_EEP_CFG_USB_OFFSET TTY_EEP_CFG_USB_OFFSET49,1502
-const char WELCOME_MSG[] PROGMEM = "\r\n------------------\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";PROGMEM51,1537
-struct tty_config_t {tty_config_t99,3153
-    uint8_t read_mode:2;read_mode103,3359
-    uint8_t echo:1;echo106,3473
-    uint8_t empty:5; // Frei für weiter Konfigurationszwecke.empty107,3493
-} tty_config;tty_config108,3556
-unsigned char tty_cb_pos; // Position im Kommando Buffertty_cb_pos110,3571
-unsigned char tty_ud_pos; // Position in den zu verändernden Datentty_ud_pos111,3628
-char tty_buff[TTY_MAX_CMD_LINE_LEN];tty_buff114,3753
-   void (*func)(int); // Zeiger auf die auszuführende Funktionfunc120,3908
-   int type;         // das Argument, das mitübergeben wirdtype121,3972
-   char *command;    // Zeiger auf das Kommando im FLASHcommand122,4033
-} tty_command_t;tty_command_t123,4090
-static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);_stdout180,5627
-const prog_char _rledon[]  = "rledon";_rledon185,5831
-const prog_char _rledoff[] = "rledoff";_rledoff186,5870
-const prog_char _yledon[]  = "yledon";_yledon187,5910
-const prog_char _yledoff[] = "yledoff";_yledoff188,5949
-const prog_char _gledon[]  = "gledon";_gledon189,5989
-const prog_char _gledoff[] = "gledoff";_gledoff190,6028
-const prog_char _urst[] = "urst";_urst191,6068
-const prog_char _sint[] = "sint";_sint192,6102
-const prog_char _sint3[] = "sint3";_sint3194,6177
-const prog_char _gdsc[] = "gdsc";_gdsc196,6220
-const prog_char _gdta[] = "gdta";_gdta197,6254
-const prog_char _sdsc[] = "sdsc";_sdsc199,6289
-const prog_char _sdta[] = "sdta";_sdta200,6323
-const prog_char _erdta[] = "erdta";_erdta202,6358
-const prog_char _esdta[] = "esdta";_esdta203,6394
-const prog_char _erdsc[] = "erdsc";_erdsc204,6430
-const prog_char _esdsc[] = "esdsc";_esdsc205,6466
-const prog_char _ervn[]  = "ervn";_ervn207,6503
-const prog_char _esvn[]  = "esvn";_esvn208,6538
-const prog_char _ern[]   = "ern";_ern209,6573
-const prog_char _esn[]   = "esn";_esn210,6607
-const prog_char _ersn[]  = "ersn";_ersn211,6641
-const prog_char _essn[]  = "essn";_essn212,6676
-const prog_char _ercvid[] = "ercvid";_ercvid214,6712
-const prog_char _escvid[] = "escvid";_escvid215,6750
-const prog_char _ercdid[] = "ercdid";_ercdid216,6788
-const prog_char _escdid[] = "escdid";_escdid217,6826
-const prog_char _tlosdsc[]  = "tlosdsc";_tlosdsc219,6865
-const prog_char _tlosdta[]  = "tlosdta";_tlosdta220,6906
-const prog_char _tlosvn[]   = "tlosvn";_tlosvn221,6947
-const prog_char _tlosn[]    = "tlosn";_tlosn222,6987
-const prog_char _tlossn[]   = "tlossn";_tlossn223,7026
-const prog_char _tloscvid[] = "tloscvid";_tloscvid224,7066
-const prog_char _tloscdid[] = "tloscdid";_tloscdid225,7108
-const prog_char _edcfg[]  = "edcfg";_edcfg227,7151
-const prog_char _gvn[]   = "gvn";_gvn229,7189
-const prog_char _gn[]    = "gn";_gn230,7223
-const prog_char _gsn[]   = "gsn";_gsn231,7256
-const prog_char _gcvid[] = "gcvid";_gcvid232,7290
-const prog_char _gcdid[] = "gcdid";_gcdid233,7326
-const prog_char _svn[]   = "svn";_svn234,7362
-const prog_char _sn[]    = "sn";_sn235,7396
-const prog_char _ssn[]   = "ssn";_ssn236,7429
-const prog_char _svnh[]   = "svnh";_svnh238,7464
-const prog_char _snh[]    = "snh";_snh239,7500
-const prog_char _ssnh[]   = "ssnh";_ssnh240,7535
-const prog_char _scvid[] = "scvid";_scvid242,7572
-const prog_char _scdid[] = "scdid";_scdid243,7608
-const prog_char _ttye[] = "ttye";_ttye245,7645
-const tty_command_t tty_commands[] PROGMEM = {PROGMEM249,7768
+#define TTY_READ_MODE_HID_DATA TTY_READ_MODE_HID_DATA44,1416
+#define TTY_ECHO_ON TTY_ECHO_ON46,1456
+#define TTY_ECHO_OFF TTY_ECHO_OFF47,1479
+#define TTY_EEP_CFG_USB_OFFSET TTY_EEP_CFG_USB_OFFSET50,1541
+const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";PROGMEM52,1576
+struct tty_config_t {tty_config_t113,3386
+    uint8_t read_mode:2;read_mode117,3592
+    uint8_t echo:1;echo120,3706
+    uint8_t empty:5; // Frei für weiter Konfigurationszwecke.empty121,3726
+} tty_config;tty_config122,3789
+unsigned char tty_cb_pos; // Position im Kommando Buffertty_cb_pos124,3804
+unsigned char tty_ud_pos; // Position in den zu verändernden Datentty_ud_pos125,3861
+char *tty_buff; //[TTY_MAX_CMD_LINE_LEN];tty_buff128,3986
+   void (*func)(int); // Zeiger auf die auszuführende Funktionfunc134,4146
+   int type;         // das Argument, das mitübergeben wirdtype135,4210
+   char *command;    // Zeiger auf das Kommando im FLASHcommand136,4271
+} tty_command_t;tty_command_t137,4328
+static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);_stdout198,5962
+const prog_char _str_gt[]      = ">";_str_gt203,6153
+const prog_char _str_minus[]   = " -";_str_minus204,6191
+const prog_char _str_plus[]    = " +";_str_plus205,6230
+const prog_char _str_char[]    = "%c";_str_char206,6269
+const prog_char _str_decimal[] = "%d";_str_decimal207,6308
+const prog_char _str_end[]     = "E";_str_end208,6347
+const prog_char _str_error[]   = "ERR";_str_error209,6385
+const prog_char _str_bb[]      = "\b \b";_str_bb210,6425
+const prog_char _str_ret[]     = "\r\n";_str_ret211,6467
+const prog_char _str_ret_gt[]  = "\r\n>";_str_ret_gt212,6508
+const prog_char _str_2hex[]    = "0x%02X ";_str_2hex213,6550
+const prog_char _str_4hex[]    = "0x%04x";_str_4hex214,6594
+const prog_char _str_header[]  = "H=0x%02X\r\n";_str_header215,6637
+const prog_char _str_vid[]     = "VID=0x%02x%02x";_str_vid216,6686
+const prog_char _str_did[]     = "DID=0x%02x%02x";_str_did217,6737
+const prog_char _rledon[]  = "rledon";_rledon222,6914
+const prog_char _rledoff[] = "rledoff";_rledoff223,6953
+const prog_char _yledon[]  = "yledon";_yledon224,6993
+const prog_char _yledoff[] = "yledoff";_yledoff225,7032
+const prog_char _gledon[]  = "gledon";_gledon226,7072
+const prog_char _gledoff[] = "gledoff";_gledoff227,7111
+const prog_char _urst[] = "urst";_urst229,7152
+const prog_char _sint[]  = "sint";_sint231,7187
+const prog_char _sint3[] = "sint3";_sint3233,7263
+const prog_char _isd[] = "isd";_isd237,7331
+const prog_char _gdsc[] = "gdsc";_gdsc240,7371
+const prog_char _gsd[]  = "gsd";_gsd242,7429
+const prog_char _gdta[] = "gdta";_gdta244,7469
+const prog_char _sdsc[] = "sdsc";_sdsc246,7504
+const prog_char _ssd[]  = "ssd";_ssd248,7562
+const prog_char _sdta[] = "sdta";_sdta250,7602
+const prog_char _ersd[]  = "ersd";_ersd252,7637
+const prog_char _essd[]  = "essd";_essd253,7672
+const prog_char _erdsc[] = "erdsc";_erdsc254,7707
+const prog_char _esdsc[] = "esdsc";_esdsc255,7743
+const prog_char _ervn[]  = "ervn";_ervn257,7780
+const prog_char _esvn[]  = "esvn";_esvn258,7815
+const prog_char _ern[]   = "ern";_ern259,7850
+const prog_char _esn[]   = "esn";_esn260,7884
+const prog_char _ersn[]  = "ersn";_ersn261,7918
+const prog_char _essn[]  = "essn";_essn262,7953
+const prog_char _ercvid[] = "ercvid";_ercvid264,7989
+const prog_char _escvid[] = "escvid";_escvid265,8027
+const prog_char _ercdid[] = "ercdid";_ercdid266,8065
+const prog_char _escdid[] = "escdid";_escdid267,8103
+const prog_char _tlosdsc[]  = "tlosdsc";_tlosdsc269,8142
+const prog_char _tlossd[]   = "tlossd";_tlossd271,8207
+const prog_char _tlosvn[]   = "tlosvn";_tlosvn273,8254
+const prog_char _tlosn[]    = "tlosn";_tlosn274,8294
+const prog_char _tlossn[]   = "tlossn";_tlossn275,8333
+const prog_char _tloscvid[] = "tloscvid";_tloscvid276,8373
+const prog_char _tloscdid[] = "tloscdid";_tloscdid277,8415
+const prog_char _tiossd[]   = "tiossd";_tiossd279,8481
+const prog_char _edcfg[] = "edcfg";_edcfg282,8529
+const prog_char _gvn[]   = "gvn";_gvn284,8566
+const prog_char _gn[]    = "gn";_gn285,8600
+const prog_char _gsn[]   = "gsn";_gsn286,8633
+const prog_char _gcvid[] = "gcvid";_gcvid287,8667
+const prog_char _gcdid[] = "gcdid";_gcdid288,8703
+const prog_char _svn[]   = "svn";_svn289,8739
+const prog_char _sn[]    = "sn";_sn290,8773
+const prog_char _ssn[]   = "ssn";_ssn291,8806
+const prog_char _svnh[] = "svnh";_svnh293,8841
+const prog_char _snh[]  = "snh";_snh294,8875
+const prog_char _ssnh[] = "ssnh";_ssnh295,8908
+const prog_char _scvid[] = "scvid";_scvid297,8943
+const prog_char _scdid[] = "scdid";_scdid298,8979
+const prog_char _ttye[] = "ttye";_ttye300,9016
+const tty_command_t tty_commands[] PROGMEM = {PROGMEM304,9139
 
 usbconfig.h,2981
 #define __usbconfig_h_included____usbconfig_h_included__12,391
@@ -238,109 +268,74 @@ usbconfig.h,2981
 #define USB_CFG_DESCR_PROPS_HID_REPORT USB_CFG_DESCR_PROPS_HID_REPORT353,17705
 #define USB_CFG_DESCR_PROPS_UNKNOWN USB_CFG_DESCR_PROPS_UNKNOWN354,17799
 
-usbdrv/oddebug.c,210
-static void uartPutc(char c)uartPutc17,452
-static uchar    hexAscii(uchar h)hexAscii23,588
-static void printHex(uchar c)printHex32,721
-void    odDebug(uchar prefix, uchar *data, uchar len)odDebug38,815
-
-usbdrv/usbdrv.c,5332
-uchar usbRxBuf[2*USB_BUFSIZE];  /* raw RX buffer: PID, 8 bytes data, 2 bytes CRC */usbRxBuf24,732
-uchar       usbInputBufOffset;  /* offset in usbRxBuf used for low level receiving */usbInputBufOffset25,816
-uchar       usbDeviceAddr;      /* assigned during enumeration, defaults to 0 */usbDeviceAddr26,902
-uchar       usbNewDeviceAddr;   /* device ID which should be set after status phase */usbNewDeviceAddr27,983
-uchar       usbConfiguration;   /* currently selected configuration. Administered by driver, but not used */usbConfiguration28,1070
-volatile schar usbRxLen;        /* = 0; number of bytes in usbRxBuf; 0 means free, -1 for flow control */usbRxLen29,1179
-uchar       usbCurrentTok;      /* last token received or endpoint number for last OUT token if != 0 */usbCurrentTok30,1285
-uchar       usbRxToken;         /* token for data we received; or endpont number for last OUT */usbRxToken31,1389
-volatile uchar usbTxLen = USBPID_NAK;   /* number of bytes to transmit with next IN token or handshake token */usbTxLen32,1486
-uchar       usbTxBuf[USB_BUFSIZE];/* data to transmit with next IN, free if usbTxLen contains handshake token */usbTxBuf33,1598
-volatile uchar  usbSofCount;    /* incremented by assembler module every SOF */usbSofCount35,1729
-usbTxStatus_t  usbTxStatus1;usbTxStatus138,1880
-usbTxStatus_t  usbTxStatus3;usbTxStatus340,1946
-uchar       usbCurrentDataToken;/* when we check data toggling to ignore duplicate packets */usbCurrentDataToken44,2024
-uchar               *usbMsgPtr;     /* data to transmit next -- ROM or RAM address */usbMsgPtr48,2180
-static usbMsgLen_t  usbMsgLen = USB_NO_MSG; /* remaining number of bytes */usbMsgLen49,2266
-static uchar        usbMsgFlags;    /* flag values see below */usbMsgFlags50,2342
-#define USB_FLG_MSGPTR_IS_ROM USB_FLG_MSGPTR_IS_ROM52,2407
-#define USB_FLG_USE_USER_RW USB_FLG_USE_USER_RW53,2446
-#undef USB_CFG_DESCR_PROPS_STRING_0USB_CFG_DESCR_PROPS_STRING_068,2953
-#define USB_CFG_DESCR_PROPS_STRING_0 USB_CFG_DESCR_PROPS_STRING_069,2989
-PROGMEM char usbDescriptorString0[] = { /* language descriptor */usbDescriptorString070,3058
-#undef USB_CFG_DESCR_PROPS_STRING_VENDORUSB_CFG_DESCR_PROPS_STRING_VENDOR78,3384
-#define USB_CFG_DESCR_PROPS_STRING_VENDOR USB_CFG_DESCR_PROPS_STRING_VENDOR79,3425
-PROGMEM int  usbDescriptorStringVendor[] = {usbDescriptorStringVendor80,3503
-#undef USB_CFG_DESCR_PROPS_STRING_PRODUCTUSB_CFG_DESCR_PROPS_STRING_PRODUCT87,3713
-#define USB_CFG_DESCR_PROPS_STRING_PRODUCT USB_CFG_DESCR_PROPS_STRING_PRODUCT88,3755
-PROGMEM int  usbDescriptorStringDevice[] = {usbDescriptorStringDevice89,3834
-#undef USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBERUSB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER96,4052
-#define USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER97,4100
-PROGMEM int usbDescriptorStringSerialNumber[] = {usbDescriptorStringSerialNumber98,4192
-#undef USB_CFG_DESCR_PROPS_DEVICEUSB_CFG_DESCR_PROPS_DEVICE109,4505
-#define USB_CFG_DESCR_PROPS_DEVICE USB_CFG_DESCR_PROPS_DEVICE110,4539
-PROGMEM char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice111,4603
-#undef USB_CFG_DESCR_PROPS_HIDUSB_CFG_DESCR_PROPS_HID135,5773
-#define USB_CFG_DESCR_PROPS_HID USB_CFG_DESCR_PROPS_HID136,5804
-#undef USB_CFG_DESCR_PROPS_CONFIGURATIONUSB_CFG_DESCR_PROPS_CONFIGURATION140,5953
-#define USB_CFG_DESCR_PROPS_CONFIGURATION USB_CFG_DESCR_PROPS_CONFIGURATION141,5994
-PROGMEM char usbDescriptorConfiguration[] = {    /* USB configuration descriptor */usbDescriptorConfiguration142,6073
-static inline void  usbResetDataToggling(void)usbResetDataToggling197,8809
-static inline void  usbResetStall(void)usbResetStall207,9173
-static void usbGenericSetInterrupt(uchar *data, uchar len, usbTxStatus_t *txStatus)usbGenericSetInterrupt221,9535
-USB_PUBLIC void usbSetInterrupt(uchar *data, uchar len)usbSetInterrupt245,10440
-USB_PUBLIC void usbSetInterrupt3(uchar *data, uchar len)usbSetInterrupt3252,10596
-#   define SWITCH_START(SWITCH_START267,11114
-#   define SWITCH_CASE(SWITCH_CASE268,11163
-#   define SWITCH_CASE2(SWITCH_CASE2269,11221
-#   define SWITCH_CASE3(SWITCH_CASE3270,11286
-#   define SWITCH_DEFAULT SWITCH_DEFAULT271,11361
-#   define SWITCH_END SWITCH_END272,11414
-#   define SWITCH_START(SWITCH_START274,11458
-#   define SWITCH_CASE(SWITCH_CASE275,11519
-#   define SWITCH_CASE2(SWITCH_CASE2276,11581
-#   define SWITCH_CASE3(SWITCH_CASE3277,11656
-#   define SWITCH_DEFAULT SWITCH_DEFAULT278,11747
-#   define SWITCH_END SWITCH_END279,11789
-#define USB_RX_USER_HOOK(USB_RX_USER_HOOK283,11860
-#define USB_SET_ADDRESS_HOOK(USB_SET_ADDRESS_HOOK286,11932
-#define GET_DESCRIPTOR(GET_DESCRIPTOR296,12284
-static inline usbMsgLen_t usbDriverDescriptor(usbRequest_t *rq)usbDriverDescriptor311,12952
-static inline usbMsgLen_t usbDriverSetup(usbRequest_t *rq)usbDriverSetup362,15136
-static inline void usbProcessRx(uchar *data, uchar len)usbProcessRx422,17597
-static uchar usbDeviceRead(uchar *data, uchar len)usbDeviceRead492,20667
-static inline void usbBuildTxBlock(void)usbBuildTxBlock524,21663
-static inline void usbHandleResetHook(uchar notResetState)usbHandleResetHook550,22464
-USB_PUBLIC void usbPoll(void)usbPoll565,22803
-USB_PUBLIC void usbInit(void)usbInit607,24134
-
-usbdrv/oddebug.h,1119
-#define __oddebug_h_included____oddebug_h_included__12,372
-#   define  F_CPU F_CPU28,922
-#   define  uchar uchar35,1060
-#   undef   DEBUG_LEVELDEBUG_LEVEL40,1242
-#   define  DEBUG_LEVEL DEBUG_LEVEL44,1294
-#   define  DBG1(DBG150,1429
-#   define  DBG1(DBG152,1498
-#   define  DBG2(DBG256,1562
-#   define  DBG2(DBG258,1631
-#   define  ODDBG_UBRR ODDBG_UBRR69,1923
-#   define  ODDBG_UBRR ODDBG_UBRR71,1972
-#   define  ODDBG_UBRR ODDBG_UBRR73,2022
-#   define  ODDBG_UBRR ODDBG_UBRR75,2073
-#   define  ODDBG_UCR ODDBG_UCR79,2128
-#   define  ODDBG_UCR ODDBG_UCR81,2176
-#   define  ODDBG_UCR ODDBG_UCR83,2227
-#   define  ODDBG_TXEN ODDBG_TXEN87,2283
-#   define  ODDBG_TXEN ODDBG_TXEN89,2318
-#   define  ODDBG_USR ODDBG_USR93,2372
-#   define  ODDBG_USR ODDBG_USR95,2420
-#   define  ODDBG_USR ODDBG_USR97,2471
-#   define  ODDBG_UDRE ODDBG_UDRE101,2527
-#   define  ODDBG_UDRE ODDBG_UDRE103,2562
-#   define  ODDBG_UDR ODDBG_UDR107,2616
-#   define  ODDBG_UDR ODDBG_UDR109,2663
-static inline void  odDebugInit(void)odDebugInit112,2700
-#   define odDebugInit(odDebugInit118,2826
+usbdrv/usbdrv.c,5334
+uchar usbRxBuf[2*USB_BUFSIZE];  /* raw RX buffer: PID, 8 bytes data, 2 bytes CRC */usbRxBuf26,759
+uchar       usbInputBufOffset;  /* offset in usbRxBuf used for low level receiving */usbInputBufOffset27,843
+uchar       usbDeviceAddr;      /* assigned during enumeration, defaults to 0 */usbDeviceAddr28,929
+uchar       usbNewDeviceAddr;   /* device ID which should be set after status phase */usbNewDeviceAddr29,1010
+uchar       usbConfiguration;   /* currently selected configuration. Administered by driver, but not used */usbConfiguration30,1097
+volatile schar usbRxLen;        /* = 0; number of bytes in usbRxBuf; 0 means free, -1 for flow control */usbRxLen31,1206
+uchar       usbCurrentTok;      /* last token received or endpoint number for last OUT token if != 0 */usbCurrentTok32,1312
+uchar       usbRxToken;         /* token for data we received; or endpont number for last OUT */usbRxToken33,1416
+volatile uchar usbTxLen = USBPID_NAK;   /* number of bytes to transmit with next IN token or handshake token */usbTxLen34,1513
+uchar       usbTxBuf[USB_BUFSIZE];/* data to transmit with next IN, free if usbTxLen contains handshake token */usbTxBuf35,1625
+volatile uchar  usbSofCount;    /* incremented by assembler module every SOF */usbSofCount37,1756
+usbTxStatus_t  usbTxStatus1;usbTxStatus140,1907
+usbTxStatus_t  usbTxStatus3;usbTxStatus342,1973
+uchar       usbCurrentDataToken;/* when we check data toggling to ignore duplicate packets */usbCurrentDataToken46,2051
+uchar               *usbMsgPtr;     /* data to transmit next -- ROM or RAM address */usbMsgPtr50,2207
+static usbMsgLen_t  usbMsgLen = USB_NO_MSG; /* remaining number of bytes */usbMsgLen51,2293
+static uchar        usbMsgFlags;    /* flag values see below */usbMsgFlags52,2369
+#define USB_FLG_MSGPTR_IS_ROM USB_FLG_MSGPTR_IS_ROM54,2434
+#define USB_FLG_USE_USER_RW USB_FLG_USE_USER_RW55,2473
+#undef USB_CFG_DESCR_PROPS_STRING_0USB_CFG_DESCR_PROPS_STRING_070,2980
+#define USB_CFG_DESCR_PROPS_STRING_0 USB_CFG_DESCR_PROPS_STRING_071,3016
+PROGMEM char usbDescriptorString0[] = { /* language descriptor */usbDescriptorString072,3085
+#undef USB_CFG_DESCR_PROPS_STRING_VENDORUSB_CFG_DESCR_PROPS_STRING_VENDOR80,3411
+#define USB_CFG_DESCR_PROPS_STRING_VENDOR USB_CFG_DESCR_PROPS_STRING_VENDOR81,3452
+PROGMEM int  usbDescriptorStringVendor[] = {usbDescriptorStringVendor82,3530
+#undef USB_CFG_DESCR_PROPS_STRING_PRODUCTUSB_CFG_DESCR_PROPS_STRING_PRODUCT89,3740
+#define USB_CFG_DESCR_PROPS_STRING_PRODUCT USB_CFG_DESCR_PROPS_STRING_PRODUCT90,3782
+PROGMEM int  usbDescriptorStringDevice[] = {usbDescriptorStringDevice91,3861
+#undef USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBERUSB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER98,4079
+#define USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER99,4127
+PROGMEM int usbDescriptorStringSerialNumber[] = {usbDescriptorStringSerialNumber100,4219
+#undef USB_CFG_DESCR_PROPS_DEVICEUSB_CFG_DESCR_PROPS_DEVICE111,4532
+#define USB_CFG_DESCR_PROPS_DEVICE USB_CFG_DESCR_PROPS_DEVICE112,4566
+PROGMEM char usbDescriptorDevice[] = {    /* USB device descriptor */usbDescriptorDevice113,4630
+#undef USB_CFG_DESCR_PROPS_HIDUSB_CFG_DESCR_PROPS_HID137,5800
+#define USB_CFG_DESCR_PROPS_HID USB_CFG_DESCR_PROPS_HID138,5831
+#undef USB_CFG_DESCR_PROPS_CONFIGURATIONUSB_CFG_DESCR_PROPS_CONFIGURATION142,5980
+#define USB_CFG_DESCR_PROPS_CONFIGURATION USB_CFG_DESCR_PROPS_CONFIGURATION143,6021
+PROGMEM char usbDescriptorConfiguration[] = {    /* USB configuration descriptor */usbDescriptorConfiguration144,6100
+static inline void  usbResetDataToggling(void)usbResetDataToggling199,8836
+static inline void  usbResetStall(void)usbResetStall209,9200
+static void usbGenericSetInterrupt(uchar *data, uchar len, usbTxStatus_t *txStatus)usbGenericSetInterrupt223,9562
+USB_PUBLIC void usbSetInterrupt(uchar *data, uchar len)usbSetInterrupt249,10494
+USB_PUBLIC void usbSetInterrupt3(uchar *data, uchar len)usbSetInterrupt3256,10650
+#   define SWITCH_START(SWITCH_START271,11168
+#   define SWITCH_CASE(SWITCH_CASE272,11217
+#   define SWITCH_CASE2(SWITCH_CASE2273,11275
+#   define SWITCH_CASE3(SWITCH_CASE3274,11340
+#   define SWITCH_DEFAULT SWITCH_DEFAULT275,11415
+#   define SWITCH_END SWITCH_END276,11468
+#   define SWITCH_START(SWITCH_START278,11512
+#   define SWITCH_CASE(SWITCH_CASE279,11573
+#   define SWITCH_CASE2(SWITCH_CASE2280,11635
+#   define SWITCH_CASE3(SWITCH_CASE3281,11710
+#   define SWITCH_DEFAULT SWITCH_DEFAULT282,11801
+#   define SWITCH_END SWITCH_END283,11843
+#define USB_RX_USER_HOOK(USB_RX_USER_HOOK287,11914
+#define USB_SET_ADDRESS_HOOK(USB_SET_ADDRESS_HOOK290,11986
+#define GET_DESCRIPTOR(GET_DESCRIPTOR300,12338
+static inline usbMsgLen_t usbDriverDescriptor(usbRequest_t *rq)usbDriverDescriptor315,13006
+static inline usbMsgLen_t usbDriverSetup(usbRequest_t *rq)usbDriverSetup366,15190
+static inline void usbProcessRx(uchar *data, uchar len)usbProcessRx426,17651
+static uchar usbDeviceRead(uchar *data, uchar len)usbDeviceRead498,20748
+static inline void usbBuildTxBlock(void)usbBuildTxBlock530,21744
+static inline void usbHandleResetHook(uchar notResetState)usbHandleResetHook558,22572
+USB_PUBLIC void usbPoll(void)usbPoll573,22911
+USB_PUBLIC void usbInit(void)usbInit617,24269
 
 usbdrv/usbconfig-prototype.h,3140
 #define __usbconfig_h_included____usbconfig_h_included__12,439

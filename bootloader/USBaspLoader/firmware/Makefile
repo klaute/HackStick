@@ -16,16 +16,21 @@
 
 F_CPU = 20000000
 DEVICE = atmega168
+# mega168
 BOOTLOADER_ADDRESS = 3800
+# mega328
+#BOOTLOADER_ADDRESS = 7800
 FUSEOPT = $(FUSEOPT_168)
 LOCKOPT = -U lock:w:0x2f:m
 
-PROGRAMMER = -c avrisp2 -P /dev/ttyUSB0
+PROGRAMMER = -c dragon_pp -P usb 
+# -c avrisp2 -P /dev/ttyUSB0
 # PROGRAMMER contains AVRDUDE options to address your programmer
 
 FUSEOPT_8 = -U hfuse:w:0xc0:m -U lfuse:w:0x9f:m
 FUSEOPT_88 = -U hfuse:w:0xd6:m -U lfuse:w:0xdf:m -U efuse:w:0x00:m
 FUSEOPT_168 = -U hfuse:w:0xd6:m -U lfuse:w:0xdf:m -U efuse:w:0x00:m
+FUSEOPT_328 = -U hfuse:w:0xd2:m -U lfuse:w:0xdf:m -U efuse:w:0xff:m
 # You may have to change the order of these -U commands.
 
 #---------------------------------------------------------------------

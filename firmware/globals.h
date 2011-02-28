@@ -24,24 +24,34 @@
 #endif
 
 /*----------------------------------------------------------------------------*/
+
+#include <stdlib.h>
+
+/*----------------------------------------------------------------------------*/
+// Flags um die Bestandteile der Firmware zu aktivieren/deaktivieren
+
+//#define WITH_INTERPRETER
+
+/*----------------------------------------------------------------------------*/
+
 #define USB_CFG_HID_REPORT_DESCRIPTOR_LEN 100
 
-// Maximale Länge der Strings für die USB Variablen.
+// Maximale Laenge der Strings fuer die USB Variablen.
 #define USB_DEVICE_STRING_DESCRIPTION_LEN 20
 
-// Maximale Anzahl der zu übertragenden DatenBytes festlegen
+// Maximale Anzahl der zu uebertragenden DatenBytes festlegen
 #define USB_MAX_DATA_BYTES 128
 
-// Anzahl der Bytes für die USB ID's (Vendor und Device)
+// Anzahl der Bytes fuer die USB ID's (Vendor und Device)
 #define USB_CFG_ID_BYTE_CNT 2
 
-// Maximal Anzahl der Bytes im EEPROM abzüglich der anderen gespeicherten Daten.
+// Maximal Anzahl der Bytes im EEPROM abzueglich der anderen gespeicherten Daten.
 //( 512 -(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) ) )
 #define USB_MAX_DATA_SEQ_SIZE 286
 //#define USB_MAX_DATA_SEQ_SIZE 512-(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) )
 
 /*----------------------------------------------------------------------------*/
-// Defines um die LED's einfacher ansteuern zu können.
+// Defines um die LED's einfacher ansteuern zu koennen.
 #define LED_RED_PORT    PORTC
 #define LED_YELLOW_PORT PORTC
 #define LED_GREEN_PORT  PORTB
@@ -58,6 +68,7 @@
 #define EEP_CFG_USB_CONFIG_VENDOR_ID                4
 #define EEP_CFG_USB_CONFIG_DEVICE_ID                5
 #define EEP_CFG_USB_DATA_SEQ                        6
+#define EEP_CFG_USB_CONFIG_INTERPRET_ID             7
 
 #define EEP_CFG_USB_TYPES       7 // Die Anzahl der "EEP_CFG_USB_" Defines
 #define EEP_CFG_USB_STARTS_WITH 0

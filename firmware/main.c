@@ -56,9 +56,24 @@ void init(void)
     DDRD  |= (0 << PD3) | (0 << PD2) | (0 << PD6);
     PORTD |= (0 << PD3) | (0 << PD2) | (1 << PD6);
 
-    tty_init();
+    // Je ein Byte für die Zeiger allocieren
+    //usbHidReportDescriptor = malloc(sizeof(char)); // nicht nötig, wird mit array initialisiert
+#ifdef WITH_INTERPRETER
+    usbDataSequence = malloc(1*sizeof(uint8_t));
+#endif
+    //dataBytes       = malloc(1*sizeof(uint8_t));
+    /*realloc(usbDescriptorStringVendor,       1*sizeof(int));
+    realloc(usbDescriptorStringDevice,       1*sizeof(int));
+    realloc(usbDescriptorStringSerialNumber, 1*sizeof(int));*/
+    //maxUSBDataBytes = USB_MAX_DATA_BYTES;
+    // Anzah der Bytes des Descriptors die in der Firmware eingetragen sind.
+    //maxUSBHidReportDescriptorBytes = 22;
+
+    usb_descr.USBCfgInterfaceClass = 3; // Hid Device Class
 
     _loadEEPROMConfig();
+
+    tty_init();
 
     // USB initialisieren
     usbInit();
@@ -75,26 +90,30 @@ void init(void)
 /* Laden der Startup Konfiguration aus dem EEPROM */
 void _loadEEPROMConfig()
 {
-// USB-Konfiguartion aus dem EEPROM laden
+
+    // USB-Konfiguartion aus dem EEPROM laden
     uint8_t config = eeprom_read_byte(&eep_usbConfig);
 
     // TODO aus EEPROM laden oder festlegen der USB Geräteinformationen setzen
-    usbDescriptorDevice[4]  = USBCfgDeviceClass;
-    usbDescriptorDevice[5]  = USBCfgDeviceSubClass;
-    usbDescriptorConfiguration[14] = USBCfgInterfaceClass;
-    usbDescriptorConfiguration[15] = USBCfgInterfaceSubClass;
-    usbDescriptorConfiguration[16] = USBCfgInterfaceProtocol;
+    usbDescriptorDevice[4]         = usb_descr.USBCfgDeviceClass;
+    usbDescriptorDevice[5]         = usb_descr.USBCfgDeviceSubClass;
+    usbDescriptorConfiguration[14] = usb_descr.USBCfgInterfaceClass;
+    usbDescriptorConfiguration[15] = usb_descr.USBCfgInterfaceSubClass;
+    usbDescriptorConfiguration[16] = usb_descr.USBCfgInterfaceProtocol;
     
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_HID_REPORT_DESCRIPTOR)) )
     {
         eep_readUSBHidReportDescriptor();
     } else {
+        // Bei der default einstellung muss die Größe nicht angepasst werden,
+        // da der Zeiger bereits auf die korrekte Größe initialisiert wurde.
         usbDescriptorConfiguration[25] = maxUSBHidReportDescriptorBytes;
     }
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR)) )
     {
         eep_readUSBDescriptorStringVendor();
     } else {
+        //realloc(usbDescriptorStringVendor, 9*sizeof(int));
         usbDescriptorStringVendor[0] = USB_STRING_DESCRIPTOR_HEADER(8);
         usbDescriptorStringVendor[1] = 'k';
         usbDescriptorStringVendor[2] = 'l';
@@ -109,6 +128,7 @@ void _loadEEPROMConfig()
     {
         eep_readUSBDescriptorStringDevice();
     } else {
+        //realloc(usbDescriptorStringDevice, 10*sizeof(int));
         usbDescriptorStringDevice[0] = USB_STRING_DESCRIPTOR_HEADER(9);
         usbDescriptorStringDevice[1] = 'H';
         usbDescriptorStringDevice[2] = 'a';
@@ -124,6 +144,7 @@ void _loadEEPROMConfig()
     {
         eep_readUSBDescriptorStringSerialNumber();
     } else {
+        //realloc(usbDescriptorStringSerialNumber, 5*sizeof(int));
         usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(4);
         usbDescriptorStringSerialNumber[1] = '0';
         usbDescriptorStringSerialNumber[2] = '.';
@@ -144,11 +165,71 @@ void _loadEEPROMConfig()
         //usbDescriptorDevice[10] = 0xdf; // Low-Byte der Device ID
         //usbDescriptorDevice[11] = 0x05;
     }
+#ifdef WITH_INTERPRETER
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_DATA_SEQ)) )
     {
         eep_readUSBDataSequence();
     }
+#endif
 }
+
+/* ------------------------------------------------------------------------- */
+
+#ifdef WITH_INTERPRETER
+void interpretUSBDataSequence()
+{
+/**/
+    if ( usbDataSequenceBytes < 4 )
+        return; // Keine gültige Sequenz vorhanden und der Code soll ausgeführt werden.
+
+    // Header auslesen.
+    uint8_t maxDataBytes = usbDataSequence[0];
+    uint8_t delayStart   = usbDataSequence[1];
+    uint8_t delay        = usbDataSequence[2];
+    uint8_t blockCnt     = usbDataSequence[3];
+
+    // Die maximale/minimale Anzahl der auszugebenden Daten ist ungültig oder keine Blöcke in den Daten vorhanden.
+    if ( maxDataBytes > USB_MAX_DATA_BYTES || !maxDataBytes || !blockCnt )
+        return; 
+
+    // Größe der Daten anpassen und leeren.
+    //realloc(dataBytes, maxDataBytes);
+    //bzero(dataBytes,   maxDataBytes);
+
+    uint16_t arrayPos = 3; // Index ab dem die Blöcke gelesen werden
+    
+    _delay_ms(delayStart); // Pause vor dem Start ausführen
+    
+    // Bytes beginnen zu interpretieren
+    uint8_t i;
+    for ( i = 0; i < blockCnt; i++ )
+    {
+        arrayPos++;
+        uint8_t tupelCnt = usbDataSequence[arrayPos];
+        
+        uint8_t j;
+        for ( j = 0; j < tupelCnt; j++ )
+        {
+            arrayPos++;
+            uint8_t index = usbDataSequence[arrayPos];
+            
+            arrayPos++;
+            if ( index < maxDataBytes ) // ungültige indizes werden übersprungen
+                dataBytes[ index ] = usbDataSequence[arrayPos];
+        }
+
+#if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
+        // Falls ein weiterer Endpoint definiert wurde werden die Daten mit diesem versendet.
+        tty_setInterrupt3();
+#else
+        tty_setInterrupt();
+#endif
+        _delay_ms(delay);
+    }
+/**/
+}
+
+#endif
 
 /* ------------------------------------------------------------------------- */
 /* Simulieren eines USB disconnect */
@@ -163,7 +244,8 @@ void usbReset( void )
     {    // USB disconnect (~250ms)
         _delay_ms(20);
         LED_GREEN_PORT = LED_GREEN_PORT ^ (1 << LED_GREEN_PIN); // Grüne LED blinken lassen
-    } while ( --i );
+        i--;
+    } while ( i > 0 );
 
     usbDeviceConnect();
     //LED_GREEN_PORT = LED_GREEN_PORT | (1 << LED_GREEN_PIN);
@@ -315,7 +397,7 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             return maxUSBDataBytes;  // usbFunctionWrite() wird aufgerufen*/
         } else if(rq->bRequest == USBRQ_HID_GET_IDLE)
         {
-            usbMsgPtr = &idleRate;
+            usbMsgPtr = idleRate;
             return 1;
         } else if ( rq->bRequest == USBRQ_HID_SET_IDLE )
         {

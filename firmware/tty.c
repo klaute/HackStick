@@ -26,7 +26,10 @@ void tty_init()
 
     stdout = &_stdout; /* Allow printf over UART */
 
+    tty_buff = malloc(1*sizeof(char));
+
     tty_config.echo = TTY_ECHO_ON;
+
 }
 
 /* ------------------------------------------------------------------------- */
@@ -43,39 +46,40 @@ void tty_pollTerminal(void)
 
     char c = uart_getc(); // Lesen eines Byte vom UART Puffer.
 
-    if ( c != 0 && c != '\r' ) // Buffer solange füllen bis ein Zeilenumbruch erreicht wurde
+    // Buffer solange füllen bis ein Zeilenumbruch erreicht wurde oder die maximale anzahl der gepufferten
+    // zeichen erreicht wurde
+    if ( c != 0 && c != '\r' && tty_cb_pos < TTY_MAX_CMD_LINE_LEN-2 ) 
     {
 
-        switch ( c ) // Steuerzeichen abfangen
-        {
-            case 32 ... 126:; // Keine Steuerzeichen
-                // Kein lokales Echo auf dem Host nötig, jedes Zeichen wird zurück gesendet.
-                // Es ist auch kein standardisiertes Terminal.
-                if ( tty_config.echo )
-                    printf_P(PSTR("%c"), c);
+        if ( tty_cb_pos >= sizeof(tty_buff) )
+            realloc(tty_buff, sizeof(tty_buff)+1); // Es wird mehr speicher benötigt
+        else if ( (sizeof(tty_buff)-tty_cb_pos) >= 5 ) // Wenn 5 oder mehr Bytes nbenutzt sind werden diese freigegeben
+            realloc(tty_buff, sizeof(tty_buff)-5);
+        
 
-                tty_buff[tty_cb_pos] = c;
-                tty_cb_pos++;
-            break;
-            case 0x09:; // Tab
-                tty_buff[tty_cb_pos] = 32; // durch Space ersetzen
-                tty_cb_pos++;
-            break;
-            case 0x7F:; // Backspace
-                if ( tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
-                {
-                    printf_P(PSTR("\b \b")); // Zeichen mit Space auf der Ausgabe überschreiben
-                    tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
-                    tty_cb_pos--;
-                }
-            break;
-            case 0x1b:; // ESC
-                if ( tty_cb_pos > 0 )
-                {
-                    printf_P(PSTR("\r\n>"));
-                    tty_cb_pos = 0; // Kommando abbrechen
-                }
-            break;
+		// Steuerzeichen abfangen
+        if ( c >= 32 && c <= 126 )
+        { // Keine Steuerzeichen
+			// Kein lokales Echo auf dem Host nötig, jedes Zeichen wird zurück gesendet.
+			// Es ist auch kein standardisiertes Terminal.
+			if ( tty_config.echo )
+				printf_P(_str_char, c);
+
+			tty_buff[tty_cb_pos] = c;
+			tty_cb_pos++;
+		} else if ( c == 0x09 )
+        {
+			tty_buff[tty_cb_pos] = 32; // durch Space ersetzen
+			tty_cb_pos++;
+		} else if ( c == 0x7f && tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
+		{
+			printf_P(_str_bb); // Zeichen mit Space auf der Ausgabe überschreiben
+			tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
+			tty_cb_pos--;
+		} else if ( c == 0x1b && tty_cb_pos > 0 )
+        {
+            printf_P(_str_ret_gt);
+            tty_cb_pos = 0; // Kommando abbrechen
         }
 
         if ( tty_cb_pos > TTY_MAX_CMD_LINE_LEN ) // Bevor der Buffer überläuft, wird "aufgeräumt";
@@ -91,7 +95,7 @@ void tty_pollTerminal(void)
             tty_cb_pos = 0;
 
             if ( tty_config.echo )
-                printf_P(PSTR("\r\n")); // Zeilenumbruch senden.
+                printf_P(_str_ret); // Zeilenumbruch senden.
 
             if (tty_executeCmd(tty_buff))
             {
@@ -103,11 +107,11 @@ void tty_pollTerminal(void)
                 }
             } else {
                 if (strlen(tty_buff) > 0)
-                    printf_P(PSTR("ERR")); // Kein gültiges Kommando.
+                    printf_P(_str_error); // Kein gültiges Kommando.
             }
-            printf_P(PSTR("\r\n"));
+            printf_P(_str_ret);
             if ( tty_config.echo )
-                printf_P(PSTR(">")); // Neuer Promt...
+                printf_P(_str_gt); // Neuer Promt...
 
         } else { // read_mode != 0
             // Einlesen der USB_HID_DESCRIPTOR Bytes oder DatenBytes
@@ -115,23 +119,28 @@ void tty_pollTerminal(void)
             tty_buff[tty_cb_pos] = '\0'; // Stringende festlegen
             tty_cb_pos = 0;
 
-            if ( ! strcmp_P((char*)tty_buff, PSTR("E")) )
+            if ( ! strcmp_P((char*)tty_buff, _str_end) )
             { // Es wurde das Ende der Daten angegeben
 
-                printf_P(PSTR("\r\n"));
+                printf_P(_str_ret);
                 if ( tty_config.echo )
-                    printf_P(PSTR(">"));
+                    printf_P(_str_gt);
 
                 if ( tty_config.read_mode == TTY_READ_MODE_HID_DESCRIPTOR )
                 {
+                    // Länge der des Descriptors speichern und
+                    // die den Konfigurations Descriptor anpassen.
                     maxUSBHidReportDescriptorBytes = tty_ud_pos;
                     usbDescriptorConfiguration[25] = maxUSBHidReportDescriptorBytes & 0xFF;
                     usbDescriptorConfiguration[26] = maxUSBHidReportDescriptorBytes >> 8;
                 }
-                // TODO prüfen ob dies noh benötigt wird.
-                //else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA ) // Falls wir im Mode 2 sind muss die Länge gespeichert werden.
-                    //maxUSBDataBytes = tty_ud_pos;
-
+#ifdef WITH_INTERPRETER
+                else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ ) //  Länge der Sequenzdaten speichern
+                    usbDataSequenceBytes = tty_ud_pos;
+#endif
+				else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA )
+					maxUSBDataBytes = tty_ud_pos;
+				
                 tty_ud_pos = 0;
                 tty_config.read_mode = TTY_READ_MODE_COMMAND; // In den Kommandomdus zurückspringen
 
@@ -139,20 +148,31 @@ void tty_pollTerminal(void)
 
                 unsigned int tmp = 0;
                 // formatiertes einlesen der Hexadezimalen Bytes wenn der Stig 4 Zeichen besitzt
-                if ( sscanf((char*)tty_buff, "0x%02x", &tmp ) && strlen(tty_buff) == 4 )
+                if ( sscanf_P((char*)tty_buff, _str_2hex, &tmp ) &&
+                     strlen(tty_buff) == 4 )
                 {
 
-                    if ( tty_config.read_mode == TTY_READ_MODE_HID_DESCRIPTOR )
+                    if ( tty_config.read_mode == TTY_READ_MODE_HID_DESCRIPTOR &&
+                         tty_ud_pos < USB_CFG_HID_REPORT_DESCRIPTOR_LEN )
                         usbHidReportDescriptor[tty_ud_pos] = tmp; // In USB HID Descriptor eintragen.
-                    else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ )
+#ifdef WITH_INTERPRETER
+                    else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ &&
+                              tty_ud_pos+1 < USB_MAX_DATA_SEQ_SIZE )
+                    {
+                        realloc(usbDataSequence, usbDataSequenceBytes);
                         usbDataSequence[tty_ud_pos] = tmp; // In das Datenarray eintragen.
+                    }
+#endif
+					else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA &&
+                              tty_ud_pos < USB_MAX_DATA_BYTES )
+						dataBytes[tty_ud_pos] = tmp;
 
                     tty_ud_pos++;
-                    printf_P(PSTR(" +")); // Byte wurde übernommen
+                    printf_P(_str_plus); // Byte wurde übernommen
                 } else
-                    printf_P(PSTR(" -")); // Eingabe wurde verworfen, war ungültig
+                    printf_P(_str_minus); // Eingabe wurde verworfen, war ungültig
 
-                printf_P(PSTR("\r\n"));
+                printf_P(_str_ret);
             }
         } // if zu read_mode == 0
     } // if ( c == '\r' ) zu
@@ -257,7 +277,7 @@ void tty_ledYellowOff()
 /* ------------------------------------------------------------------------- */
 void tty_setInterrupt()
 {
-    if ( usbInterruptIsReady() )
+    if ( usbInterruptIsReady() && maxUSBDataBytes )
     {
         usbSetInterrupt(&dataBytes[0], maxUSBDataBytes);
     }
@@ -266,34 +286,47 @@ void tty_setInterrupt()
 #if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
 void tty_setInterrupt3()
 {
-    if ( usbInterruptIsReady() )
+    if ( usbInterruptIsReady() && maxUSBDataBytes )
     {
         usbSetInterrupt3(&dataBytes[0], maxUSBDataBytes);
     }
 }
 #endif
 
+void tty_getUSBReportData()
+{
+    uint8_t i = 0;
+    for ( i = 0; i < maxUSBDataBytes; i++ )
+    {
+        printf_P(_str_2hex, dataBytes[i]); // Byteweises ausgeben der Daten
+        if (((i+1)%20)==0) // Alle 20 Werteeinen Zeilenumbruch einfügen
+            printf_P(PSTR("\r\n"));
+    }
+}
+
+#ifdef WITH_INTERPRETER
 void tty_getUSBDataSequence()
 {
     uint8_t i = 0;
     // TODO Hier die maximale Anzahl durch parsen der Daten herausfinden
     // und strukturiert anzeigen.
-    for ( i = 0; i < USB_MAX_DATA_SEQ_SIZE; i++ )
+    for ( i = 0; i < usbDataSequenceBytes; i++ )
     {
-        printf_P(PSTR("0x%02X "), usbDataSequence[i]); // Byteweises ausgeben der Daten
+        printf_P(_str_2hex, usbDataSequence[i]); // Byteweises ausgeben der Daten
         if (((i+1)%20)==0) // Alle 20 Werte einen Zeilenumbruch einfügen
-            printf_P(PSTR("\r\n"));
+            printf_P(_str_ret);
     }
 }
+#endif
 
 void tty_getUSBHidDeviceDescriptor()
 {
     uint8_t i = 0;
     for ( i = 0; i < maxUSBHidReportDescriptorBytes; i++ )
     { // ausgeben des kompletten Array's
-        printf_P(PSTR("0x%02X "), (unsigned int)usbHidReportDescriptor[i]);
+        printf_P(_str_2hex, (unsigned int)usbHidReportDescriptor[i]);
         if (((i+1)%20)==0) // Alle 20 Werteeinen Zeilenumbruch einfügen
-            printf_P(PSTR("\r\n"));
+            printf_P(_str_ret);
     }
 }
 
@@ -302,10 +335,12 @@ void tty_getVendorName()
     // Ausgeben des Herstellers.
     uint8_t i = 0;
     int j = ( ( usbDescriptorStringVendor[0] & 0x00ff ) -2 ) / 2;
-    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringVendor[0]);
+    printf_P(_str_header, usbDescriptorStringVendor[0]);
+    if (!usbDescriptorStringVendor[0])
+        return;
     for ( i = 1; i <= j; i++ )
     {
-        printf_P(PSTR("%c"), (unsigned int)usbDescriptorStringVendor[i]);
+        printf_P(_str_char, (unsigned int)usbDescriptorStringVendor[i]);
     }
 }
 
@@ -314,10 +349,12 @@ void tty_getDeviceName()
     // Ausgeben des Gerätenamen und Headers
     uint8_t i = 0;
     uint8_t j = ( ( usbDescriptorStringDevice[0] & 0x00FF ) -2 ) / 2;
-    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringDevice[0]);
+    printf_P(_str_header, usbDescriptorStringDevice[0]);
+    if (!usbDescriptorStringDevice[0])
+        return;
     for ( i = 1; i <= j; i++ )
     {
-        printf_P(PSTR("%c"), usbDescriptorStringDevice[i]);
+        printf_P(_str_char, usbDescriptorStringDevice[i]);
     }
 }
 
@@ -327,28 +364,36 @@ void tty_getSerialNumber()
     uint8_t i = 0;
     // Stringlänge ermitteln.
     char j = ( ( usbDescriptorStringSerialNumber[0] & 0x00FF ) -2 ) / 2;
-    printf_P(PSTR("H=0x%02X\r\n"),usbDescriptorStringSerialNumber[0]);
+    printf_P(_str_header, usbDescriptorStringSerialNumber[0]);
+    if (!usbDescriptorStringSerialNumber[0])
+        return;
     for ( i = 1; i <= j; i++ )
     {
-        printf_P(PSTR("%c"), (unsigned int)usbDescriptorStringSerialNumber[i]);
+        printf_P(_str_char, (unsigned int)usbDescriptorStringSerialNumber[i]);
     }
 }
 
 void tty_getUSBConfigVendorID()
 {
-    printf_P(PSTR("VID=0x%02x%02x"), usbDescriptorDevice[9], usbDescriptorDevice[8]);
+    printf_P(_str_vid, usbDescriptorDevice[9], usbDescriptorDevice[8]);
 }
 
 void tty_getUSBConfigDeviceID()
 {
-    printf_P(PSTR("DID=0x%02x%02x"), usbDescriptorDevice[11], usbDescriptorDevice[10]);
+    printf_P(_str_did, usbDescriptorDevice[11], usbDescriptorDevice[10]);
 }
 
+void tty_setUSBReportData()
+{
+    tty_config.read_mode = TTY_READ_MODE_HID_DATA;
+}
+
+#ifdef WITH_INTERPRETER
 void tty_setUSBDataSequence()
 {
     tty_config.read_mode = TTY_READ_MODE_USB_DATA_SEQ;
 }
-
+#endif
 
 void tty_setUSBHidDeviceDescriptor()
 {
@@ -360,11 +405,12 @@ void tty_setVendorName(char* t)
     uint8_t i = 0;
     // Größe des Daten ermitteln und festlegen
     uint8_t j = strlen(t);
-    // Der String darf nur USB_DEVICE_STRING_DESCRIPTION_LEN -1 Zeichen lang sein,
+    // Der String darf nur USB_DEVICE_STRING_DESCRIPTION_LEN Zeichen lang sein,
     // da im ersten Element die Länge der Bytefolge steht.
-    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN) ?
+    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ?
                         j :
-                        USB_DEVICE_STRING_DESCRIPTION_LEN-1;
+                        USB_DEVICE_STRING_DESCRIPTION_LEN;
+    //realloc(usbDescriptorStringVendor, k+1);
     usbDescriptorStringVendor[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweise kopieren
@@ -377,9 +423,10 @@ void tty_setDeviceName(char* t)
     uint8_t i = 0;
     // Größe des Daten ermitteln und festlegen
     uint8_t j = strlen(t);
-    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN) ?
+    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ?
                     j :
-                    USB_DEVICE_STRING_DESCRIPTION_LEN-1;
+                    USB_DEVICE_STRING_DESCRIPTION_LEN;
+    //realloc(usbDescriptorStringDevice, k+1);
     usbDescriptorStringDevice[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweises kopieren
@@ -392,9 +439,10 @@ void tty_setSerialNumber(char* t)
     uint8_t i = 0;
     // Größe des Daten ermitteln und festlegen
     uint8_t j = strlen(t);
-    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN) ?
+    uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ? 
                     j :
-                    USB_DEVICE_STRING_DESCRIPTION_LEN-1;
+                    USB_DEVICE_STRING_DESCRIPTION_LEN;
+    //realloc(usbDescriptorStringSerialNumber, k+1);
     usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweise kopieren
@@ -404,37 +452,37 @@ void tty_setSerialNumber(char* t)
 
 void tty_setVendorHeader(char *t)
 {
-	uint16_t tmp = 0;
-	if ( sscanf((char*)t, "0x%04x", &tmp) )
-	{
-	    usbDescriptorStringVendor[0] = ( tmp & 0x00FF )
-		             | ((( tmp & 0xFF00 ) >> 8) << 8);
-	}
+    uint16_t tmp = 0;
+    if ( sscanf_P((char*)t, _str_4hex, &tmp) )
+    {
+        usbDescriptorStringVendor[0] = ( tmp & 0x00FF )
+                     | ((( tmp & 0xFF00 ) >> 8) << 8);
+    }
 }
 
 void tty_setSerialNumberHeader(char *t)
 {
-	uint16_t tmp = 0;
-	if ( sscanf((char*)t, "0x%04x", &tmp) )
-	{
-	    usbDescriptorStringSerialNumber[0] = ( tmp & 0x00FF )
-		               | ((( tmp & 0xFF00 ) >> 8) << 8);
-	}
+    uint16_t tmp = 0;
+    if ( sscanf_P((char*)t, _str_4hex, &tmp) )
+    {
+        usbDescriptorStringSerialNumber[0] = ( tmp & 0x00FF )
+                       | ((( tmp & 0xFF00 ) >> 8) << 8);
+    }
 }
 
 void tty_setDeviceNameHeader(char *t)
 {
-	uint16_t tmp = 0;
-	if ( sscanf((char*)t, "0x%04x", &tmp) )
-	{
-	    usbDescriptorStringDevice[0] = ( tmp & 0x00FF ) | ((( tmp & 0xFF00 ) >> 8) << 8);
-	}
+    uint16_t tmp = 0;
+    if ( sscanf_P((char*)t, _str_4hex, &tmp) )
+    {
+        usbDescriptorStringDevice[0] = ( tmp & 0x00FF ) | ((( tmp & 0xFF00 ) >> 8) << 8);
+    }
 }
 
 void tty_setUSBConfigVendorID(char* t)
 {
     uint16_t tmp = 0;
-    if ( sscanf_P((char*)t, PSTR("0x%04x"), &tmp) )
+    if ( sscanf_P((char*)t, _str_4hex, &tmp) )
     {
         usbDescriptorDevice[8] = (char)(tmp & 0x00FF);
         usbDescriptorDevice[9] = (char)((tmp & 0xFF00) >> 8);
@@ -444,7 +492,7 @@ void tty_setUSBConfigVendorID(char* t)
 void tty_setUSBConfigDeviceID(char* t)
 {
     uint16_t tmp = 0;
-    if ( sscanf_P((char*)t, PSTR("0x%04x"), &tmp) )
+    if ( sscanf_P((char*)t, _str_4hex, &tmp) )
     {
         usbDescriptorDevice[10] = (char)(tmp & 0x00FF);
         usbDescriptorDevice[11] = (char)((tmp & 0xFF00) >> 8);
@@ -456,7 +504,7 @@ void tty_setUSBConfigDeviceID(char* t)
 void tty_setEcho(char* t)
 {
     uint16_t tmp = 0;
-    if ( sscanf((char*)t, "%d", &tmp) )
+    if ( sscanf_P((char*)t, _str_decimal, &tmp) )
     {
         if ( tmp )
             tty_config.echo = TTY_ECHO_ON;
