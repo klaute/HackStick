@@ -37,3 +37,7 @@ In Zeilenform und Hex:
 0x00
 
 	the first byte holds both the LEFT CTRL and LEFT  modifier keys the 3rd byte holds the delete key (== decimal 76)
+
+KEY_NUM_LOCK	0X53				// 83 Key codes
+KEY_CAPS_LOCK	0x39				// 57
+KEY_SCROLL_LOCK	0x47				// 71
