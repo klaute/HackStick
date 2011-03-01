@@ -141,8 +141,8 @@ these macros are defined, the boot loader usees them.
 static inline void  bootLoaderInit(void)
 {
     PORTD |= (1 << JUMPER_BIT);     /* activate pull-up */
-    if(!(MCUCSR & (1 << EXTRF)))    /* If this was not an external reset, ignore */
-        leaveBootloader();
+    //if(!(MCUCSR & (1 << EXTRF)))    /* If this was not an external reset, ignore */
+        //leaveBootloader();
     MCUCSR = 0;                     /* clear all reset flags for next time */
 }
 

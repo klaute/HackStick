@@ -48,7 +48,7 @@ const prog_char _str_cfg[] = "\r\nCfg: 0x%02x";
 #ifdef WITH_INTERPRETER
 extern uint8_t *usbDataSequence; //[];
 #endif
-extern char     usbHidReportDescriptor[];
+extern char usbHidReportDescriptor[];
 
 extern uint8_t maxUSBDataBytes;
 #ifdef WITH_INTERPRETER
