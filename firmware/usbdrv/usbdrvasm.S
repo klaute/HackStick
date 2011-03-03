@@ -363,7 +363,6 @@ usbMFTimeout:
 #ifndef USB_CFG_CLOCK_KHZ
 #   ifdef F_CPU
 #       define USB_CFG_CLOCK_KHZ (F_CPU/1000)
-#error "test " USB_CFG_CLOCK_KHZ
 #   else
 #       error "USB_CFG_CLOCK_KHZ not defined in usbconfig.h and no F_CPU set!"
 #   endif

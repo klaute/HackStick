@@ -10,9 +10,7 @@
 
 #include "usbportability.h"
 #include "usbdrv.h"
-#if DEBUG_LEVEL > 0
 #include "oddebug.h"
-#endif
 
 /*
 General Description:
@@ -241,9 +239,7 @@ char    i;
     }while(--i > 0);            /* loop control at the end is 2 bytes shorter than at beginning */
     usbCrc16Append(&txStatus->buffer[1], len);
     txStatus->len = len + 4;    /* len must be given including sync byte */
-#if DEBUG_LEVEL > 0
     DBG2(0x21 + (((int)txStatus >> 3) & 3), txStatus->buffer, len + 3);
-#endif
 }
 
 USB_PUBLIC void usbSetInterrupt(uchar *data, uchar len)
@@ -432,9 +428,7 @@ usbRequest_t    *rq = (void *)data;
  * 0xe1 11100001 (USBPID_OUT: data phase of setup transfer)
  * 0...0x0f for OUT on endpoint X
  */
-#if DEBUG_LEVEL > 0
     DBG2(0x10 + (usbRxToken & 0xf), data, len + 2); /* SETUP=1d, SETUP-DATA=11, OUTx=1x */
-#endif
     USB_RX_USER_HOOK(data, len)
 #if USB_CFG_IMPLEMENT_FN_WRITEOUT
     if(usbRxToken < 0x10){  /* OUT to endpoint != 0: endpoint number in usbRxToken */
@@ -548,9 +542,7 @@ uchar       len;
         usbMsgLen = USB_NO_MSG;
     }
     usbTxLen = len;
-#if DEBUG_LEVEL > 0
     DBG2(0x20, usbTxBuf, len-1);
-#endif
 }
 
 /* ------------------------------------------------------------------------- */
@@ -605,9 +597,7 @@ uchar   i;
     usbNewDeviceAddr = 0;
     usbDeviceAddr = 0;
     usbResetStall();
-#if DEBUG_LEVEL > 0
     DBG1(0xff, 0, 0);
-#endif
 isNotReset:
     usbHandleResetHook(i);
 }
