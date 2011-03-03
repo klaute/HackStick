@@ -71,9 +71,11 @@ void init(void)
 
     usb_descr.USBCfgInterfaceClass = 3; // Hid Device Class
 
+    tty_init();
+
     _loadEEPROMConfig();
 
-    tty_init();
+    LED_GREEN_PORT = LED_GREEN_PORT & ~(1 << LED_GREEN_PIN);
 
     // USB initialisieren
     usbInit();
@@ -145,11 +147,12 @@ void _loadEEPROMConfig()
         eep_readUSBDescriptorStringSerialNumber();
     } else {
         //realloc(usbDescriptorStringSerialNumber, 5*sizeof(int));
-        usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(4);
+        usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(5);
         usbDescriptorStringSerialNumber[1] = '0';
         usbDescriptorStringSerialNumber[2] = '.';
-        usbDescriptorStringSerialNumber[3] = '0';
-        usbDescriptorStringSerialNumber[4] = '6';
+        usbDescriptorStringSerialNumber[3] = '6';
+        usbDescriptorStringSerialNumber[4] = '.';
+        usbDescriptorStringSerialNumber[5] = '1';
     }
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_CONFIG_VENDOR_ID)) )
     {
@@ -169,6 +172,11 @@ void _loadEEPROMConfig()
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_DATA_SEQ)) )
     {
         eep_readUSBDataSequence();
+        if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_CONFIG_INTERPRET_ID)) )
+        {
+            // Sollte nur ausgeführt weren wenn Daten zuvor geladen wurden.
+            interpretUSBDataSequence();
+        }
     }
 #endif
 }

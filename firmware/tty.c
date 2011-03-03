@@ -21,8 +21,17 @@
 void tty_init()
 {
 
+    /**/
     // UART initialisieren
-    uart_init(UART_BAUD_SELECT(9600, F_CPU)); // Baudrate = 9600
+    cli();
+
+    uart_init(UART_BAUD_SELECT_DOUBLE_SPEED(9600, F_CPU)); // Baudrate = 9600
+    //uart_init(UART_BAUD_SELECT(9600, F_CPU)); // Baudrate = 9600
+
+    sei();
+
+    //UDR0 = 'a';
+    //uart_puts("test");
 
     stdout = &_stdout; /* Allow printf over UART */
 
@@ -36,7 +45,12 @@ void tty_init()
 /* Allow printf over UART */
 static int _uart_putc(char c, FILE *stream)
 {
-    uart_putc(c);
+    //uart_putc(c);
+
+    while ( !(UCSR0A & (1<<UDRE0) ) );
+
+    UDR0 = c;
+
     return 0;
 }
 
@@ -44,12 +58,59 @@ static int _uart_putc(char c, FILE *stream)
 void tty_pollTerminal(void)
 {
 
+    /**/
     char c = uart_getc(); // Lesen eines Byte vom UART Puffer.
+    /**/
+
+    /*
+    char c = UDR0; // Lesen eines Byte vom UART Puffer.
+    */
+
+    if ( c & UART_NO_DATA )
+        return;
 
     // Buffer solange füllen bis ein Zeilenumbruch erreicht wurde oder die maximale anzahl der gepufferten
     // zeichen erreicht wurde
-    if ( c != 0 && c != '\r' && tty_cb_pos < TTY_MAX_CMD_LINE_LEN-2 ) 
+    if ( c != 0 && c != '\r' ) 
     {
+		if ( c == 0x7f && tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
+		{ // Backspace
+			printf_P(_str_bb); // Zeichen mit Space auf der Ausgabe überschreiben
+			tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
+			tty_cb_pos--;
+        }
+        // Die Anzahl der Zeichen darf TTY_MAX_CMD_LINE_LEN minus '\0' nicht überschreiten.
+        // Zudem ist tty_cb_pos immer eins höher als die aktuelle Anzahl der Zeichen im String.
+        if ( tty_cb_pos >= TTY_MAX_CMD_LINE_LEN -2 )
+            return;
+
+        /*
+         * new data available from UART
+         * check for Frame or Overrun error
+         */
+        if ( c & UART_FRAME_ERROR )
+        {
+            /* Framing Error detected, i.e no stop bit detected */
+            uart_puts_P("UART Frame Error: ");
+        }
+        if ( c & UART_OVERRUN_ERROR )
+        {
+            /* 
+             * Overrun, a character already present in the UART UDR register was 
+             * not read by the interrupt handler before the next character arrived,
+             * one or more received characters have been dropped
+             */
+            uart_puts_P("UART Overrun Error: ");
+        }
+        if ( c & UART_BUFFER_OVERFLOW )
+        {
+            /* 
+             * We are not reading the receive buffer fast enough,
+             * one or more received character have been dropped 
+             */
+            uart_puts_P("Buffer overflow error: ");
+        }
+
 
         if ( tty_cb_pos >= sizeof(tty_buff) )
             realloc(tty_buff, sizeof(tty_buff)+1); // Es wird mehr speicher benötigt
@@ -67,17 +128,12 @@ void tty_pollTerminal(void)
 
 			tty_buff[tty_cb_pos] = c;
 			tty_cb_pos++;
-		} else if ( c == 0x09 )
-        {
+		} else if ( c == 0x09 ) 
+        { // Tab
 			tty_buff[tty_cb_pos] = 32; // durch Space ersetzen
 			tty_cb_pos++;
-		} else if ( c == 0x7f && tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
-		{
-			printf_P(_str_bb); // Zeichen mit Space auf der Ausgabe überschreiben
-			tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
-			tty_cb_pos--;
 		} else if ( c == 0x1b && tty_cb_pos > 0 )
-        {
+        { // ESC
             printf_P(_str_ret_gt);
             tty_cb_pos = 0; // Kommando abbrechen
         }
@@ -500,6 +556,18 @@ void tty_setUSBConfigDeviceID(char* t)
 }
 
 /* ------------------------------------------------------------------------- */
+
+void tty_Help()
+{
+    printf_P(HELP_MSG);
+}
+
+void tty_startBootloader()
+{
+    printf_P(_str_bl);
+    wdt_enable(0);
+    while(1);
+}
 
 void tty_setEcho(char* t)
 {

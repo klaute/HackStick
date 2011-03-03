@@ -15,10 +15,10 @@
 #     make lock    # to protect the boot loader from overwriting
 
 F_CPU = 20000000
-DEVICE = atmega168
+DEVICE = atmega328p
 # BOOTLOADER_ADDRESS is 1800 for 8k devices, 3800 for 16k and 7800 for 32k.
-BOOTLOADER_ADDRESS = 3800
-FUSEOPT = $(FUSEOPT_168)
+BOOTLOADER_ADDRESS = 7800
+FUSEOPT = $(FUSEOPT_328)
 LOCKOPT = -U lock:w:0x2f:m
 
 PROGRAMMER = -c avrisp2 -P /dev/ttyUSB0
@@ -27,7 +27,8 @@ PROGRAMMER = -c avrisp2 -P /dev/ttyUSB0
 FUSEOPT_8 = -U hfuse:w:0xc0:m -U lfuse:w:0x9f:m
 FUSEOPT_88 = -U hfuse:w:0xd6:m -U lfuse:w:0xdf:m -U efuse:w:0x00:m
 FUSEOPT_168 = -U hfuse:w:0xd6:m -U lfuse:w:0xdf:m -U efuse:w:0x00:m
-FUSEOPT_328 = -U lfuse:w:0xf7:m -U hfuse:w:0xda:m -U efuse:w:0x03:m
+#FUSEOPT_328 = -U lfuse:w:0xf7:m -U hfuse:w:0xda:m -U efuse:w:0x03:m
+FUSEOPT_328 = -U lfuse:w:0xf7:m -U hfuse:w:0xd2:m -U efuse:w:0x03:m # Preserve EEPROM
 # You may have to change the order of these -U commands.
 
 #---------------------------------------------------------------------

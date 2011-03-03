@@ -38,11 +38,11 @@
 
 
 # MCU name
-MCU = atmega168
+MCU = atmega328p
 
 # Main Oscillator Frequency
 # This is only used to define F_CPU in all assembler and c-sources.
-F_CPU = 20000000
+F_CPU = 20000000UL
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -52,7 +52,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = usbdrv/usbdrv.c eeprom.c tty.c $(TARGET).c
+SRC = $(TARGET).c usbdrv/usbdrv.c eeprom.c tty.c uart.c
 
 
 # List Assembler source files here.
@@ -94,7 +94,7 @@ CDEFS =
 
 # Place -I options here
 CINCS  = -Iusbdrv
-CINCS += -I../../avrlib
+#CINCS += -I../../avrlib
 #CINCS += -I"C:\Users\klaute\Documents\My Dropbox\Privat\developing\avr\avrlib"
 
 
@@ -451,4 +451,5 @@ clean_list :
 .PHONY : all begin finish end sizebefore sizeafter gccversion \
 build elf hex eep lss sym coff extcoff \
 clean clean_list program
+
 

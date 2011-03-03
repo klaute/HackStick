@@ -19,6 +19,8 @@
 #define TTY_H
 
 /*----------------------------------------------------------------------------*/
+
+#include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
@@ -31,25 +33,32 @@
 #include "uart.h"
 
 #include "globals.h"
+#include "help.h"
+
+/*----------------------------------------------------------------------------*/
 
 // Maximale Länge die auf dem Terminal als kommando inkl. Parametern angegeben werden kann.
-#define TTY_MAX_CMD_LINE_LEN 30
+#define TTY_MAX_CMD_LINE_LEN          30
 
-#define TTY_CMD_WITHOUT_PARAMETER     0
-#define TTY_CMD_WITH_STRING_PARAMETER 1
+#define TTY_CMD_WITHOUT_PARAMETER      0
+#define TTY_CMD_WITH_STRING_PARAMETER  1
 
-#define TTY_READ_MODE_COMMAND        0
-#define TTY_READ_MODE_HID_DESCRIPTOR 1
-#define TTY_READ_MODE_USB_DATA_SEQ   2
-#define TTY_READ_MODE_HID_DATA       3
+#define TTY_READ_MODE_COMMAND          0
+#define TTY_READ_MODE_HID_DESCRIPTOR   1
+#define TTY_READ_MODE_USB_DATA_SEQ     2
+#define TTY_READ_MODE_HID_DATA         3
 
-#define TTY_ECHO_ON  1
-#define TTY_ECHO_OFF 0
+#define TTY_ECHO_ON                    1
+#define TTY_ECHO_OFF                   0
 
 // Verschiebung der EEPROM-Konstanten
-#define TTY_EEP_CFG_USB_OFFSET 16
+#define TTY_EEP_CFG_USB_OFFSET        16
 
-const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6 (by klaute)\r\n>";
+/*----------------------------------------------------------------------------*/
+
+const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6.1 (by klaute)\r\n>";
+
+const char HELP_MSG[] PROGMEM = _MSG_HELP_;
 
 /*----------------------------------------------------------------------------*/
 // Externe USB-Daten
@@ -190,6 +199,10 @@ void tty_getSerialNumber(void);
 void tty_getUSBConfigVendorID(void);
 void tty_getUSBConfigDeviceID(void);
 
+void tty_Help(void);
+
+void tty_startBootloader(void);
+
 void tty_setEcho(char*);
 
 /*----------------------------------------------------------------------------*/
@@ -215,6 +228,7 @@ const prog_char _str_4hex[]    = "0x%04x";
 const prog_char _str_header[]  = "H=0x%02X\r\n";
 const prog_char _str_vid[]     = "VID=0x%02x%02x";
 const prog_char _str_did[]     = "DID=0x%02x%02x";
+const prog_char _str_bl[]      = "Starting bootloader...\r\n\r\n";
 
 /*----------------------------------------------------------------------------*/
 
@@ -266,17 +280,17 @@ const prog_char _escvid[] = "escvid";
 const prog_char _ercdid[] = "ercdid";
 const prog_char _escdid[] = "escdid";
 
-const prog_char _tlosdsc[]  = "tlosdsc";
+const prog_char _tlsdsc[]  = "tlsdsc";
 #ifdef WITH_INTERPRETER
-const prog_char _tlossd[]   = "tlossd";
+const prog_char _tlssd[]   = "tlssd";
 #endif
-const prog_char _tlosvn[]   = "tlosvn";
-const prog_char _tlosn[]    = "tlosn";
-const prog_char _tlossn[]   = "tlossn";
-const prog_char _tloscvid[] = "tloscvid";
-const prog_char _tloscdid[] = "tloscdid";
+const prog_char _tlsvn[]   = "tlsvn";
+const prog_char _tlsn[]    = "tlsn";
+const prog_char _tlssn[]   = "tlssn";
+const prog_char _tlscvid[] = "tlscvid";
+const prog_char _tlscdid[] = "tlscdid";
 #ifdef WITH_INTERPRETER
-const prog_char _tiossd[]   = "tiossd";
+const prog_char _tissd[]   = "tissd";
 #endif
 
 const prog_char _edcfg[] = "edcfg";
@@ -297,7 +311,11 @@ const prog_char _ssnh[] = "ssnh";
 const prog_char _scvid[] = "scvid";
 const prog_char _scdid[] = "scdid";
 
+const prog_char _help[] = "help";
+
 const prog_char _ttye[] = "ttye";
+
+const prog_char _bootloader[] = "bootloader";
 
 // Zuordnung der vorher definierten Kommandos
 // zu den Funktionen mit deren Parametern
@@ -350,18 +368,18 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_readUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _ercdid },
     { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _escdid },
 
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlosdsc  },
-    // TODO Datenm auf andere Art laden
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlsdsc  },
+    // TODO Daten auf andere Art laden
 #ifdef WITH_INTERPRETER
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlossd   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlssd   },
 #endif
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlosvn   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlosn    },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlossn   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tloscvid },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tloscdid },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlsvn   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlsn    },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlssn   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tlscvid },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tlscdid },
 #ifdef WITH_INTERPRETER
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tiossd   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tissd   },
 #endif
 
     { eep_deleteUSBConfigBits, TTY_CMD_WITHOUT_PARAMETER, _edcfg },
@@ -383,7 +401,11 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_setUSBConfigVendorID, TTY_CMD_WITH_STRING_PARAMETER, _scvid },
     { tty_setUSBConfigDeviceID, TTY_CMD_WITH_STRING_PARAMETER, _scdid },
 
+    { tty_Help,    TTY_CMD_WITHOUT_PARAMETER,     _help },
+
     { tty_setEcho, TTY_CMD_WITH_STRING_PARAMETER, _ttye },
+
+    { tty_startBootloader, TTY_CMD_WITH_STRING_PARAMETER, _bootloader },
 
 };
 

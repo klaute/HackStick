@@ -265,8 +265,6 @@ Purpose:  called when the UART has received a character
     unsigned char usr;
     unsigned char lastRxError;
 
-    //PORTC = PORTC ^ (1 << PC4);
- 
     /* read UART status register and UART data register */ 
     usr  = UART0_STATUS;
     data = UART0_DATA;
@@ -296,8 +294,6 @@ Purpose:  called when the UART has received a character
     }
     UART_LastRxError = lastRxError;   
 
-    //PORTC = PORTC ^ (1 << PC4);
- 
 }
 
 
@@ -373,7 +369,6 @@ void uart_init(unsigned int baudrate)
 #elif defined (ATMEGA_USART0 )
     /* Set baud rate */
 
-#if defined(__AVR_ATmega328P__)
     if ( baudrate & 0x8000 ) 
     {
    		UART0_STATUS = (1<<U2X0);  //Enable 2x speed 
@@ -382,16 +377,6 @@ void uart_init(unsigned int baudrate)
 
     UBRR0H = (unsigned char)(baudrate>>8);
     UBRR0L = (unsigned char) baudrate;
-#else
-    if ( baudrate & 0x8000 ) 
-    {
-   		UART0_STATUS = (1<<U2X0);  //Enable 2x speed 
-   		baudrate &= ~0x8000;
-   	}
-
-    UBRR0H = (unsigned char)(baudrate>>8);
-    UBRR0L = (unsigned char) baudrate;
-#endif
 
     /* Enable USART receiver and transmitter and receive complete interrupt */
     UART0_CONTROL = _BV(RXCIE0)|(1<<RXEN0)|(1<<TXEN0);

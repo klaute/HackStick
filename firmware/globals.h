@@ -24,13 +24,9 @@
 #endif
 
 /*----------------------------------------------------------------------------*/
-
-#include <stdlib.h>
-
-/*----------------------------------------------------------------------------*/
 // Flags um die Bestandteile der Firmware zu aktivieren/deaktivieren
 
-//#define WITH_INTERPRETER
+#define WITH_INTERPRETER
 
 /*----------------------------------------------------------------------------*/
 
@@ -47,7 +43,7 @@
 
 // Maximal Anzahl der Bytes im EEPROM abzueglich der anderen gespeicherten Daten.
 //( 512 -(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) ) )
-#define USB_MAX_DATA_SEQ_SIZE 286
+#define USB_MAX_DATA_SEQ_SIZE 798
 //#define USB_MAX_DATA_SEQ_SIZE 512-(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) )
 
 /*----------------------------------------------------------------------------*/
@@ -70,7 +66,7 @@
 #define EEP_CFG_USB_DATA_SEQ                        6
 #define EEP_CFG_USB_CONFIG_INTERPRET_ID             7
 
-#define EEP_CFG_USB_TYPES       7 // Die Anzahl der "EEP_CFG_USB_" Defines
+#define EEP_CFG_USB_TYPES       8 // Die Anzahl der "EEP_CFG_USB_" Defines, nicht der höchste Wert.
 #define EEP_CFG_USB_STARTS_WITH 0
 
 #define EEP_CFG_VALUE_ON  1

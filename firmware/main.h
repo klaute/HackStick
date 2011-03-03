@@ -87,7 +87,7 @@ extern void eep_readUSBCfgDeviceID(void);
 /* USB */
 
 // Maximale Anzahl der zu übertragenden DatenBytes festlegen
-uint8_t maxUSBDataBytes = USB_MAX_DATA_BYTES;
+uint8_t maxUSBDataBytes;
 #ifdef WITH_INTERPRETER
 // Vorhandene Anzahl von Sequenzbytes
 uint8_t usbDataSequenceBytes;
