@@ -51,12 +51,12 @@ escvid = save USB Configuration Vendor ID
 ercvid = read USB Configuration Device ID
 escvid = save USB Configuration Device ID
 
-tlosdsc = Toggelt das USBConfig Bit 0 zum laden des HidReportDescriptor, beim Start der Firmware.
-tlosvn  = Toggelt setzt das USBConfig Bit 1 zum laden des Herstellers, beim Start der Firmware.
-tlosn   = Toggelt setzt das USBConfig Bit 2 zum laden des Gerätenamen, beim Start der Firmware.
-tlossn  = Toggelt setzt das USBConfig Bit 3 zum laden der SerialNumber, beim Start der Firmware.
-tloscvid = -"- frü die Vendor ID
-tloscdid = -"- frü die Device ID
+tlsdsc = Toggelt das USBConfig Bit 0 zum laden des HidReportDescriptor, beim Start der Firmware.
+tlsvn  = Toggelt setzt das USBConfig Bit 1 zum laden des Herstellers, beim Start der Firmware.
+tlsn   = Toggelt setzt das USBConfig Bit 2 zum laden des Gerätenamen, beim Start der Firmware.
+tlssn  = Toggelt setzt das USBConfig Bit 3 zum laden der SerialNumber, beim Start der Firmware.
+tlscvid = -"- frü die Vendor ID
+tlscdid = -"- frü die Device ID
 
 edcfg  = löscht alle Bits der Einstellungen im EEPROM
 
