@@ -566,7 +566,7 @@ void tty_startBootloader()
 {
     printf_P(_str_bl);
     wdt_enable(0);
-    while(1);
+    while(1) {};
 }
 
 void tty_setEcho(char* t)

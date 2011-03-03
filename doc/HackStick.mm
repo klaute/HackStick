@@ -60,7 +60,7 @@
 <node CREATED="1298893274620" ID="ID_1672984108" MODIFIED="1298893282398" TEXT="ATMega328P-20PU">
 <node CREATED="1298893284043" ID="ID_201826718" MODIFIED="1298893289379" TEXT="2kB SRAM"/>
 <node CREATED="1298893291436" ID="ID_1901324208" MODIFIED="1298893297568" TEXT="32kB Flash"/>
-<node CREATED="1298893298811" ID="ID_1552282448" MODIFIED="1298893302835" TEXT="2kB EEPROM"/>
+<node CREATED="1298893298811" ID="ID_1552282448" MODIFIED="1299169749025" TEXT="1kB EEPROM"/>
 </node>
 <node CREATED="1298298310499" ID="ID_1760088447" MODIFIED="1298893368238" TEXT="Kompatibel mit Firmware 0.6.1"/>
 </node>
@@ -105,22 +105,6 @@
 <node CREATED="1298296445939" ID="ID_1806045077" MODIFIED="1298296448471" POSITION="left" TEXT="Software">
 <node CREATED="1298296495868" ID="ID_822527607" MODIFIED="1298296500213" TEXT="Bootloader">
 <node CREATED="1298296516940" ID="ID_96451916" MODIFIED="1298296522637" TEXT="USBASP">
-<node CREATED="1298296523932" ID="ID_1277545768" MODIFIED="1298296537390" TEXT="Mit meinem Patch f&#xfc;r den Mega168"/>
-<node CREATED="1298296541219" ID="ID_1192929681" MODIFIED="1298296610170">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Wird aktiv wenn der Jumper 1
-    </p>
-    <p>
-      (ab HW 0.2) gesettz wird.
-    </p>
-  </body>
-</html></richcontent>
-</node>
 <node CREATED="1298296939010" ID="ID_209101390" MODIFIED="1298298285975">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -135,17 +119,19 @@
 </node>
 <node CREATED="1298301807737" ID="ID_630767864" MODIFIED="1298301827040" TEXT="Kann zum Flashen des AVR verwendet werden"/>
 <node CREATED="1298301827721" ID="ID_1199338263" MODIFIED="1298301842214" TEXT="Ben&#xf6;tigt 2 kB des internen Flash des AVR"/>
-<node CREATED="1298301863848" ID="ID_1346017589" MODIFIED="1298301920681">
+<node CREATED="1299169981946" ID="ID_1523407163" MODIFIED="1299170165742" TEXT="Wird gestartet wenn der Stick bei gesetztem&#xa;Jumper eingesteckt wurde."/>
+<node CREATED="1299170049666" ID="ID_1489190947" MODIFIED="1299170115402">
 <richcontent TYPE="NODE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Wenn der Jumper JP1 nicht gesettz wird,<br />wird direkt ind ie FW des HC gesprungen.
+      Wird gestartet wenn von der Firmware ein Watchdog<br />Reset ausgef&#252;hrt wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -228,6 +214,22 @@
 <node CREATED="1298307313968" ID="ID_454765890" MODIFIED="1298307338274" TEXT="Startverhalten der Firmware wird hier abgelegt"/>
 </node>
 </node>
+<node CREATED="1299169263605" ID="ID_800534119" MODIFIED="1299169280442" TEXT="v0.6.1">
+<node CREATED="1299169270894" ID="ID_487422497" MODIFIED="1299169278524" TEXT="Kopie von v0.6"/>
+<node CREATED="1299169281229" ID="ID_1083201010" MODIFIED="1299169290202" TEXT="Angepasst an den ATMega328P"/>
+<node CREATED="1299169291174" ID="ID_1721233553" MODIFIED="1299169504393" TEXT="Enth&#xe4;lt zus&#xe4;tzliche TTY Kommandos">
+<node CREATED="1299169345157" ID="ID_1817832601" MODIFIED="1299169350164" TEXT="bootloader">
+<node CREATED="1299169482565" ID="ID_416441062" MODIFIED="1299169491526" TEXT="resettet den AVR"/>
+<node CREATED="1299169521204" ID="ID_1552660066" MODIFIED="1299169533407" TEXT="Startet den Bootloader"/>
+</node>
+<node CREATED="1299169351061" ID="ID_1500009269" MODIFIED="1299169479952" TEXT="help">
+<node CREATED="1299169506589" ID="ID_994551088" MODIFIED="1299169517435" TEXT="gibt die Liste der verf&#xfc;gbaren Kommandos aus"/>
+<node CREATED="1299169550108" ID="ID_294788394" MODIFIED="1299169575385" TEXT="Aufgrund der Gr&#xf6;&#xdf;e in extra Headerfile exportiert"/>
+</node>
+<node CREATED="1299169631316" ID="ID_990054520" MODIFIED="1299169644828" TEXT="Einige Kommandos wuden umbenannt"/>
+<node CREATED="1299169655756" ID="ID_1349026329" MODIFIED="1299169732304" TEXT="Kommandos zum verabreiten von Sequenzen verf&#xfc;gbar&#xa;mit zus&#xe4;tzliicher Option zum Ausf&#xfc;hren beim Start, aus dem EEPROM."/>
+</node>
+</node>
 <node CREATED="1298307208145" ID="ID_1496767637" MODIFIED="1298307211577" TEXT="v0.7">
 <node CREATED="1298307230591" ID="ID_391451052" MODIFIED="1298307232688" TEXT="Ideen">
 <node CREATED="1298301674810" ID="ID_339579297" MODIFIED="1298382862977" TEXT="Mit sniffen von Daten erm&#xf6;glichen"/>
@@ -270,6 +272,11 @@
   </body>
 </html></richcontent>
 </node>
+</node>
+<node CREATED="1299169781523" ID="ID_303967684" MODIFIED="1299169812780" TEXT="Device ID des Host Systems faken">
+<node CREATED="1299169813979" ID="ID_1759080652" MODIFIED="1299169821755" TEXT="zugeordnete ID verringern"/>
+<node CREATED="1299169822803" ID="ID_1179014457" MODIFIED="1299169832068" TEXT="zugeordnete ID erh&#xe4;hen"/>
+<node CREATED="1299169832747" ID="ID_1960623511" MODIFIED="1299169842456" TEXT="zuf&#xe4;llig w&#xe4;hlen"/>
 </node>
 </node>
 </node>

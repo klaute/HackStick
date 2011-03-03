@@ -138,9 +138,18 @@ these macros are defined, the boot loader usees them.
 #   define MCUCSR   MCUSR
 #endif
 
+static unsigned char btLdrCnd = 0;
+
 static inline void  bootLoaderInit(void)
 {
     PORTD |= (1 << JUMPER_BIT);     /* activate pull-up */
+
+    if ( (MCUCSR & (1 << WDRF)) )
+        btLdrCnd = 1;
+
+    if ( (MCUCSR & (1 << PORF)) )
+        btLdrCnd = 2;
+
     //if(!(MCUCSR & (1 << EXTRF)))    /* If this was not an external reset, ignore */
         //leaveBootloader();
     MCUCSR = 0;                     /* clear all reset flags for next time */
@@ -151,7 +160,10 @@ static inline void  bootLoaderExit(void)
     PORTD = 0;                      /* undo bootLoaderInit() changes */
 }
 
-#define bootLoaderCondition()   ((PIND & (1 << JUMPER_BIT)) == 0)
+//#define bootLoaderCondition()   ((PIND & (1 << JUMPER_BIT)) == 0)
+// Wenn beim Systemstart der Jumper gesetzt ist oder der Watchdog das Systemresettet hat
+// soll der Bootloader gestartet werden.
+#define bootLoaderCondition()   ( (btLdrCnd == 2 && !(PIND & (1 << JUMPER_BIT))) || btLdrCnd == 1) //(MCUCSR & (1 << WDRF)) )
 
 #endif /* __ASSEMBLER__ */
 
