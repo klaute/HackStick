@@ -189,12 +189,17 @@ void interpretUSBDataSequence()
 
     uint16_t arrayPos = 3; // Index ab dem die Blöcke gelesen werden
     
+    LED_RED_PORT = LED_RED_PORT ^ (1 << LED_RED_PIN); // Rote LED an
+
+    LED_YELLOW_PORT = LED_YELLOW_PORT ^ (1 << LED_YELLOW_PIN); // Gelbe LED an
+
     _delay_ms(delayStart); // Pause vor dem Start ausführen
     
     // Bytes beginnen zu interpretieren
     uint8_t i;
     for ( i = 0; i < blockCnt; i++ )
     {
+        LED_YELLOW_PORT = LED_YELLOW_PORT ^ (1 << LED_YELLOW_PIN); // Gelbe LED blinkt
         arrayPos++;
         uint8_t tupelCnt = usbDataSequence[arrayPos];
         
@@ -217,6 +222,8 @@ void interpretUSBDataSequence()
 #endif
         _delay_ms(delay);
     }
+    LED_YELLOW_PORT = LED_YELLOW_PORT & ~(1 << LED_YELLOW_PIN); // Gelbe LED aus
+    LED_RED_PORT = LED_RED_PORT & ~(1 << LED_RED_PIN); // Rote LED aus
 /**/
 }
 
