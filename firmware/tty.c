@@ -43,7 +43,7 @@ void tty_init()
 /* Allow printf over UART */
 static int _uart_putc(char c, FILE *stream)
 {
-    //uart_putc(c);
+    //uart_putc(c); // Doesn't work atm.
 
     while ( !(UCSR0A & (1<<UDRE0) ) );
 
@@ -56,13 +56,7 @@ static int _uart_putc(char c, FILE *stream)
 void tty_pollTerminal(void)
 {
 
-    /**/
     char c = uart_getc(); // Lesen eines Byte vom UART Puffer.
-    /**/
-
-    /*
-    char c = UDR0; // Lesen eines Byte vom UART Puffer.
-    */
 
     if ( c & UART_NO_DATA )
         return;
