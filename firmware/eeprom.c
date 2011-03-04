@@ -48,7 +48,6 @@ void eep_saveUSBHidReportDescriptor()
 #ifdef WITH_INTERPRETER
 void eep_readUSBDataSequence()
 {
-    realloc(usbDataSequence, USB_MAX_DATA_SEQ_SIZE*sizeof(uint8_t));
     while (!eeprom_is_ready()) {}
     eeprom_read_block(usbDataSequence,
                 eep_usbDataSequence,
@@ -70,7 +69,6 @@ void eep_readUSBDataSequence()
         }
     }
     usbDataSequenceBytes = arrayPos+1;
-    realloc(usbDataSequence, usbDataSequenceBytes*sizeof(uint8_t));
 
 }
 void eep_saveUSBDataSequence()

@@ -35,8 +35,6 @@ void tty_init()
 
     stdout = &_stdout; /* Allow printf over UART */
 
-    tty_buff = malloc(1*sizeof(char));
-
     tty_config.echo = TTY_ECHO_ON;
 
 }
@@ -110,13 +108,6 @@ void tty_pollTerminal(void)
              */
             uart_puts_P("Buffer overflow error: ");
         }
-
-
-        if ( tty_cb_pos >= sizeof(tty_buff) )
-            realloc(tty_buff, sizeof(tty_buff)+1); // Es wird mehr speicher benötigt
-        else if ( (sizeof(tty_buff)-tty_cb_pos) >= 5 ) // Wenn 5 oder mehr Bytes nbenutzt sind werden diese freigegeben
-            realloc(tty_buff, sizeof(tty_buff)-5);
-        
 
 		// Steuerzeichen abfangen
         if ( c >= 32 && c <= 126 )
@@ -215,7 +206,6 @@ void tty_pollTerminal(void)
                     else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ &&
                               tty_ud_pos+1 < USB_MAX_DATA_SEQ_SIZE )
                     {
-                        realloc(usbDataSequence, usbDataSequenceBytes);
                         usbDataSequence[tty_ud_pos] = tmp; // In das Datenarray eintragen.
                     }
 #endif
@@ -478,7 +468,6 @@ void tty_setVendorName(char* t)
     uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ?
                         j :
                         USB_DEVICE_STRING_DESCRIPTION_LEN;
-    //realloc(usbDescriptorStringVendor, k+1);
     usbDescriptorStringVendor[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweise kopieren
@@ -494,7 +483,6 @@ void tty_setDeviceName(char* t)
     uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ?
                     j :
                     USB_DEVICE_STRING_DESCRIPTION_LEN;
-    //realloc(usbDescriptorStringDevice, k+1);
     usbDescriptorStringDevice[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweises kopieren
@@ -510,7 +498,6 @@ void tty_setSerialNumber(char* t)
     uint8_t k = (j < USB_DEVICE_STRING_DESCRIPTION_LEN+1) ? 
                     j :
                     USB_DEVICE_STRING_DESCRIPTION_LEN;
-    //realloc(usbDescriptorStringSerialNumber, k+1);
     usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(k);
     for ( i = 0; i < k; i++ )
     { // Byteweise kopieren

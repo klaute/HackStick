@@ -102,7 +102,7 @@ static uchar idleRate; // in 4 ms units
 uint8_t dataBytes[USB_MAX_DATA_BYTES];
 #ifdef WITH_INTERPRETER
 // Sequence der Daten die an den Host gesendet werden sollen.
-uint8_t *usbDataSequence; //[USB_MAX_DATA_SEQ_SIZE];
+uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];
 #endif
 
 /*----------------------------------------------------------------------------*/

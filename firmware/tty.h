@@ -64,7 +64,7 @@ const char HELP_MSG[] PROGMEM = _MSG_HELP_;
 // Externe USB-Daten
 extern uint8_t dataBytes[];
 #ifdef WITH_INTERPRETER
-extern uint8_t *usbDataSequence; //[];
+extern uint8_t usbDataSequence[];
 #endif
 
 extern uint8_t maxUSBDataBytes;
@@ -134,7 +134,7 @@ unsigned char tty_cb_pos; // Position im Kommando Buffer
 unsigned char tty_ud_pos; // Position in den zu verändernden Daten
 
 // Puffer der eingegeben Kommandos und deren Parameter.
-char *tty_buff; //[TTY_MAX_CMD_LINE_LEN];
+char tty_buff[TTY_MAX_CMD_LINE_LEN];
 
 // Typendefinition zur verinfachten Zuordnung von Kommandos zu
 // den damit verbundenen Funktionen.

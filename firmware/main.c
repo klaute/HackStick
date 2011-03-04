@@ -56,16 +56,6 @@ void init(void)
     DDRD  |= (0 << PD3) | (0 << PD2) | (0 << PD6);
     PORTD |= (0 << PD3) | (0 << PD2) | (1 << PD6);
 
-    // Je ein Byte für die Zeiger allocieren
-    //usbHidReportDescriptor = malloc(sizeof(char)); // nicht nötig, wird mit array initialisiert
-#ifdef WITH_INTERPRETER
-    usbDataSequence = malloc(1*sizeof(uint8_t));
-#endif
-    //dataBytes       = malloc(1*sizeof(uint8_t));
-    /*realloc(usbDescriptorStringVendor,       1*sizeof(int));
-    realloc(usbDescriptorStringDevice,       1*sizeof(int));
-    realloc(usbDescriptorStringSerialNumber, 1*sizeof(int));*/
-    //maxUSBDataBytes = USB_MAX_DATA_BYTES;
     // Anzah der Bytes des Descriptors die in der Firmware eingetragen sind.
     //maxUSBHidReportDescriptorBytes = 22;
 
@@ -115,7 +105,6 @@ void _loadEEPROMConfig()
     {
         eep_readUSBDescriptorStringVendor();
     } else {
-        //realloc(usbDescriptorStringVendor, 9*sizeof(int));
         usbDescriptorStringVendor[0] = USB_STRING_DESCRIPTOR_HEADER(8);
         usbDescriptorStringVendor[1] = 'k';
         usbDescriptorStringVendor[2] = 'l';
@@ -130,7 +119,6 @@ void _loadEEPROMConfig()
     {
         eep_readUSBDescriptorStringDevice();
     } else {
-        //realloc(usbDescriptorStringDevice, 10*sizeof(int));
         usbDescriptorStringDevice[0] = USB_STRING_DESCRIPTOR_HEADER(9);
         usbDescriptorStringDevice[1] = 'H';
         usbDescriptorStringDevice[2] = 'a';
@@ -146,7 +134,6 @@ void _loadEEPROMConfig()
     {
         eep_readUSBDescriptorStringSerialNumber();
     } else {
-        //realloc(usbDescriptorStringSerialNumber, 5*sizeof(int));
         usbDescriptorStringSerialNumber[0] = USB_STRING_DESCRIPTOR_HEADER(5);
         usbDescriptorStringSerialNumber[1] = '0';
         usbDescriptorStringSerialNumber[2] = '.';
@@ -199,10 +186,6 @@ void interpretUSBDataSequence()
     // Die maximale/minimale Anzahl der auszugebenden Daten ist ungültig oder keine Blöcke in den Daten vorhanden.
     if ( maxDataBytes > USB_MAX_DATA_BYTES || !maxDataBytes || !blockCnt )
         return; 
-
-    // Größe der Daten anpassen und leeren.
-    //realloc(dataBytes, maxDataBytes);
-    //bzero(dataBytes,   maxDataBytes);
 
     uint16_t arrayPos = 3; // Index ab dem die Blöcke gelesen werden
     
