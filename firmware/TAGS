@@ -31,37 +31,37 @@ tty.c,1978
 void tty_init()tty_init21,885
 static int _uart_putc(char c, FILE *stream)_uart_putc46,1395
 void tty_pollTerminal(void)tty_pollTerminal58,1614
-int tty_executeCmd(const char *buffer)tty_executeCmd240,8378
-void tty_ledRedOn()tty_ledRedOn303,10340
-void tty_ledRedOff()tty_ledRedOff308,10421
-void tty_ledGreenOn()tty_ledGreenOn313,10502
-void tty_ledGreenOff()tty_ledGreenOff318,10591
-void tty_ledYellowOn()tty_ledYellowOn323,10680
-void tty_ledYellowOff()tty_ledYellowOff328,10773
-void tty_setInterrupt()tty_setInterrupt334,10946
-void tty_setInterrupt3()tty_setInterrupt3343,11137
-void tty_getUSBReportData()tty_getUSBReportData352,11296
-void tty_getUSBDataSequence()tty_getUSBDataSequence364,11613
-void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor378,12030
-void tty_getVendorName()tty_getVendorName389,12372
-void tty_getDeviceName()tty_getDeviceName403,12748
-void tty_getSerialNumber()tty_getSerialNumber417,13126
-void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID432,13576
-void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID437,13685
-void tty_setUSBReportData()tty_setUSBReportData442,13796
-void tty_setUSBDataSequence()tty_setUSBDataSequence448,13904
-void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor454,14001
-void tty_setVendorName(char* t)tty_setVendorName459,14100
-void tty_setDeviceName(char* t)tty_setDeviceName477,14745
-void tty_setSerialNumber(char* t)tty_setSerialNumber493,15243
-void tty_setVendorHeader(char *t)tty_setVendorHeader509,15761
-void tty_setSerialNumberHeader(char *t)tty_setSerialNumberHeader519,15992
-void tty_setDeviceNameHeader(char *t)tty_setDeviceNameHeader529,16237
-void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID538,16451
-void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID548,16693
-void tty_Help()tty_Help560,17018
-void tty_startBootloader()tty_startBootloader565,17063
-void tty_setEcho(char* t)tty_setEcho572,17154
+int tty_executeCmd(const char *buffer)tty_executeCmd252,8914
+void tty_ledRedOn()tty_ledRedOn315,10876
+void tty_ledRedOff()tty_ledRedOff320,10957
+void tty_ledGreenOn()tty_ledGreenOn325,11038
+void tty_ledGreenOff()tty_ledGreenOff330,11127
+void tty_ledYellowOn()tty_ledYellowOn335,11216
+void tty_ledYellowOff()tty_ledYellowOff340,11309
+void tty_setInterrupt()tty_setInterrupt346,11482
+void tty_setInterrupt3()tty_setInterrupt3355,11673
+void tty_getUSBReportData()tty_getUSBReportData364,11832
+void tty_getUSBDataSequence()tty_getUSBDataSequence376,12149
+void tty_getUSBHidDeviceDescriptor()tty_getUSBHidDeviceDescriptor390,12566
+void tty_getVendorName()tty_getVendorName401,12908
+void tty_getDeviceName()tty_getDeviceName415,13284
+void tty_getSerialNumber()tty_getSerialNumber429,13662
+void tty_getUSBConfigVendorID()tty_getUSBConfigVendorID444,14112
+void tty_getUSBConfigDeviceID()tty_getUSBConfigDeviceID449,14221
+void tty_setUSBReportData()tty_setUSBReportData454,14332
+void tty_setUSBDataSequence()tty_setUSBDataSequence460,14440
+void tty_setUSBHidDeviceDescriptor()tty_setUSBHidDeviceDescriptor466,14537
+void tty_setVendorName(char* t)tty_setVendorName471,14636
+void tty_setDeviceName(char* t)tty_setDeviceName489,15281
+void tty_setSerialNumber(char* t)tty_setSerialNumber505,15779
+void tty_setVendorHeader(char *t)tty_setVendorHeader521,16297
+void tty_setSerialNumberHeader(char *t)tty_setSerialNumberHeader531,16528
+void tty_setDeviceNameHeader(char *t)tty_setDeviceNameHeader541,16773
+void tty_setUSBConfigVendorID(char* t)tty_setUSBConfigVendorID550,16987
+void tty_setUSBConfigDeviceID(char* t)tty_setUSBConfigDeviceID560,17229
+void tty_Help()tty_Help572,17554
+void tty_startBootloader()tty_startBootloader577,17599
+void tty_setEcho(char* t)tty_setEcho584,17690
 
 uart.c,8057
 #define UART_RX_BUFFER_MASK UART_RX_BUFFER_MASK50,1808
