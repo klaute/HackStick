@@ -222,6 +222,18 @@ void tty_pollTerminal(void)
 					else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA &&
                               tty_ud_pos < USB_MAX_DATA_BYTES )
 						dataBytes[tty_ud_pos] = tmp;
+                    else
+                    {
+                        // Dateneingabe abbrechen, da die Puffer mit der Maximalen Anzahl der Elemente
+                        // gefüllt ist.
+                        printf_P(_str_minus);
+                        printf_P(_str_ret);
+                        printf_P(_str_end);
+                        printf_P(_str_ret_gt);
+                        tty_ud_pos = 0;
+                        tty_config.read_mode = TTY_READ_MODE_COMMAND;
+                        return;
+                    }
 
                     tty_ud_pos++;
                     printf_P(_str_plus); // Byte wurde übernommen
