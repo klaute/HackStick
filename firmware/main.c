@@ -202,6 +202,14 @@ void interpretUSBDataSequence()
         LED_YELLOW_PORT = LED_YELLOW_PORT ^ (1 << LED_YELLOW_PIN); // Gelbe LED blinkt
         arrayPos++;
         uint8_t tupelCnt = usbDataSequence[arrayPos];
+        // TODO Hier prüfen ob die Anzahl der Tupel kleiner gleich ist
+        // mit der maximalen Anzahl der Bytes in einem Datenpaket.
+        if ( tupelCnt > USB_MAX_DATA_BYTES || tupelCnt == 0 )
+        {
+            printf_P(_str_err);
+            printf_P(_str_ret);
+            return;
+        }
         
         uint8_t j;
         for ( j = 0; j < tupelCnt; j++ )
