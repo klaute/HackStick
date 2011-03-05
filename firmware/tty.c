@@ -329,8 +329,9 @@ void tty_ledYellowOff()
 /* ------------------------------------------------------------------------- */
 void tty_setInterrupt()
 {
-    if ( usbInterruptIsReady() && maxUSBDataBytes )
+    if ( maxUSBDataBytes )
     {
+        while( !usbInterruptIsReady() ) {}
         usbSetInterrupt(&dataBytes[0], maxUSBDataBytes);
     }
 }
@@ -338,8 +339,9 @@ void tty_setInterrupt()
 #if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
 void tty_setInterrupt3()
 {
-    if ( usbInterruptIsReady() && maxUSBDataBytes )
+    if ( maxUSBDataBytes )
     {
+        while( !usbInterruptIsReady() ) {}
         usbSetInterrupt3(&dataBytes[0], maxUSBDataBytes);
     }
 }
@@ -427,12 +429,18 @@ void tty_getSerialNumber()
 
 void tty_getUSBConfigVendorID()
 {
-    printf_P(_str_vid, usbDescriptorDevice[9], usbDescriptorDevice[8]);
+    uint16_t tmp = usbDescriptorDevice[9] << 8;
+    tmp += usbDescriptorDevice[8];
+    printf_P(_str_vid, tmp);
+    //printf_P(_str_vid, usbDescriptorDevice[9], usbDescriptorDevice[8]);
 }
 
 void tty_getUSBConfigDeviceID()
 {
-    printf_P(_str_did, usbDescriptorDevice[11], usbDescriptorDevice[10]);
+    uint16_t tmp = usbDescriptorDevice[11] << 8;
+    tmp += usbDescriptorDevice[10];
+    printf_P(_str_did, tmp);
+    //printf_P(_str_did, usbDescriptorDevice[11], usbDescriptorDevice[10]);
 }
 
 void tty_setUSBReportData()

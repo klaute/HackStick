@@ -49,6 +49,9 @@ void eep_saveUSBHidReportDescriptor()
 void eep_readUSBDataSequence()
 {
     while (!eeprom_is_ready()) {}
+
+    LED_RED_PORT = LED_RED_PORT ^ (1 << LED_RED_PIN); // Gelbe LED an
+
     eeprom_read_block(usbDataSequence,
                 eep_usbDataSequence,
                 sizeof(eep_usbDataSequence));
@@ -69,6 +72,8 @@ void eep_readUSBDataSequence()
         }
     }
     usbDataSequenceBytes = arrayPos+1;
+
+    LED_RED_PORT = LED_RED_PORT ^ (1 << LED_RED_PIN); // Gelbe LED an
 
 }
 void eep_saveUSBDataSequence()

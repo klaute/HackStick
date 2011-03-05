@@ -46,7 +46,7 @@ const prog_char _str_cfg[] = "\r\nCfg: 0x%02x";
 /*----------------------------------------------------------------------------*/
 
 #ifdef WITH_INTERPRETER
-extern uint8_t *usbDataSequence; //[];
+extern uint8_t usbDataSequence[];
 #endif
 extern char usbHidReportDescriptor[];
 
@@ -73,6 +73,12 @@ int     eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
+/*
+uint8_t eep_usbDataSequence0[256] EEMEM;
+uint8_t eep_usbDataSequence1[256] EEMEM;
+uint8_t eep_usbDataSequence2[256] EEMEM;
+uint8_t eep_usbDataSequence3[30] EEMEM;
+*/
 
 /*----------------------------------------------------------------------------*/
 

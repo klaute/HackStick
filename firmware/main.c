@@ -178,13 +178,13 @@ void interpretUSBDataSequence()
         return; // Keine gültige Sequenz vorhanden und der Code soll ausgeführt werden.
 
     // Header auslesen.
-    uint8_t maxDataBytes = usbDataSequence[0];
+    maxUSBDataBytes      = usbDataSequence[0];
     uint8_t delayStart   = usbDataSequence[1];
     uint8_t delay        = usbDataSequence[2];
     uint8_t blockCnt     = usbDataSequence[3];
 
     // Die maximale/minimale Anzahl der auszugebenden Daten ist ungültig oder keine Blöcke in den Daten vorhanden.
-    if ( maxDataBytes > USB_MAX_DATA_BYTES || !maxDataBytes || !blockCnt )
+    if ( maxUSBDataBytes > USB_MAX_DATA_BYTES || !maxUSBDataBytes || !blockCnt )
         return; 
 
     uint16_t arrayPos = 3; // Index ab dem die Blöcke gelesen werden
@@ -210,7 +210,7 @@ void interpretUSBDataSequence()
             uint8_t index = usbDataSequence[arrayPos];
             
             arrayPos++;
-            if ( index < maxDataBytes ) // ungültige indizes werden übersprungen
+            if ( index < maxUSBDataBytes ) // ungültige indizes werden übersprungen
                 dataBytes[ index ] = usbDataSequence[arrayPos];
         }
 
@@ -223,7 +223,7 @@ void interpretUSBDataSequence()
         _delay_ms(delay);
     }
     LED_YELLOW_PORT = LED_YELLOW_PORT & ~(1 << LED_YELLOW_PIN); // Gelbe LED aus
-    LED_RED_PORT = LED_RED_PORT & ~(1 << LED_RED_PIN); // Rote LED aus
+    LED_RED_PORT = LED_RED_PORT ^ (1 << LED_RED_PIN); // Rote LED aus
 /**/
 }
 

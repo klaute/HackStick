@@ -225,9 +225,9 @@ const prog_char _str_ret[]     = "\r\n";
 const prog_char _str_ret_gt[]  = "\r\n>";
 const prog_char _str_2hex[]    = "0x%02X ";
 const prog_char _str_4hex[]    = "0x%04x";
-const prog_char _str_header[]  = "H=0x%02X\r\n";
-const prog_char _str_vid[]     = "VID=0x%02x%02x";
-const prog_char _str_did[]     = "DID=0x%02x%02x";
+const prog_char _str_header[]  = "H=0x%02x\r\n";
+const prog_char _str_vid[]     = "VID=0x%04x";
+const prog_char _str_did[]     = "DID=0x%04x";
 const prog_char _str_bl[]      = "Starting bootloader...\r\n\r\n";
 
 /*----------------------------------------------------------------------------*/
@@ -315,7 +315,7 @@ const prog_char _help[] = "help";
 
 const prog_char _ttye[] = "ttye";
 
-const prog_char _bootloader[] = "bootloader";
+const prog_char _btldr[] = "btldr";
 
 // Zuordnung der vorher definierten Kommandos
 // zu den Funktionen mit deren Parametern
@@ -405,7 +405,7 @@ const tty_command_t tty_commands[] PROGMEM = {
 
     { tty_setEcho, TTY_CMD_WITH_STRING_PARAMETER, _ttye },
 
-    { tty_startBootloader, TTY_CMD_WITH_STRING_PARAMETER, _bootloader },
+    { tty_startBootloader, TTY_CMD_WITH_STRING_PARAMETER, _btldr },
 
 };
 
