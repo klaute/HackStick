@@ -21,15 +21,15 @@
 \tscdid:\tSetzt die Device ID des USB Device durch die Übergabe dieser im Format 0x0000.\r\n\
 \tgn:\tLiefert den Device Namen.\r\n\
 \tsn:\tSetzt den Device Namen im RAM.\r\n\
-\tsnh:\tSetzt den Header des Device Namen im RAM.\r\b\
+\tsnh:\tSetzt den Header des Device Namen im RAM.\r\n\
 \t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \tgvn:\tLiefert den Vendor Namen.\r\n\
 \tsvn:\tSetzt den Vendor Namen im RAM.\r\n\
-\tsvnh:\tSetzt den Header des Vendor Namen im RAM.\r\b\
+\tsvnh:\tSetzt den Header des Vendor Namen im RAM.\r\n\
 \t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \tgvn:\tLiefert die Seriennummer.\r\n\
 \tsvn:\tSetzt die Seriennummer im RAM.\r\n\
-\tsvnh:\tSetzt die Header des Seriennummer im RAM.\r\b\
+\tsvnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
 \t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \turst:\tEntfernt das USB Device vom Bus und verbindet es neu.\r\n\
 \terdsc:\tLiest den im EEPROM gespeicherten USB Hid Descriptor aus.\r\n\
