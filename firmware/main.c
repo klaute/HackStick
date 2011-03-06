@@ -301,9 +301,18 @@ uchar usbFunctionRead(uchar *data, uchar len)
 /* ------------------------------------------------------------------------- */
 
 /* usbFunctionWrite() wird aufgerufen wenn der PC auf den AVR schreibend zugreift.
- * /
+ */
 uchar usbFunctionWrite(uchar *data, uchar len)
 {
+    //printf("dev=0x%02x\r\n",usbHidReportDescriptor[3]);
+    if ( bytesRemaining == 2 && len == 2 && usbHidReportDescriptor[3] == 0x06 ) // Keyboard LED status
+    {
+        printf("\r\nKeyboard LED status 0x%02x\r\n> ",data[1]);
+        LED_YELLOW_PORT = LED_YELLOW_PORT | (1 << LED_YELLOW_PIN);
+
+        return 1;
+    }
+
     if ( bytesRemaining == 0 )
         return 1; // Ende der Übertragung
 
@@ -319,6 +328,7 @@ uchar usbFunctionWrite(uchar *data, uchar len)
     {
         // Daten in das EEPROM Byteweise schreiben.
         dataBytes[pos + i] = data[i];
+        printf("%d = 0x%02x\r\n",i,data[i]);
     }
 
     if ( bytesRemaining <= 8 ) // Wenn hier noch 8 Bytes übrig sind wurden alle USB_DATA_BYTES Bytes übernommen. USB_DATA_BYTES = Maximum.
@@ -328,7 +338,8 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 
     bytesRemaining -= len;
     return bytesRemaining == 0; // return 1 if this was the last chunk 
-}*/
+
+}/**/
 
 /* ------------------------------------------------------------------------- */
 /* usbFunctionDescriptor() wird aufgerufen vom USBTreiber.
@@ -392,15 +403,21 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
             // since we have only one report type, we can ignore the report-ID
 
             bytesRemaining = maxUSBDataBytes;
-            usbMsgPtr = &dataBytes[0];
+            //usbMsgPtr = &dataBytes[0];
 
             return USB_NO_MSG; // call usbFunctionRead()
 
-        /*} else if ( rq->bRequest == USBRQ_HID_SET_REPORT )
+        } else if ( rq->bRequest == USBRQ_HID_SET_REPORT )
         {
             // since we have only one report type, we can ignore the report-ID
-            //bytesRemaining = maxUSBDataBytes;
-            return maxUSBDataBytes;  // usbFunctionWrite() wird aufgerufen*/
+
+            // TODO Die Daten nur empfangen wenn dieser gewünscht ist.
+            if ( rq->wLength.word == 2 && usbHidReportDescriptor[3] == 0x06 )
+            {
+                bytesRemaining = 2;
+                return USB_NO_MSG; // durch USB_NO_MSG wird usbFunctionWrite() aufgerufen
+            }
+
         } else if(rq->bRequest == USBRQ_HID_GET_IDLE)
         {
             usbMsgPtr = idleRate;
@@ -408,9 +425,21 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
         } else if ( rq->bRequest == USBRQ_HID_SET_IDLE )
         {
             idleRate = rq->wValue.bytes[1];
+        }else if(rq->bRequest == USBRQ_HID_GET_PROTOCOL)
+        {
+            if (rq->wValue.bytes[1] < 1)
+            {
+                protocolVer = rq->wValue.bytes[1];
+            }
+        }
+        else if (rq->bRequest == USBRQ_HID_SET_PROTOCOL)
+        {
+            usbMsgPtr = &protocolVer;
+            return 1;
         }
     }
     return 0;
 }
 
+/* ------------------------------------------------------------------------- */
 

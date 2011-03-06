@@ -100,6 +100,7 @@ uint8_t usbDataSequenceBytes;
 static uchar bytesRemaining;
 
 static uchar idleRate; // in 4 ms units
+static uchar protocolVer = 1;
 
 // Daten die an den Host gesendet werden.
 uint8_t dataBytes[USB_MAX_DATA_BYTES];
