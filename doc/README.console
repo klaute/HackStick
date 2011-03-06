@@ -1,62 +1,51 @@
-
-gdta = Liefert alle Bytes zurück die bei Anfragen des hosts gesendet werden.
-sdta = Datenbytes festlegen, zeilenweise als 0xNN, mit "E" als Abschluss in eienr eigenene Zeile. Korrekt übergebene Daten werden mit einem "+" markiert, falsche mit einem "-".
-
-gvn  = Get Vendor
-svn  = Set Vendor (<cmd> Hersteller-Bezeichnung)
-svnh = Set Vendor Header
-
-gsn  = Get Seriennummer
-ssn  = Set Seriennummer (<cmd> Versionsnummer)
-ssnh = Set Seriennummer Header
-
-gn  = Get Name
-sn  = Set Name (<cmd> Name des Gerätes)
-snh = Set Name Header
-
-gdsc = Get USB Hid Decice Desctiptor
-sdsc = Set USB Hid Device Descriptor. Daten werden wie bei sdta übergeben.
-
-gcvid = Get the USB Configuration value of the Vendor ID
-scvid = Set the USB Configuration value of the Vendor ID (Highbyte Logbyte as <cmd> 0xab 0xcd)
-gcdid = Get the USB Configuration value of the Device ID
-scdid = Set the USB Configuration value of the Device ID (Highbyte Logbyte as <cmd> 0xab 0xcd)
-
-urst = USB Reset
-
-sint  = Send Interrupt an Endpoint 1
-sint3 = Send Interrupt an Endpoint 3 (nur vorhanden wenn in usbconfig definiert)
-
-ttye = Set TTY Echo 
-
-# zum Testen der LED's
-rledon  = Rote LED einschalten
-rledoff = Rote LED ausschalten
-gledon  = Grüne LED einsschalten
-gledoff = Grüne LED ausschalten
-yledon  = Gelbe LED einsschalten
-yledoff = Gelbe LED ausschalten
-
-# EEPROM Kommandos zum schreiben udn lesen der Konfigurationsdaten
-erdsc  = read USB HidReportDescriptor
-esdsc  = save USB HidReportDescriptor
-ervn   = read USBDescriptor Vendor
-esvn   = save USBDescriptor Vendor
-ern    = read USBDescriptor Device
-esn    = save USBDescriptor Device
-ersn   = read USBDescriptor SerialNumber
-essn   = save USBDescriptor SerialNumber
-ercvid = read USB Configuration Vendor ID
-escvid = save USB Configuration Vendor ID
-ercvid = read USB Configuration Device ID
-escvid = save USB Configuration Device ID
-
-tlsdsc = Toggelt das USBConfig Bit 0 zum laden des HidReportDescriptor, beim Start der Firmware.
-tlsvn  = Toggelt setzt das USBConfig Bit 1 zum laden des Herstellers, beim Start der Firmware.
-tlsn   = Toggelt setzt das USBConfig Bit 2 zum laden des Gerätenamen, beim Start der Firmware.
-tlssn  = Toggelt setzt das USBConfig Bit 3 zum laden der SerialNumber, beim Start der Firmware.
-tlscvid = -"- frü die Vendor ID
-tlscdid = -"- frü die Device ID
-
-edcfg  = löscht alle Bits der Einstellungen im EEPROM
+gdsc:       Liefert den USB Hid Device Descriptor.
+sdsc:       Erwartet keine Parameter sondern erwartet die Daten Zeilenweise
+            im Format 0x00. Da Ende der Daten wird mit einem "E" festgelegt,
+gdta:       Liefert die aktuell im Speicher vorgehaltenen USB-Daten.
+sdta:       Funktionalität wie bei "sdsc".
+sint:       Löst eine Übertragung der im Speicher vorgehaltenen USB-Daten aus.
+sint3:      Löst eine Übertragung der im Speicher vorgehaltenen USB-Daten
+            über den Interrupt3 Endpoint, aus.
+gsd:        Liefert die Sequenzdaten zurück.
+ssd:        Funktionalität wie bei "sdsc".
+isd:        Startet den Interpreter der SequenzDaten.
+gcvid:      Liefert die Vendor ID des USB Device.
+scvid:      Setzt die Vendor ID des USB Device durch die Übergabe dieser im Format 0x0000.
+gcdid:      Liefert die Device ID des USB Device.
+scdid:      Setzt die Device ID des USB Device durch die Übergabe dieser im Format 0x0000.
+gn:         Liefert den Device Namen.
+sn:         Setzt den Device Namen im RAM.
+snh:        Setzt den Header des Device Namen im RAM.
+            Muss als Parameter im Format 0x00 angeegben werden.
+gvn:        Liefert den Vendor Namen.
+svn:        Setzt den Vendor Namen im RAM.
+svnh:       Setzt den Header des Vendor Namen im RAM.
+            Muss als Parameter im Format 0x00 angeegben werden.
+gvn:        Liefert die Seriennummer.
+svn:        Setzt die Seriennummer im RAM.
+svnh:       Setzt die Header des Seriennummer im RAM.
+            Muss als Parameter im Format 0x00 angeegben werden.
+urst:       Entfernt das USB Device vom Bus und verbindet es neu.
+erdsc:      Liest den im EEPROM gespeicherten USB Hid Descriptor aus.
+esdsc:      Speichert den im RAM vorgehaltenen USB Hid Descriptor in das EEPROM.
+ersd:       Liest die im EEPROM gespeicherten USB Sequenz-Daten aus.
+essd:       Speichert die im RAM USB Sequenz-Daten in das EEPROM.
+ervn:       Liest den im EEPROM gespeicherten Vendor Namen aus.
+esvn:       Speichert den im RAM vorgehaltenen Vendor Namen in das EEPROM.
+ern:        Liest den im EEPROM gespeicherten Device Namen aus.
+esn:        Speichert den im RAM vorgehaltenen Device Namen in das EEPROM.
+ersn:       Liest die im EEPROM gespeicherte Seriennummer aus.
+essn:       Speichert die im RAM vorgehaltene Seriennummer in das EEPROM.
+tlsdsc:     Toggelt das Konfigurations-Bit für das Laden des USB Hid Descriptors beim Start.
+tlsn:       Toggelt das Konfigurations-Bit für das Laden des Device Namen beim Start.
+tlsvn:      Toggelt das Konfigurations-Bit für das Laden des Vendor Namen beim Start.
+tlssn:      Toggelt das Konfigurations-Bit für das Laden der Seriennummer beim Start.
+tlssd:      Toggelt das Konfigurations-Bit für das Laden der USB Sequenz-Daten beim Start.
+tlscvid:    Toggelt das Konfigurations-Bit für das Laden der Vendor ID beim Start.
+tlscdid:    Toggelt das Konfigurations-Bit für das Laden der Device ID beim Start.
+tlsiossd:   Toggelt das Konfigurations-Bit für das ausführen von USB Sequenz-Daten beim Start.
+edcfg:      Löscht alle Bits des Konfigurationsbytes im EEPROM.
+help:       Gibt diese Hilfe aus.
+ttye:       Toggelt das Echo und die Ausgabe des TTY.
+btldr:      Reset the device and start den USBABPLoader.
 
