@@ -26,7 +26,8 @@ Reportbuffer format:
 	an example of a reportBuffer for a CTRL+ALT+Delete keypress:
 
 	{((1<<0)+(1<<2)),0,76,0,0,0,0,0}
-In Zeilenform und Hex:
+
+    In hex
 0x05
 0x00
 0x4c
