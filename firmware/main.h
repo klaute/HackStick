@@ -58,6 +58,9 @@ extern uint8_t eep_usbConfig EEMEM;
 
 extern const char WELCOME_MSG[] PROGMEM;
 
+extern const prog_char _str_error[];
+extern const prog_char _str_ret[];
+
 /*----------------------------------------------------------------------------*/
 // Methoden zum Zugriff auf die Variablen im EEPROM
 extern void tty_init(void);

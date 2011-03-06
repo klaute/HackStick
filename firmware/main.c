@@ -206,7 +206,7 @@ void interpretUSBDataSequence()
         // mit der maximalen Anzahl der Bytes in einem Datenpaket.
         if ( tupelCnt > USB_MAX_DATA_BYTES || tupelCnt == 0 )
         {
-            printf_P(_str_err);
+            printf_P(_str_error);
             printf_P(_str_ret);
             return;
         }
