@@ -31,6 +31,16 @@ int __attribute__((noreturn)) main(void)
 
         _delay_ms(10);
 
+        if ( usb_status.isd == 1 && usb_status.connected == 7 )
+        {
+            //printf("%d\r\n",usb_status.connected);
+            printf_P( PSTR("\r\nsending USB Data Sequence...") );
+            interpretUSBDataSequence();
+            usb_status.isd = 0;
+            printf_P( _str_ret );
+            printf_P( _str_ret_gt );
+        }
+
     } while (1); // Endlosschleife
 
 }
@@ -84,7 +94,7 @@ void _loadEEPROMConfig()
 {
 
     // USB-Konfiguartion aus dem EEPROM laden
-    uint8_t config = eeprom_read_byte(&eep_usbConfig);
+    uint16_t config = eeprom_read_word(&eep_usbConfig);
 
     // TODO aus EEPROM laden oder festlegen der USB Geräteinformationen setzen
     usbDescriptorDevice[4]         = usb_descr.USBCfgDeviceClass;
@@ -161,8 +171,17 @@ void _loadEEPROMConfig()
         eep_readUSBDataSequence();
         if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_CONFIG_INTERPRET_ID)) )
         {
-            // Sollte nur ausgeführt weren wenn Daten zuvor geladen wurden.
-            interpretUSBDataSequence();
+            // Wird in der Main ausgeführt
+            usb_status.isd = 1;
+        }
+    }
+    if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_RECEIVE_DATA)) )
+    {
+        eep_readUSBReceiveData();
+        if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_RECEIVE_DATA_ACTIVE)) )
+        {
+            usb_status.prd = 1;
+            usb_status.isd = 0; // cant't be done simultanous
         }
     }
 #endif
@@ -178,10 +197,10 @@ void interpretUSBDataSequence()
         return; // Keine gültige Sequenz vorhanden und der Code soll ausgeführt werden.
 
     // Header auslesen.
-    maxUSBDataBytes      = usbDataSequence[0];
-    uint8_t delayStart   = usbDataSequence[1];
-    uint8_t delay        = usbDataSequence[2];
-    uint8_t blockCnt     = usbDataSequence[3];
+    maxUSBDataBytes    = usbDataSequence[0];
+    uint8_t delayStart = usbDataSequence[1];
+    uint8_t delay      = usbDataSequence[2];
+    uint8_t blockCnt   = usbDataSequence[3];
 
     // Die maximale/minimale Anzahl der auszugebenden Daten ist ungültig oder keine Blöcke in den Daten vorhanden.
     if ( maxUSBDataBytes > USB_MAX_DATA_BYTES || !maxUSBDataBytes || !blockCnt )
@@ -194,6 +213,8 @@ void interpretUSBDataSequence()
     LED_YELLOW_PORT = LED_YELLOW_PORT ^ (1 << LED_YELLOW_PIN); // Gelbe LED an
 
     _delay_ms(delayStart); // Pause vor dem Start ausführen
+
+    usbPoll();
     
     // Bytes beginnen zu interpretieren
     uint8_t i;
@@ -229,6 +250,9 @@ void interpretUSBDataSequence()
         tty_setInterrupt();
 #endif
         _delay_ms(delay);
+
+        usbPoll();
+
     }
     LED_YELLOW_PORT = LED_YELLOW_PORT & ~(1 << LED_YELLOW_PIN); // Gelbe LED aus
     LED_RED_PORT = LED_RED_PORT ^ (1 << LED_RED_PIN); // Rote LED aus
@@ -244,6 +268,8 @@ void usbReset( void )
 
     LED_GREEN_PORT = LED_GREEN_PORT & ~(1 << LED_GREEN_PIN);
     usbDeviceDisconnect();
+
+    usb_status.connected = 0;
 
     uchar i = 13;
     do
@@ -304,14 +330,21 @@ uchar usbFunctionRead(uchar *data, uchar len)
  */
 uchar usbFunctionWrite(uchar *data, uchar len)
 {
+
+#ifdef WITH_INTERPRETER
     //printf("dev=0x%02x\r\n",usbHidReportDescriptor[3]);
-    if ( bytesRemaining == 2 && len == 2 && usbHidReportDescriptor[3] == 0x06 ) // Keyboard LED status
+    if ( bytesRemaining == usbReceiveData[0] && len == usbReceiveData[0] ) //&& usbHidReportDescriptor[3] == 0x06 ) // Keyboard LED status
     {
-        printf("\r\nKeyboard LED status 0x%02x\r\n> ",data[1]);
         LED_YELLOW_PORT = LED_YELLOW_PORT | (1 << LED_YELLOW_PIN);
+
+        if ( (data[ usbReceiveData[1] ] & usbReceiveData[2]) > 0 && usb_status.prd == 1 )
+        {
+            usb_status.isd = 1; // start interpretation of the data
+        }
 
         return 1;
     }
+#endif
 
     if ( bytesRemaining == 0 )
         return 1; // Ende der Übertragung
@@ -326,9 +359,9 @@ uchar usbFunctionWrite(uchar *data, uchar len)
     uint8_t i = 0;
     for ( i = 0; i < len; i++ )
     {
-        // Daten in das EEPROM Byteweise schreiben.
+        // Daten Byteweise ausgeben
         dataBytes[pos + i] = data[i];
-        printf("%d = 0x%02x\r\n",i,data[i]);
+        printf_P( PSTR("\r\n%d = 0x%02x\r\n"), i, data[i] );
     }
 
     if ( bytesRemaining <= 8 ) // Wenn hier noch 8 Bytes übrig sind wurden alle USB_DATA_BYTES Bytes übernommen. USB_DATA_BYTES = Maximum.
@@ -352,18 +385,26 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
 
     if ( rq->wValue.bytes[1] == USBDESCR_HID )
     {
+        usb_status.connected += 1;
+
         usbMsgPtr = (uchar *)usbDescriptorConfiguration+18;
         return 9 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3;
     } else if ( rq->wValue.bytes[1] == USBDESCR_CONFIG )
     {
+        usb_status.connected += 1;
+
         usbMsgPtr = (uchar *)usbDescriptorConfiguration;
         return sizeof(usbDescriptorConfiguration);
     } else if ( rq->wValue.bytes[1] == USBDESCR_DEVICE )
     {
+        usb_status.connected += 1;
+
         usbMsgPtr = (uchar *)usbDescriptorDevice;
         return sizeof(usbDescriptorDevice);
     } else if ( rq->wValue.bytes[1] == USBDESCR_HID_REPORT )
     {
+        usb_status.connected += 1;
+
         usbMsgPtr = (uchar *)usbHidReportDescriptor;
         return maxUSBHidReportDescriptorBytes; // return size
         //return USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH; // return size
@@ -371,14 +412,20 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
     {
         if ( rq->wValue.bytes[0] == 1 ) // Vendor
         {
+            usb_status.connected += 1;
+
             usbMsgPtr = (uchar *)usbDescriptorStringVendor;
             return USB_PROP_LENGTH(usbDescriptorStringVendor[0]);
         } else if ( rq->wValue.bytes[0] == 2 ) // Device
         {
+            usb_status.connected += 1;
+
             usbMsgPtr = (uchar *)usbDescriptorStringDevice;
             return USB_PROP_LENGTH(usbDescriptorStringDevice[0]);
         } else if ( rq->wValue.bytes[0] == 3 ) // SerialNumber
         {
+            usb_status.connected += 1;
+
             usbMsgPtr = (uchar *)usbDescriptorStringSerialNumber;
             return USB_PROP_LENGTH(usbDescriptorStringSerialNumber[0]);
         }

@@ -41,12 +41,13 @@
 
 /*----------------------------------------------------------------------------*/
 
-const prog_char _str_cfg[] = "eCfg = 0x%02x";
+const prog_char _str_cfg[] = "eCfg = 0x%04x";
 
 /*----------------------------------------------------------------------------*/
 
 #ifdef WITH_INTERPRETER
 extern uint8_t usbDataSequence[];
+extern uint8_t usbReceiveData[];
 #endif
 extern char usbHidReportDescriptor[];
 
@@ -63,22 +64,20 @@ extern int usbDescriptorStringSerialNumber[];
 /*----------------------------------------------------------------------------*/
 
 // Variablen im EEPROM
-uint8_t eep_usbConfig EEMEM;
+uint16_t eep_usbConfig EEMEM;
 uint8_t eep_maxUSBHidReportDescriptorBytes EEMEM;
 char    eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
 
 int     eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 int     eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 int     eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+
 uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
 uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
+
+uint8_t eep_usbReceiveData[USB_RECEIVE_DATA_SIZE] EEMEM;
+
 uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
-/*
-uint8_t eep_usbDataSequence0[256] EEMEM;
-uint8_t eep_usbDataSequence1[256] EEMEM;
-uint8_t eep_usbDataSequence2[256] EEMEM;
-uint8_t eep_usbDataSequence3[30] EEMEM;
-*/
 
 /*----------------------------------------------------------------------------*/
 
@@ -89,6 +88,8 @@ void eep_saveUSBHidReportDescriptor(void);
 #ifdef WITH_INTERPRETER
 void eep_readUSBDataSequence(void);
 void eep_saveUSBDataSequence(void);
+void eep_readUSBReceiveData(void);
+void eep_saveUSBReceiveData(void);
 #endif
 
 void eep_readUSBDescriptorStringVendor(void);

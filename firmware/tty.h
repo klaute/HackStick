@@ -70,7 +70,9 @@ extern uint8_t usbDataSequence[];
 extern uint8_t maxUSBDataBytes;
 #ifdef WITH_INTERPRETER
 extern uint8_t usbDataSequenceBytes;
+extern uint8_t usbReceiveData[];
 #endif
+
 extern uint8_t maxUSBHidReportDescriptorBytes;
 
 extern char usbHidReportDescriptor[];
@@ -95,6 +97,8 @@ extern void eep_saveUSBHidReportDescriptor(void);
 #ifdef WITH_INTERPRETER
 extern void eep_readUSBDataSequence(void);
 extern void eep_saveUSBDataSequence(void);
+extern void eep_readUSBReceiveData(void);
+extern void eep_saveUSBReceiveData(void);
 #endif
 
 extern void eep_readUSBDescriptorStringVendor(void);
@@ -174,6 +178,7 @@ void tty_setInterrupt3(void);
 void tty_setUSBHidDeviceDescriptor(void);
 #ifdef WITH_INTERPRETER
 void tty_setUSBDataSequence(void);
+void tty_setUSBReceiveData(char*);
 #endif
 void tty_setUSBReportData(void);
 
@@ -189,7 +194,10 @@ void tty_setUSBConfigVendorID(char*);
 void tty_setUSBConfigDeviceID(char*);
 
 void tty_getUSBHidDeviceDescriptor(void);
+#ifdef WITH_INTERPRETER
 void tty_getUSBDataSequence(void);
+void tty_getUSBReceiveData(void);
+#endif
 void tty_getUSBReportData(void);
 
 void tty_getVendorName(void);
@@ -225,10 +233,12 @@ const prog_char _str_ret[]     = "\r\n";
 const prog_char _str_ret_gt[]  = "\r\n>";
 const prog_char _str_2hex[]    = "0x%02X ";
 const prog_char _str_4hex[]    = "0x%04x";
+const prog_char _str_3_2hex[]  = "0x%02x 0x%02x 0x%02x";
 const prog_char _str_header[]  = "H=0x%02x\r\n";
 const prog_char _str_vid[]     = "VID=0x%04x";
 const prog_char _str_did[]     = "DID=0x%04x";
 const prog_char _str_bl[]      = "Starting bootloader...\r\n\r\n";
+const prog_char _str_udr[]     = "len=0x%02x; idx=0x%02x; data=0x%02x\r\n";
 
 /*----------------------------------------------------------------------------*/
 
@@ -254,17 +264,24 @@ const prog_char _isd[] = "isd";
 const prog_char _gdsc[] = "gdsc";
 #ifdef WITH_INTERPRETER
 const prog_char _gsd[]  = "gsd";
+const prog_char _grd[]  = "grd";
 #endif
 const prog_char _gdta[] = "gdta";
 
 const prog_char _sdsc[] = "sdsc";
 #ifdef WITH_INTERPRETER
 const prog_char _ssd[]  = "ssd";
+const prog_char _srd[]  = "srd";
 #endif
 const prog_char _sdta[] = "sdta";
 
+#ifdef WITH_INTERPRETER
 const prog_char _ersd[]  = "ersd";
 const prog_char _essd[]  = "essd";
+const prog_char _errd[]  = "errd";
+const prog_char _esrd[]  = "esrd";
+#endif
+
 const prog_char _erdsc[] = "erdsc";
 const prog_char _esdsc[] = "esdsc";
 
@@ -283,6 +300,7 @@ const prog_char _escdid[] = "escdid";
 const prog_char _tlsdsc[]  = "tlsdsc";
 #ifdef WITH_INTERPRETER
 const prog_char _tlssd[]   = "tlssd";
+const prog_char _tlsrd[]   = "tlsrd";
 #endif
 const prog_char _tlsvn[]   = "tlsvn";
 const prog_char _tlsn[]    = "tlsn";
@@ -291,6 +309,7 @@ const prog_char _tlscvid[] = "tlscvid";
 const prog_char _tlscdid[] = "tlscdid";
 #ifdef WITH_INTERPRETER
 const prog_char _tissd[]   = "tissd";
+const prog_char _tprd[]   = "tprd";
 #endif
 
 const prog_char _edcfg[] = "edcfg";
@@ -343,17 +362,21 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_getUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _gdsc },
 #ifdef WITH_INTERPRETER
     { tty_getUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _gsd  },
+    { tty_getUSBReceiveData,         TTY_CMD_WITHOUT_PARAMETER, _grd  },
 #endif
 	{ tty_getUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _gdta },
     { tty_setUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _sdsc },
 #ifdef WITH_INTERPRETER
     { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _ssd  },
+    { tty_setUSBReceiveData,         TTY_CMD_WITH_STRING_PARAMETER, _srd  },
 #endif
 	{ tty_setUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _sdta },
 
 #ifdef WITH_INTERPRETER
     { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _ersd   },
     { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _essd   },
+    { eep_readUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _errd   },
+    { eep_saveUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _esrd   },
 #endif
     { eep_readUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _erdsc  },
     { eep_saveUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _esdsc  },
@@ -372,6 +395,7 @@ const tty_command_t tty_commands[] PROGMEM = {
     // TODO Daten auf andere Art laden
 #ifdef WITH_INTERPRETER
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlssd   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA + TTY_EEP_CFG_USB_OFFSET,                    _tlsrd   },
 #endif
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlsvn   },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlsn    },
@@ -380,6 +404,7 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tlscdid },
 #ifdef WITH_INTERPRETER
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tissd   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA_ACTIVE + TTY_EEP_CFG_USB_OFFSET,             _tprd    },
 #endif
 
     { eep_deleteUSBConfigBits, TTY_CMD_WITHOUT_PARAMETER, _edcfg },

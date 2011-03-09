@@ -60,6 +60,7 @@ extern const char WELCOME_MSG[] PROGMEM;
 
 extern const prog_char _str_error[];
 extern const prog_char _str_ret[];
+extern const prog_char _str_ret_gt[];
 
 /*----------------------------------------------------------------------------*/
 // Methoden zum Zugriff auf die Variablen im EEPROM
@@ -74,6 +75,7 @@ extern void eep_readUSBHidReportDescriptor(void);
 
 #ifdef WITH_INTERPRETER
 extern void eep_readUSBDataSequence(void);
+extern void eep_readUSBReceiveData(void);
 #endif
 
 extern void eep_readUSBDescriptorStringVendor(void);
@@ -83,6 +85,8 @@ extern void eep_readUSBDescriptorStringDevice(void);
 extern void eep_readUSBDescriptorStringSerialNumber(void);
 
 extern void eep_readUSBCfgVendorID(void);
+
+extern void eep_readUSBCfgDeviceID(void);
 
 extern void eep_readUSBCfgDeviceID(void);
 
@@ -107,7 +111,20 @@ uint8_t dataBytes[USB_MAX_DATA_BYTES];
 #ifdef WITH_INTERPRETER
 // Sequence der Daten die an den Host gesendet werden sollen.
 uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];
+uint8_t usbReceiveData[USB_RECEIVE_DATA_SIZE];
 #endif
+
+/*----------------------------------------------------------------------------*/
+
+typedef struct USB_Status
+{
+    uint8_t isd       : 1;
+    uint8_t prd       : 1;
+    uint8_t connected : 4;
+    uint8_t unused    : 2;
+} USB_Status_t;
+
+volatile USB_Status_t usb_status;
 
 /*----------------------------------------------------------------------------*/
 /* USB report descriptor */

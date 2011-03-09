@@ -41,10 +41,15 @@
 // Anzahl der Bytes fuer die USB ID's (Vendor und Device)
 #define USB_CFG_ID_BYTE_CNT 2
 
+// Anzahl der Bytes die notwendig sind für das Erkennen von zu empfangenen Daten
+// Byte 0: ist beinhaltet die Anzahl der Bytes die empfangen werden sollen,
+//         diese wurde im USB Hid Report Descriptor festgelegt
+// Byte 1: Index der Byte im Daten-Array, das geprüft werden soll.
+// Byte 2: Inhalt der per & mit dem Byte im Daten-Array verknüpft wird.
+#define USB_RECEIVE_DATA_SIZE 3
+
 // Maximal Anzahl der Bytes im EEPROM abzueglich der anderen gespeicherten Daten.
-//( 512 -(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) ) )
-#define USB_MAX_DATA_SEQ_SIZE 798
-//#define USB_MAX_DATA_SEQ_SIZE 512-(2 + USB_CFG_HID_REPORT_DESCRIPTOR_LEN + (2*USB_CFG_ID_BYTE_CNT) + (3*USB_DEVICE_STRING_DESCRIPTION_LEN) )
+#define USB_MAX_DATA_SEQ_SIZE 794
 
 /*----------------------------------------------------------------------------*/
 // Defines um die LED's einfacher ansteuern zu koennen.
@@ -56,7 +61,7 @@
 #define LED_GREEN_PIN   PB1
 
 /*----------------------------------------------------------------------------*/
-// Konfigurationsbits in der EEPROM-Variable eep_usbConfig
+// Konfigurationsbits in der EEPROM-Variable eep_usbConfig (16 Bit)
 #define EEP_CFG_USB_HID_REPORT_DESCRIPTOR           0
 #define EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR        1
 #define EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE        2
@@ -65,9 +70,11 @@
 #define EEP_CFG_USB_CONFIG_DEVICE_ID                5
 #define EEP_CFG_USB_DATA_SEQ                        6
 #define EEP_CFG_USB_CONFIG_INTERPRET_ID             7
+#define EEP_CFG_USB_RECEIVE_DATA                    8
+#define EEP_CFG_USB_RECEIVE_DATA_ACTIVE             9
 
-#define EEP_CFG_USB_TYPES       8 // Die Anzahl der "EEP_CFG_USB_" Defines, nicht der höchste Wert.
-#define EEP_CFG_USB_STARTS_WITH 0
+#define EEP_CFG_USB_TYPES       10 // Die Anzahl der "EEP_CFG_USB_" Defines, nicht der höchste Wert.
+#define EEP_CFG_USB_STARTS_WITH  0
 
 #define EEP_CFG_VALUE_ON  1
 #define EEP_CFG_VALUE_OFF 0

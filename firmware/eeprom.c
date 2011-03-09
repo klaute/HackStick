@@ -139,6 +139,23 @@ void eep_saveUSBDescriptorStringSerialNumber()
 
 /* ------------------------------------------------------------------------- */
 
+void eep_readUSBReceiveData()
+{
+    while (!eeprom_is_ready()) {}
+    eeprom_read_block(usbReceiveData,
+                eep_usbReceiveData,
+                sizeof(eep_usbReceiveData));
+}
+void eep_saveUSBReceiveData()
+{
+    while (!eeprom_is_ready()) {}
+    eeprom_write_block(usbReceiveData,
+                eep_usbReceiveData,
+                sizeof(eep_usbReceiveData));
+}
+
+/* ------------------------------------------------------------------------- */
+
 void eep_readUSBCfgVendorID()
 {
     uint8_t tmp[USB_CFG_ID_BYTE_CNT];
@@ -178,20 +195,20 @@ void eep_saveUSBCfgDeviceID()
 void eep_toggleUSBConfigBit(uint8_t bit)
 {
 	while (!eeprom_is_ready()) {}
-    uint8_t config = eeprom_read_byte(&eep_usbConfig);
+    uint16_t config = eeprom_read_word(&eep_usbConfig);
 
     config ^= (EEP_CFG_VALUE_ON << bit);
 
     while (!eeprom_is_ready()) {}
-    eeprom_write_byte(&eep_usbConfig, config);
+    eeprom_write_word(&eep_usbConfig, config);
     printf_P(_str_cfg, config);
 }
 
 void eep_deleteUSBConfigBits()
 {
     while (!eeprom_is_ready()) {}
-    eeprom_write_byte(&eep_usbConfig, 0x00);
-    uint8_t config = eeprom_read_byte(&eep_usbConfig);
+    eeprom_write_word(&eep_usbConfig, 0x0000);
+    uint16_t config = eeprom_read_byte(&eep_usbConfig);
     printf_P(_str_cfg, config);
 }
 

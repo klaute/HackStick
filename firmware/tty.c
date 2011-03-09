@@ -371,6 +371,11 @@ void tty_getUSBDataSequence()
             printf_P(_str_ret);
     }
 }
+
+void tty_getUSBReceiveData()
+{
+    printf_P( _str_udr, usbReceiveData[0], usbReceiveData[1], usbReceiveData[2] );
+}
 #endif
 
 void tty_getUSBHidDeviceDescriptor()
@@ -452,6 +457,19 @@ void tty_setUSBReportData()
 void tty_setUSBDataSequence()
 {
     tty_config.read_mode = TTY_READ_MODE_USB_DATA_SEQ;
+}
+
+void tty_setUSBReceiveData(char* t)
+{
+    uint8_t tmp0 = 0;
+    uint8_t tmp1 = 0;
+    uint8_t tmp2 = 0;
+    if ( sscanf_P((char*)t, _str_3_2hex, &tmp0, &tmp1, &tmp2) )
+    {
+        usbReceiveData[0] = tmp0;
+        usbReceiveData[1] = tmp1;
+        usbReceiveData[2] = tmp2;
+    }
 }
 #endif
 
