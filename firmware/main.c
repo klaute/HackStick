@@ -332,12 +332,11 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 {
 
 #ifdef WITH_INTERPRETER
-    //printf("dev=0x%02x\r\n",usbHidReportDescriptor[3]);
-    if ( bytesRemaining == usbReceiveData[0] && len == usbReceiveData[0] ) //&& usbHidReportDescriptor[3] == 0x06 ) // Keyboard LED status
+    if ( usb_status.prd == 1 && bytesRemaining == usbReceiveData[0] && len == usbReceiveData[0] ) // Keyboard LED status
     {
         LED_YELLOW_PORT = LED_YELLOW_PORT | (1 << LED_YELLOW_PIN);
 
-        if ( (data[ usbReceiveData[1] ] & usbReceiveData[2]) > 0 && usb_status.prd == 1 )
+        if ( (data[ usbReceiveData[1] ] & usbReceiveData[2]) > 0 )
         {
             usb_status.isd = 1; // start interpretation of the data
         }
@@ -357,12 +356,16 @@ uchar usbFunctionWrite(uchar *data, uchar len)
     uint16_t pos = ( maxUSBDataBytes - bytesRemaining ); // Berechnen der Position im Datenarray.
 
     uint8_t i = 0;
+    if (len > 0)
+        printf_P( PSTR("\r\n") );
     for ( i = 0; i < len; i++ )
     {
         // Daten Byteweise ausgeben
         dataBytes[pos + i] = data[i];
-        printf_P( PSTR("\r\n%d = 0x%02x\r\n"), i, data[i] );
+        printf_P( PSTR("data[%d] = 0x%02x\r\n"), i, data[i] );
     }
+    if (len > 0)
+        printf_P( PSTR("\r\n>") );
 
     if ( bytesRemaining <= 8 ) // Wenn hier noch 8 Bytes übrig sind wurden alle USB_DATA_BYTES Bytes übernommen. USB_DATA_BYTES = Maximum.
     {
