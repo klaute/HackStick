@@ -5,3 +5,6 @@ cat help.h  | grep ":" | sed -e "s/:.*$//ig" | grep "\t" | sed -e "s/\\\t//ig" |
 
 diff a b | grep "<"
 
+rm a
+rm b
+

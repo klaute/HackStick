@@ -14,14 +14,14 @@ Reportbuffer format:
 	
    Modifier byte: 8 bits, each individual bit represents one of the modifier keys.
 
-   	bit0  LEFT CTRL		(1<<0)
-	bit1  LEFT SHIFT	(1<<1)
-	bit2  LEFT ALT		(1<<2)
-	bit3  LEFT GUI		(1<<3)
-	bit4  RIGHT CTRL	(1<<4)
-	bit5  RIGHT SHIFT	(1<<5)
-	bit6  RIGHT ALT		(1<<6)
-	bit7  RIGHT GUI		(1<<7)
+   	bit0  LEFT CTRL		(1<<0) =   1
+	bit1  LEFT SHIFT	(1<<1) =   2
+	bit2  LEFT ALT		(1<<2) =   4
+	bit3  LEFT GUI		(1<<3) =   8
+	bit4  RIGHT CTRL	(1<<4) =  16
+	bit5  RIGHT SHIFT	(1<<5) =  32
+	bit6  RIGHT ALT		(1<<6) =  64
+	bit7  RIGHT GUI		(1<<7) = 128
 
 	an example of a reportBuffer for a CTRL+ALT+Delete keypress:
 

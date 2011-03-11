@@ -212,5 +212,12 @@ void eep_deleteUSBConfigBits()
     printf_P(_str_cfg, config);
 }
 
+void eep_getConfig()
+{
+    while (!eeprom_is_ready()) {}
+    uint16_t config = eeprom_read_word(&eep_usbConfig);
+    printf_P(_str_cfg, config);
+}
+
 /* ------------------------------------------------------------------------- */
 

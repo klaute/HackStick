@@ -65,19 +65,19 @@ extern int usbDescriptorStringSerialNumber[];
 
 // Variablen im EEPROM
 uint16_t eep_usbConfig EEMEM;
-uint8_t eep_maxUSBHidReportDescriptorBytes EEMEM;
-char    eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
+uint8_t  eep_maxUSBHidReportDescriptorBytes EEMEM;
+char     eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
 
-int     eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
-int     eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
-int     eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int      eep_usbDescriptorStringVendor[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int      eep_usbDescriptorStringDevice[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
+int      eep_usbDescriptorSerialNumber[USB_DEVICE_STRING_DESCRIPTION_LEN] EEMEM;
 
-uint8_t eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
-uint8_t eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
+uint8_t  eep_usbCfgVendorID[USB_CFG_ID_BYTE_CNT] EEMEM;
+uint8_t  eep_usbCfgDeviceID[USB_CFG_ID_BYTE_CNT] EEMEM;
 
-uint8_t eep_usbReceiveData[USB_RECEIVE_DATA_SIZE] EEMEM;
+uint8_t  eep_usbReceiveData[USB_RECEIVE_DATA_SIZE] EEMEM;
 
-uint8_t eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
+uint8_t  eep_usbDataSequence[USB_MAX_DATA_SEQ_SIZE] EEMEM;
 
 /*----------------------------------------------------------------------------*/
 
@@ -110,6 +110,8 @@ void eep_saveUSBCfgDeviceID(void);
 void eep_toggleUSBConfigBit(uint8_t);
 
 void eep_deleteUSBConfigBits(void);
+
+extern void eep_getConfig(void);
 
 /*----------------------------------------------------------------------------*/
 

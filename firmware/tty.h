@@ -61,6 +61,7 @@ const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6.1 (by kla
 const char HELP_MSG[] PROGMEM = _MSG_HELP_;
 
 /*----------------------------------------------------------------------------*/
+
 // Externe USB-Daten
 extern uint8_t dataBytes[];
 #ifdef WITH_INTERPRETER
@@ -81,6 +82,8 @@ extern char usbDescriptorConfiguration[];
 extern int  usbDescriptorStringVendor[];
 extern int  usbDescriptorStringDevice[];
 extern int  usbDescriptorStringSerialNumber[];
+
+extern volatile USB_Status_t usb_status;
 
 /*----------------------------------------------------------------------------*/
 // Externe Methoden zum Zugriff auf Daten
@@ -119,6 +122,8 @@ extern void eep_saveUSBCfgDeviceID(void);
 extern void eep_toggleUSBConfigBit(uint8_t);
 
 extern void eep_deleteUSBConfigBits(void);
+
+extern void eep_getConfig(void);
 
 /*----------------------------------------------------------------------------*/
 
@@ -213,6 +218,8 @@ void tty_startBootloader(void);
 
 void tty_setEcho(char*);
 
+void tty_toggleProveReceiveData(void);
+
 /*----------------------------------------------------------------------------*/
 
 // Zum umbiegen von stdout auf UART
@@ -272,6 +279,7 @@ const prog_char _sdsc[] = "sdsc";
 #ifdef WITH_INTERPRETER
 const prog_char _ssd[]  = "ssd";
 const prog_char _srd[]  = "srd";
+const prog_char _prd[]  = "prd";
 #endif
 const prog_char _sdta[] = "sdta";
 
@@ -336,6 +344,8 @@ const prog_char _ttye[] = "ttye";
 
 const prog_char _btldr[] = "btldr";
 
+const prog_char _egcfg[] = "egcfg";
+
 // Zuordnung der vorher definierten Kommandos
 // zu den Funktionen mit deren Parametern
 const tty_command_t tty_commands[] PROGMEM = {
@@ -367,8 +377,9 @@ const tty_command_t tty_commands[] PROGMEM = {
 	{ tty_getUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _gdta },
     { tty_setUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _sdsc },
 #ifdef WITH_INTERPRETER
-    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER, _ssd  },
+    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER,     _ssd  },
     { tty_setUSBReceiveData,         TTY_CMD_WITH_STRING_PARAMETER, _srd  },
+    { tty_toggleProveReceiveData,    TTY_CMD_WITHOUT_PARAMETER,     _prd  },
 #endif
 	{ tty_setUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _sdta },
 
@@ -392,7 +403,6 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _escdid },
 
     { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlsdsc  },
-    // TODO Daten auf andere Art laden
 #ifdef WITH_INTERPRETER
     { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlssd   },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA + TTY_EEP_CFG_USB_OFFSET,                    _tlsrd   },
@@ -431,6 +441,8 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_setEcho, TTY_CMD_WITH_STRING_PARAMETER, _ttye },
 
     { tty_startBootloader, TTY_CMD_WITH_STRING_PARAMETER, _btldr },
+
+    { eep_getConfig, TTY_CMD_WITHOUT_PARAMETER, _egcfg },
 
 };
 

@@ -469,6 +469,12 @@ void tty_setUSBReceiveData(char* t)
         usbReceiveData[0] = tmp0;
         usbReceiveData[1] = tmp1;
         usbReceiveData[2] = tmp2;
+        if ( tmp0 != 0 )
+        {
+            usb_status.prd = 1;
+        } else {
+            usb_status.prd = 0;
+        }
     }
 }
 #endif
@@ -599,5 +605,12 @@ void tty_setEcho(char* t)
             tty_config.echo = TTY_ECHO_OFF;
     }
 }
+
+void tty_toggleProveReceiveData(void)
+{
+    usb_status.prd = !usb_status.prd;
+}
+
+/* ------------------------------------------------------------------------- */
 
 

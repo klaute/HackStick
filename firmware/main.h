@@ -116,6 +116,7 @@ uint8_t usbReceiveData[USB_RECEIVE_DATA_SIZE];
 
 /*----------------------------------------------------------------------------*/
 
+/*
 typedef struct USB_Status
 {
     uint8_t isd       : 1;
@@ -123,7 +124,7 @@ typedef struct USB_Status
     uint8_t connected : 4;
     uint8_t unused    : 2;
 } USB_Status_t;
-
+*/
 volatile USB_Status_t usb_status;
 
 /*----------------------------------------------------------------------------*/

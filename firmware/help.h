@@ -15,6 +15,13 @@
 \tgsd:\tLiefert die Sequenzdaten zurück.\r\n\
 \tssd:\tFunktionalität wie bei \"sdsc\".\r\n\
 \tisd:\tStartet den Interpreter der SequenzDaten.\r\n\
+\tsrd:\tErwartet 3 Parameter im Format 0x00.\r\n\
+\t    \tParameter 1 enthält die Anzhal der Bytes die im zu empfangenen Report enthalten sind.\r\n\
+\t    \tIst dieser Parameter gleich 0 werden die Empfangenen Daten nicht geprüft.\r\n\
+\t    \tParameter 2 enthält den Index innerhalb der Report-Daten, die geprüft werden sollen.\r\n\
+\t    \tParameter 3 enthält den den Wert, der an dem angegebenen Index mit einem logischen UND geprüft wird..\r\n\
+\tgrd:\tLiefert die im Speicher vorgehaltenen Request Daten.\r\n\
+\tprd:\tToggelt das interne Flag ob die Empfangenen Daten geprüft werden sollen oder nicht.\r\n\
 \tgcvid:\tLiefert die Vendor ID des USB Device.\r\n\
 \tscvid:\tSetzt die Vendor ID des USB Device durch die Übergabe dieser im Format 0x0000.\r\n\
 \tgcdid:\tLiefert die Device ID des USB Device.\r\n\
@@ -27,9 +34,9 @@
 \tsvn:\tSetzt den Vendor Namen im RAM.\r\n\
 \tsvnh:\tSetzt den Header des Vendor Namen im RAM.\r\n\
 \t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
-\tgvn:\tLiefert die Seriennummer.\r\n\
-\tsvn:\tSetzt die Seriennummer im RAM.\r\n\
-\tsvnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
+\tgsn:\tLiefert die Seriennummer.\r\n\
+\tssn:\tSetzt die Seriennummer im RAM.\r\n\
+\tssnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
 \t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \turst:\tEntfernt das USB Device vom Bus und verbindet es neu.\r\n\
 \terdsc:\tLiest den im EEPROM gespeicherten USB Hid Descriptor aus.\r\n\
@@ -42,18 +49,27 @@
 \tesn:\tSpeichert den im RAM vorgehaltenen Device Namen in das EEPROM.\r\n\
 \tersn:\tLiest die im EEPROM gespeicherte Seriennummer aus.\r\n\
 \tessn:\tSpeichert die im RAM vorgehaltene Seriennummer in das EEPROM.\r\n\
+\tercvid:\tLiest die Vendor ID aus dem EEPROM heraus.\r\n\
+\tescvid:\tSpeicheert die Vendor ID is das EEPROM.\r\n\
+\tercdid:\tLiest die Device ID aus dem EEPROM heraus.\r\n\
+\tescdid:\tSpeichert die Device ID is das EEPROM.\r\n\
+\terrd:\tLiest die Request Daten aus dem EEPROM.\r\n\
+\tesrd:\tSpeichert die Request Daten in das EEPROM.\r\n\
 \ttlsdsc:\tToggelt das Konfigurations-Bit für das Laden des USB Hid Descriptors beim Start.\r\n\
 \ttlsn:\tToggelt das Konfigurations-Bit für das Laden des Device Namen beim Start.\r\n\
 \ttlsvn:\tToggelt das Konfigurations-Bit für das Laden des Vendor Namen beim Start.\r\n\
 \ttlssn:\tToggelt das Konfigurations-Bit für das Laden der Seriennummer beim Start.\r\n\
 \ttlssd:\tToggelt das Konfigurations-Bit für das Laden der USB Sequenz-Daten beim Start.\r\n\
+\ttlsrd:\tToggelt das Konfigurations-Bit für das Laden der USB Request-Daten beim Start.\r\n\
+\ttprd:\tToggelt das Konfigurations-Bit für das prüfen der USB Request-Daten.\r\n\
 \ttlscvid:\tToggelt das Konfigurations-Bit für das Laden der Vendor ID beim Start.\r\n\
 \ttlscdid:\tToggelt das Konfigurations-Bit für das Laden der Device ID beim Start.\r\n\
-\ttlsiossd:\tToggelt das Konfigurations-Bit für das ausführen von USB Sequenz-Daten beim Start.\r\n\
+\ttissd:\tToggelt das Konfigurations-Bit für das ausführen von USB Sequenz-Daten beim Start.\r\n\
 \tedcfg:\tLöscht alle Bits des Konfigurationsbytes im EEPROM.\r\n\
 \thelp:\tGibt diese Hilfe aus.\r\n\
 \tttye:\tToggelt das Echo und die Ausgabe des TTY.\r\n\
 \tbtldr:\tReset the device and start den USBABPLoader.\r\n\
+\tegcfg:\tGet the configuration word from EEPROM.\r\n\
 ";
 
 #endif
