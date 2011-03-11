@@ -29,15 +29,15 @@
 \tgn:\tLiefert den Device Namen.\r\n\
 \tsn:\tSetzt den Device Namen im RAM.\r\n\
 \tsnh:\tSetzt den Header des Device Namen im RAM.\r\n\
-\t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \tgvn:\tLiefert den Vendor Namen.\r\n\
 \tsvn:\tSetzt den Vendor Namen im RAM.\r\n\
 \tsvnh:\tSetzt den Header des Vendor Namen im RAM.\r\n\
-\t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \tgsn:\tLiefert die Seriennummer.\r\n\
 \tssn:\tSetzt die Seriennummer im RAM.\r\n\
 \tssnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
-\t    \t\tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
 \turst:\tEntfernt das USB Device vom Bus und verbindet es neu.\r\n\
 \terdsc:\tLiest den im EEPROM gespeicherten USB Hid Descriptor aus.\r\n\
 \tesdsc:\tSpeichert den im RAM vorgehaltenen USB Hid Descriptor in das EEPROM.\r\n\
@@ -62,8 +62,8 @@
 \ttlssd:\tToggelt das Konfigurations-Bit für das Laden der USB Sequenz-Daten beim Start.\r\n\
 \ttlsrd:\tToggelt das Konfigurations-Bit für das Laden der USB Request-Daten beim Start.\r\n\
 \ttprd:\tToggelt das Konfigurations-Bit für das prüfen der USB Request-Daten.\r\n\
-\ttlscvid:\tToggelt das Konfigurations-Bit für das Laden der Vendor ID beim Start.\r\n\
-\ttlscdid:\tToggelt das Konfigurations-Bit für das Laden der Device ID beim Start.\r\n\
+\ttlsvid:\tToggelt das Konfigurations-Bit für das Laden der Vendor ID beim Start.\r\n\
+\ttlsdid:\tToggelt das Konfigurations-Bit für das Laden der Device ID beim Start.\r\n\
 \ttissd:\tToggelt das Konfigurations-Bit für das ausführen von USB Sequenz-Daten beim Start.\r\n\
 \tedcfg:\tLöscht alle Bits des Konfigurationsbytes im EEPROM.\r\n\
 \thelp:\tGibt diese Hilfe aus.\r\n\

@@ -300,10 +300,10 @@ const prog_char _esn[]   = "esn";
 const prog_char _ersn[]  = "ersn";
 const prog_char _essn[]  = "essn";
 
-const prog_char _ercvid[] = "ercvid";
-const prog_char _escvid[] = "escvid";
-const prog_char _ercdid[] = "ercdid";
-const prog_char _escdid[] = "escdid";
+const prog_char _ervid[] = "ervid";
+const prog_char _esvid[] = "esvid";
+const prog_char _erdid[]  = "erdid";
+const prog_char _esdid[]  = "esdid";
 
 const prog_char _tlsdsc[]  = "tlsdsc";
 #ifdef WITH_INTERPRETER
@@ -313,8 +313,8 @@ const prog_char _tlsrd[]   = "tlsrd";
 const prog_char _tlsvn[]   = "tlsvn";
 const prog_char _tlsn[]    = "tlsn";
 const prog_char _tlssn[]   = "tlssn";
-const prog_char _tlscvid[] = "tlscvid";
-const prog_char _tlscdid[] = "tlscdid";
+const prog_char _tlsvid[]  = "tlsvid";
+const prog_char _tlsdid[]  = "tlsdid";
 #ifdef WITH_INTERPRETER
 const prog_char _tissd[]   = "tissd";
 const prog_char _tprd[]   = "tprd";
@@ -322,21 +322,21 @@ const prog_char _tprd[]   = "tprd";
 
 const prog_char _edcfg[] = "edcfg";
 
-const prog_char _gvn[]   = "gvn";
-const prog_char _gn[]    = "gn";
-const prog_char _gsn[]   = "gsn";
-const prog_char _gcvid[] = "gcvid";
-const prog_char _gcdid[] = "gcdid";
-const prog_char _svn[]   = "svn";
-const prog_char _sn[]    = "sn";
-const prog_char _ssn[]   = "ssn";
+const prog_char _gvn[]  = "gvn";
+const prog_char _gn[]   = "gn";
+const prog_char _gsn[]  = "gsn";
+const prog_char _gvid[] = "gvid";
+const prog_char _gdid[] = "gdid";
+const prog_char _svn[]  = "svn";
+const prog_char _sn[]   = "sn";
+const prog_char _ssn[]  = "ssn";
 
 const prog_char _svnh[] = "svnh";
 const prog_char _snh[]  = "snh";
 const prog_char _ssnh[] = "ssnh";
 
-const prog_char _scvid[] = "scvid";
-const prog_char _scdid[] = "scdid";
+const prog_char _svid[] = "svid";
+const prog_char _sdid[] = "sdid";
 
 const prog_char _help[] = "help";
 
@@ -377,44 +377,44 @@ const tty_command_t tty_commands[] PROGMEM = {
 	{ tty_getUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _gdta },
     { tty_setUSBHidDeviceDescriptor, TTY_CMD_WITHOUT_PARAMETER, _sdsc },
 #ifdef WITH_INTERPRETER
-    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER,     _ssd  },
-    { tty_setUSBReceiveData,         TTY_CMD_WITH_STRING_PARAMETER, _srd  },
-    { tty_toggleProveReceiveData,    TTY_CMD_WITHOUT_PARAMETER,     _prd  },
+    { tty_setUSBDataSequence,        TTY_CMD_WITHOUT_PARAMETER,     _ssd },
+    { tty_setUSBReceiveData,         TTY_CMD_WITH_STRING_PARAMETER, _srd },
+    { tty_toggleProveReceiveData,    TTY_CMD_WITHOUT_PARAMETER,     _prd },
 #endif
 	{ tty_setUSBReportData,          TTY_CMD_WITHOUT_PARAMETER, _sdta },
 
 #ifdef WITH_INTERPRETER
-    { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _ersd   },
-    { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _essd   },
-    { eep_readUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _errd   },
-    { eep_saveUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _esrd   },
+    { eep_readUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _ersd },
+    { eep_saveUSBDataSequence,                 TTY_CMD_WITHOUT_PARAMETER, _essd },
+    { eep_readUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _errd },
+    { eep_saveUSBReceiveData,                  TTY_CMD_WITHOUT_PARAMETER, _esrd },
 #endif
-    { eep_readUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _erdsc  },
-    { eep_saveUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _esdsc  },
-    { eep_readUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _ervn   },
-    { eep_saveUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _esvn   },
-    { eep_readUSBDescriptorStringDevice,       TTY_CMD_WITHOUT_PARAMETER, _ern    },
-    { eep_saveUSBDescriptorStringDevice,       TTY_CMD_WITHOUT_PARAMETER, _esn    },
-    { eep_readUSBDescriptorStringSerialNumber, TTY_CMD_WITHOUT_PARAMETER, _ersn   },
-    { eep_saveUSBDescriptorStringSerialNumber, TTY_CMD_WITHOUT_PARAMETER, _essn   },
-    { eep_readUSBCfgVendorID,                  TTY_CMD_WITHOUT_PARAMETER, _ercvid },
-    { eep_saveUSBCfgVendorID,                  TTY_CMD_WITHOUT_PARAMETER, _escvid },
-    { eep_readUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _ercdid },
-    { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _escdid },
+    { eep_readUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _erdsc },
+    { eep_saveUSBHidReportDescriptor,          TTY_CMD_WITHOUT_PARAMETER, _esdsc },
+    { eep_readUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _ervn  },
+    { eep_saveUSBDescriptorStringVendor,       TTY_CMD_WITHOUT_PARAMETER, _esvn  },
+    { eep_readUSBDescriptorStringDevice,       TTY_CMD_WITHOUT_PARAMETER, _ern   },
+    { eep_saveUSBDescriptorStringDevice,       TTY_CMD_WITHOUT_PARAMETER, _esn   },
+    { eep_readUSBDescriptorStringSerialNumber, TTY_CMD_WITHOUT_PARAMETER, _ersn  },
+    { eep_saveUSBDescriptorStringSerialNumber, TTY_CMD_WITHOUT_PARAMETER, _essn  },
+    { eep_readUSBCfgVendorID,                  TTY_CMD_WITHOUT_PARAMETER, _ervid },
+    { eep_saveUSBCfgVendorID,                  TTY_CMD_WITHOUT_PARAMETER, _esvid },
+    { eep_readUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _erdid },
+    { eep_saveUSBCfgDeviceID,                  TTY_CMD_WITHOUT_PARAMETER, _esdid },
 
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlsdsc  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_HID_REPORT_DESCRIPTOR + TTY_EEP_CFG_USB_OFFSET,           _tlsdsc },
 #ifdef WITH_INTERPRETER
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlssd   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA + TTY_EEP_CFG_USB_OFFSET,                    _tlsrd   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DATA_SEQ + TTY_EEP_CFG_USB_OFFSET,                        _tlssd  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA + TTY_EEP_CFG_USB_OFFSET,                    _tlsrd  },
 #endif
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlsvn   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlsn    },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlssn   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tlscvid },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tlscdid },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR + TTY_EEP_CFG_USB_OFFSET,        _tlsvn  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE + TTY_EEP_CFG_USB_OFFSET,        _tlsn   },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_DESCRIPTOR_STRING_SERIAL_NUMBER + TTY_EEP_CFG_USB_OFFSET, _tlssn  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tlsvid },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tlsdid },
 #ifdef WITH_INTERPRETER
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tissd   },
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA_ACTIVE + TTY_EEP_CFG_USB_OFFSET,             _tprd    },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tissd  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA_ACTIVE + TTY_EEP_CFG_USB_OFFSET,             _tprd   },
 #endif
 
     { eep_deleteUSBConfigBits, TTY_CMD_WITHOUT_PARAMETER, _edcfg },
@@ -422,8 +422,8 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_getVendorName,        TTY_CMD_WITHOUT_PARAMETER, _gvn   },
     { tty_getDeviceName,        TTY_CMD_WITHOUT_PARAMETER, _gn    },
     { tty_getSerialNumber,      TTY_CMD_WITHOUT_PARAMETER, _gsn   },
-    { tty_getUSBConfigVendorID, TTY_CMD_WITHOUT_PARAMETER, _gcvid },
-    { tty_getUSBConfigDeviceID, TTY_CMD_WITHOUT_PARAMETER, _gcdid },
+    { tty_getUSBConfigVendorID, TTY_CMD_WITHOUT_PARAMETER, _gvid },
+    { tty_getUSBConfigDeviceID, TTY_CMD_WITHOUT_PARAMETER, _gdid },
 
     { tty_setVendorName,        TTY_CMD_WITH_STRING_PARAMETER, _svn },
     { tty_setDeviceName,        TTY_CMD_WITH_STRING_PARAMETER, _sn  },
@@ -433,8 +433,8 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_setDeviceNameHeader,   TTY_CMD_WITH_STRING_PARAMETER, _snh  },
     { tty_setSerialNumberHeader, TTY_CMD_WITH_STRING_PARAMETER, _ssnh },
 
-    { tty_setUSBConfigVendorID, TTY_CMD_WITH_STRING_PARAMETER, _scvid },
-    { tty_setUSBConfigDeviceID, TTY_CMD_WITH_STRING_PARAMETER, _scdid },
+    { tty_setUSBConfigVendorID, TTY_CMD_WITH_STRING_PARAMETER, _svid },
+    { tty_setUSBConfigDeviceID, TTY_CMD_WITH_STRING_PARAMETER, _sdid },
 
     { tty_Help,    TTY_CMD_WITHOUT_PARAMETER,     _help },
 
