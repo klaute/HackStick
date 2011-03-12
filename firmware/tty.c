@@ -331,7 +331,13 @@ void tty_setInterrupt()
 {
     if ( maxUSBDataBytes )
     {
-        while( !usbInterruptIsReady() ) {}
+        uint8_t timeout = 10;
+        while( !usbInterruptIsReady() && timeout > 0)
+        {
+            timeout--;
+        }
+        if (timeout == 0)
+            return;
         usbSetInterrupt(&dataBytes[0], maxUSBDataBytes);
     }
 }
@@ -341,7 +347,13 @@ void tty_setInterrupt3()
 {
     if ( maxUSBDataBytes )
     {
-        while( !usbInterruptIsReady() ) {}
+        uint8_t timeout = 10;
+        while( !usbInterruptIsReady() && timeout > 0)
+        {
+            timeout--;
+        }
+        if (timeout == 0)
+            return;
         usbSetInterrupt3(&dataBytes[0], maxUSBDataBytes);
     }
 }
@@ -609,6 +621,13 @@ void tty_setEcho(char* t)
 void tty_toggleProveReceiveData(void)
 {
     usb_status.prd = !usb_status.prd;
+    if ( usb_status.prd )
+        printf_P(_str_on);
+    else
+        printf_P(_str_off);
+
+    printf_P(_str_ret);
+        
 }
 
 /* ------------------------------------------------------------------------- */

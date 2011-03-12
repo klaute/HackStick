@@ -228,24 +228,28 @@ static FILE _stdout = FDEV_SETUP_STREAM(_uart_putc, NULL, _FDEV_SETUP_WRITE);
 /*----------------------------------------------------------------------------*/
 // Liste der Strings im FLASH
 
-const prog_char _str_gt[]      = ">";
-const prog_char _str_minus[]   = " -";
-const prog_char _str_plus[]    = " +";
-const prog_char _str_char[]    = "%c";
-const prog_char _str_decimal[] = "%d";
-const prog_char _str_end[]     = "E";
-const prog_char _str_error[]   = "ERR";
-const prog_char _str_bb[]      = "\b \b";
-const prog_char _str_ret[]     = "\r\n";
-const prog_char _str_ret_gt[]  = "\r\n>";
-const prog_char _str_2hex[]    = "0x%02X ";
-const prog_char _str_4hex[]    = "0x%04x";
-const prog_char _str_3_2hex[]  = "0x%02x 0x%02x 0x%02x";
-const prog_char _str_header[]  = "H=0x%02x\r\n";
-const prog_char _str_vid[]     = "VID=0x%04x";
-const prog_char _str_did[]     = "DID=0x%04x";
-const prog_char _str_bl[]      = "Starting bootloader...\r\n\r\n";
-const prog_char _str_udr[]     = "len=0x%02x; idx=0x%02x; data=0x%02x\r\n";
+const prog_char _str_gt[]          = ">";
+const prog_char _str_minus[]       = " -";
+const prog_char _str_plus[]        = " +";
+const prog_char _str_char[]        = "%c";
+const prog_char _str_decimal[]     = "%d";
+const prog_char _str_end[]         = "E";
+const prog_char _str_error[]       = "ERR";
+const prog_char _str_on[]          = "on";
+const prog_char _str_off[]         = "off";
+const prog_char _str_bb[]          = "\b \b";
+const prog_char _str_ret[]         = "\r\n";
+const prog_char _str_ret_gt[]      = "\r\n>";
+const prog_char _str_2hex[]        = "0x%02X ";
+const prog_char _str_4hex[]        = "0x%04x";
+const prog_char _str_3_2hex[]      = "0x%02x 0x%02x 0x%02x";
+const prog_char _str_header[]      = "H=0x%02x\r\n";
+const prog_char _str_vid[]         = "VID=0x%04x";
+const prog_char _str_did[]         = "DID=0x%04x";
+const prog_char _str_rcv_dta[]     = "data[%d] = 0x%02x\r\n";
+const prog_char _str_rcv_dta_msg[] = "\r\nReceiving data:\r\n";
+const prog_char _str_bl[]          = "Starting bootloader...\r\n\r\n";
+const prog_char _str_udr[]         = "len=0x%02x; idx=0x%02x; data=0x%02x\r\n";
 
 /*----------------------------------------------------------------------------*/
 

@@ -61,7 +61,8 @@ extern const char WELCOME_MSG[] PROGMEM;
 extern const prog_char _str_error[];
 extern const prog_char _str_ret[];
 extern const prog_char _str_ret_gt[];
-
+extern const prog_char _str_rcv_dta[];
+extern const prog_char _str_rcv_dta_msg[];
 /*----------------------------------------------------------------------------*/
 // Methoden zum Zugriff auf die Variablen im EEPROM
 extern void tty_init(void);

@@ -17,6 +17,8 @@
 
 #include "main.h"
 
+//#define DEBUG
+
 /* ------------------------------------------------------------------------- */
 int __attribute__((noreturn)) main(void)
 {
@@ -31,7 +33,10 @@ int __attribute__((noreturn)) main(void)
 
         _delay_ms(10);
 
-        if ( usb_status.isd == 1 && usb_status.connected == 7 )
+#ifdef DEBUG
+        printf_P(PSTR("\rconnected=%d"), usb_status.connected);
+#endif
+        if ( usb_status.isd == 1 && usb_status.connected >= 7 )
         {
             //printf("%d\r\n",usb_status.connected);
             printf_P( PSTR("\r\nsending USB Data Sequence...") );
@@ -357,15 +362,15 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 
     uint8_t i = 0;
     if (len > 0)
-        printf_P( PSTR("\r\n") );
+        printf_P( _str_rcv_dta_msg );
     for ( i = 0; i < len; i++ )
     {
         // Daten Byteweise ausgeben
         dataBytes[pos + i] = data[i];
-        printf_P( PSTR("data[%d] = 0x%02x\r\n"), i, data[i] );
+        printf_P( _str_rcv_dta, i, data[i] );
     }
     if (len > 0)
-        printf_P( PSTR("\r\n>") );
+        printf_P( _str_ret_gt );
 
     if ( bytesRemaining <= 8 ) // Wenn hier noch 8 Bytes übrig sind wurden alle USB_DATA_BYTES Bytes übernommen. USB_DATA_BYTES = Maximum.
     {
@@ -386,9 +391,17 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 uchar usbFunctionDescriptor(usbRequest_t *rq)
 {
 
+    if ( usb_status.connected == 15 )
+        usb_status.connected = 7; // stay connected
+
+
     if ( rq->wValue.bytes[1] == USBDESCR_HID )
     {
         usb_status.connected += 1;
+
+#ifdef DEBUG
+        printf("hid\r\n");
+#endif
 
         usbMsgPtr = (uchar *)usbDescriptorConfiguration+18;
         return 9 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3;
@@ -396,17 +409,29 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
     {
         usb_status.connected += 1;
 
+#ifdef DEBUG
+        printf("config\r\n");
+#endif
+
         usbMsgPtr = (uchar *)usbDescriptorConfiguration;
         return sizeof(usbDescriptorConfiguration);
     } else if ( rq->wValue.bytes[1] == USBDESCR_DEVICE )
     {
         usb_status.connected += 1;
 
+#ifdef DEBUG
+        printf("device\r\n");
+#endif
+
         usbMsgPtr = (uchar *)usbDescriptorDevice;
         return sizeof(usbDescriptorDevice);
     } else if ( rq->wValue.bytes[1] == USBDESCR_HID_REPORT )
     {
         usb_status.connected += 1;
+
+#ifdef DEBUG
+        printf("hid_report\r\n");
+#endif
 
         usbMsgPtr = (uchar *)usbHidReportDescriptor;
         return maxUSBHidReportDescriptorBytes; // return size
@@ -417,17 +442,29 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
         {
             usb_status.connected += 1;
 
+#ifdef DEBUG
+            printf("str_vendor\r\n");
+#endif
+
             usbMsgPtr = (uchar *)usbDescriptorStringVendor;
             return USB_PROP_LENGTH(usbDescriptorStringVendor[0]);
         } else if ( rq->wValue.bytes[0] == 2 ) // Device
         {
             usb_status.connected += 1;
 
+#ifdef DEBUG
+            printf("str_device\r\n");
+#endif
+
             usbMsgPtr = (uchar *)usbDescriptorStringDevice;
             return USB_PROP_LENGTH(usbDescriptorStringDevice[0]);
         } else if ( rq->wValue.bytes[0] == 3 ) // SerialNumber
         {
             usb_status.connected += 1;
+
+#ifdef DEBUG
+            printf("str_sn\r\n");
+#endif
 
             usbMsgPtr = (uchar *)usbDescriptorStringSerialNumber;
             return USB_PROP_LENGTH(usbDescriptorStringSerialNumber[0]);
