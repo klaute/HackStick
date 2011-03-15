@@ -68,7 +68,7 @@
 \tedcfg:\tLöscht alle Bits des Konfigurationsbytes im EEPROM.\r\n\
 \thelp:\tGibt diese Hilfe aus.\r\n\
 \tttye:\tToggelt das Echo und die Ausgabe des TTY.\r\n\
-\tbtldr:\tReset the device and start den USBABPLoader.\r\n\
+\tbtldr:\tReset the device and start den USBASPLoader.\r\n\
 \tegcfg:\tGet the configuration word from EEPROM.\r\n\
 ";
 

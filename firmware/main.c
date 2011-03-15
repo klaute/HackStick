@@ -17,8 +17,6 @@
 
 #include "main.h"
 
-//#define DEBUG
-
 /* ------------------------------------------------------------------------- */
 int __attribute__((noreturn)) main(void)
 {
@@ -36,7 +34,7 @@ int __attribute__((noreturn)) main(void)
 #ifdef DEBUG
         printf_P(PSTR("\rconnected=%d"), usb_status.connected);
 #endif
-        if ( usb_status.isd == 1 && usb_status.connected >= 7 )
+        if ( usb_status.isd == 1 && usb_status.connected >= 6 )
         {
             //printf("%d\r\n",usb_status.connected);
             printf_P( PSTR("\r\nsending USB Data Sequence...") );

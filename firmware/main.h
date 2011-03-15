@@ -53,6 +53,7 @@ void interpretUSBDataSequence(void);
 #endif
 
 /*----------------------------------------------------------------------------*/
+// Externe Variablen
 
 extern uint8_t eep_usbConfig EEMEM;
 
@@ -63,6 +64,7 @@ extern const prog_char _str_ret[];
 extern const prog_char _str_ret_gt[];
 extern const prog_char _str_rcv_dta[];
 extern const prog_char _str_rcv_dta_msg[];
+
 /*----------------------------------------------------------------------------*/
 // Methoden zum Zugriff auf die Variablen im EEPROM
 extern void tty_init(void);
@@ -117,15 +119,6 @@ uint8_t usbReceiveData[USB_RECEIVE_DATA_SIZE];
 
 /*----------------------------------------------------------------------------*/
 
-/*
-typedef struct USB_Status
-{
-    uint8_t isd       : 1;
-    uint8_t prd       : 1;
-    uint8_t connected : 4;
-    uint8_t unused    : 2;
-} USB_Status_t;
-*/
 volatile USB_Status_t usb_status;
 
 /*----------------------------------------------------------------------------*/
