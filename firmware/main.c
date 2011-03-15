@@ -252,7 +252,7 @@ void interpretUSBDataSequence()
 #else
         tty_setInterrupt();
 #endif
-        _delay_ms(delay);
+        _delay_ms(delay + USB_CFG_INTR_POLL_INTERVAL);
 
         usbPoll();
 

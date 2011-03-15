@@ -31,6 +31,8 @@
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 
+#include "usbconfig.h"
+
 #include "globals.h"
 
 #include "usbdrv.h"
