@@ -1,6 +1,7 @@
 /*************************************************************************
 Title:    Interrupt UART library with receive/transmit circular buffers
 Author:   Peter Fleury <pfleury@gmx.ch>   http://jump.to/fleury
+Changes:  Kai Lauterbach <klaute at web dot de> http://www.klaute.de.vu
 File:     $Id: uart.c,v 1.6.2.2 2009/11/29 08:56:12 Peter Exp $
 Software: AVR-GCC 4.1, AVR Libc 1.4.6 or higher
 Hardware: any AVR with built-in UART, 
