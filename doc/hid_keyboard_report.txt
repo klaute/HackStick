@@ -27,7 +27,7 @@ Reportbuffer format:
 
 	{((1<<0)+(1<<2)),0,76,0,0,0,0,0}
 
-    In hex
+    Example as hex codes:
 0x05
 0x00
 0x4c
