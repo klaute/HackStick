@@ -14,9 +14,9 @@
 \t      \tüber den Interrupt3 Endpoint, aus.\r\n\
 \tgsd:\tLiefert die Sequenzdaten zurück.\r\n\
 \tssd:\tFunktionalität wie bei \"sdsc\".\r\n\
-\tisd:\tStartet den Interpreter der SequenzDaten.\r\n\
+\tisd:\tStartet den Interpreter der Sequenzdaten.\r\n\
 \tsrd:\tErwartet 3 Parameter im Format 0x00.\r\n\
-\t    \tParameter 1 enthält die Anzhal der Bytes die im zu empfangenen Report enthalten sind.\r\n\
+\t    \tParameter 1 enthält die Anzahl der Bytes die im zu empfangenen Report enthalten sind.\r\n\
 \t    \tIst dieser Parameter gleich 0 werden die Empfangenen Daten nicht geprüft.\r\n\
 \t    \tParameter 2 enthält den Index innerhalb der Report-Daten, die geprüft werden sollen.\r\n\
 \t    \tParameter 3 enthält den den Wert, der an dem angegebenen Index mit einem logischen UND geprüft wird..\r\n\
@@ -29,15 +29,15 @@
 \tgn:\tLiefert den Device Namen.\r\n\
 \tsn:\tSetzt den Device Namen im RAM.\r\n\
 \tsnh:\tSetzt den Header des Device Namen im RAM.\r\n\
-\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angegeben werden.\r\n\
 \tgvn:\tLiefert den Vendor Namen.\r\n\
 \tsvn:\tSetzt den Vendor Namen im RAM.\r\n\
 \tsvnh:\tSetzt den Header des Vendor Namen im RAM.\r\n\
-\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angegeben werden.\r\n\
 \tgsn:\tLiefert die Seriennummer.\r\n\
 \tssn:\tSetzt die Seriennummer im RAM.\r\n\
 \tssnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
-\t    \tMuss als Parameter im Format 0x00 angeegben werden.\r\n\
+\t    \tMuss als Parameter im Format 0x00 angegeben werden.\r\n\
 \turst:\tEntfernt das USB Device vom Bus und verbindet es neu.\r\n\
 \terdsc:\tLiest den im EEPROM gespeicherten USB Hid Descriptor aus.\r\n\
 \tesdsc:\tSpeichert den im RAM vorgehaltenen USB Hid Descriptor in das EEPROM.\r\n\
@@ -68,7 +68,7 @@
 \tedcfg:\tLöscht alle Bits des Konfigurationsbytes im EEPROM.\r\n\
 \thelp:\tGibt diese Hilfe aus.\r\n\
 \tttye:\tToggelt das Echo und die Ausgabe des TTY.\r\n\
-\tbtldr:\tReset the device and start den USBASPLoader.\r\n\
+\tbtldr:\tReset the device and start den USBasp-Loader.\r\n\
 \tegcfg:\tGet the configuration word from EEPROM.\r\n\
 ";
 
