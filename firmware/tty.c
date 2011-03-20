@@ -387,6 +387,15 @@ void tty_getUSBDataSequence()
 void tty_getUSBReceiveData()
 {
     printf_P( _str_udr, usbReceiveData[0], usbReceiveData[1], usbReceiveData[2] );
+
+    if ( usb_status.prd )
+    {
+        printf_P(_str_on);
+    } else {
+        printf_P(_str_off);
+    }
+
+    printf_P(_str_ret);
 }
 #endif
 
@@ -622,9 +631,11 @@ void tty_toggleProveReceiveData(void)
 {
     usb_status.prd = !usb_status.prd;
     if ( usb_status.prd )
+    {
         printf_P(_str_on);
-    else
+    } else {
         printf_P(_str_off);
+    }
 
     printf_P(_str_ret);
         
