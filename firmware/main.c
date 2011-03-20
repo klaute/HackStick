@@ -172,7 +172,7 @@ void _loadEEPROMConfig()
     if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_DATA_SEQ)) )
     {
         eep_readUSBDataSequence();
-        if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_CONFIG_INTERPRET_ID)) )
+        if ( (config & (EEP_CFG_VALUE_ON<<EEP_CFG_USB_CONFIG_INTERPRET_SD)) )
         {
             // Wird in der Main ausgeführt
             usb_status.isd = 1;

@@ -73,7 +73,7 @@
 #define EEP_CFG_USB_CONFIG_VENDOR_ID                4
 #define EEP_CFG_USB_CONFIG_DEVICE_ID                5
 #define EEP_CFG_USB_DATA_SEQ                        6
-#define EEP_CFG_USB_CONFIG_INTERPRET_ID             7
+#define EEP_CFG_USB_CONFIG_INTERPRET_SD             7
 #define EEP_CFG_USB_RECEIVE_DATA                    8
 #define EEP_CFG_USB_RECEIVE_DATA_ACTIVE             9
 

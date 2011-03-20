@@ -417,7 +417,7 @@ const tty_command_t tty_commands[] PROGMEM = {
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_VENDOR_ID + TTY_EEP_CFG_USB_OFFSET,                _tlsvid },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_DEVICE_ID + TTY_EEP_CFG_USB_OFFSET,                _tlsdid },
 #ifdef WITH_INTERPRETER
-    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_ID + TTY_EEP_CFG_USB_OFFSET,             _tissd  },
+    { eep_toggleUSBConfigBit, EEP_CFG_USB_CONFIG_INTERPRET_SD + TTY_EEP_CFG_USB_OFFSET,             _tissd  },
     { eep_toggleUSBConfigBit, EEP_CFG_USB_RECEIVE_DATA_ACTIVE + TTY_EEP_CFG_USB_OFFSET,             _tprd   },
 #endif
 
