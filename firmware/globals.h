@@ -66,6 +66,8 @@
 
 /*----------------------------------------------------------------------------*/
 // Konfigurationsbits in der EEPROM-Variable eep_usbConfig (16 Bit)
+// Ist das entsprechende Bit ind er EEPROM Konfigurations-Variable gesetzt (1),
+// dann ist die Funktion aktiv.
 #define EEP_CFG_USB_HID_REPORT_DESCRIPTOR           0
 #define EEP_CFG_USB_DESCRIPTOR_STRING_VENDOR        1
 #define EEP_CFG_USB_DESCRIPTOR_STRING_DEVICE        2
@@ -75,15 +77,17 @@
 #define EEP_CFG_USB_DATA_SEQ                        6
 #define EEP_CFG_USB_CONFIG_INTERPRET_SD             7
 #define EEP_CFG_USB_RECEIVE_DATA                    8
-#define EEP_CFG_USB_RECEIVE_DATA_ACTIVE             9
+#define EEP_CFG_USB_RECEIVE_DATA_ACTIVE             9 // Ist diese Funktion aktiv, wird EEP_CFG_USB_CONFIG_INTERPRET_SD ignoriert.
+#define EEP_CFG_USB_ACTIVE                         10
 
-#define EEP_CFG_USB_TYPES       10 // Die Anzahl der "EEP_CFG_USB_" Defines, nicht der höchste Wert.
+#define EEP_CFG_USB_TYPES       11 // Die Anzahl der "EEP_CFG_USB_" Defines, nicht der höchste Wert.
 #define EEP_CFG_USB_STARTS_WITH  0
 
 #define EEP_CFG_VALUE_ON  1
 #define EEP_CFG_VALUE_OFF 0
 
 /*----------------------------------------------------------------------------*/
+// USART Puffergröße in Byte
 
 #define UART_RX_BUFFER_SIZE 128
 #define UART_TX_BUFFER_SIZE 0
@@ -92,10 +96,15 @@
 
 typedef struct USB_Status
 {
+    // isd ist das Status-Bit welches in der main Hauptschleife geprüft wird um
+    // die Interpretation der aktuell vorgehaltenen Sequenz-Daten zu starten.
     uint8_t isd       : 1;
+    // "prd" wird in der Funktion zum Empfang von USB Daten dazu verwendet um
+    // die Prüfung dieser zu veranlassen. 1 = aktiviert.
     uint8_t prd       : 1;
-    uint8_t connected : 4;
-    uint8_t unused    : 2;
+    // Hier wird der Verbindungsstatus eingetragen. TODO Betriebssystemabhängig
+    // müssen hier Werte festgelegt werden.
+    uint8_t connected : 6;
 } USB_Status_t;
 
 /*----------------------------------------------------------------------------*/

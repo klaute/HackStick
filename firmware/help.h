@@ -39,6 +39,7 @@
 \tssnh:\tSetzt die Header des Seriennummer im RAM.\r\n\
 \t    \tMuss als Parameter im Format 0x00 angegeben werden.\r\n\
 \turst:\tEntfernt das USB Device vom Bus und verbindet es neu.\r\n\
+\tua:  \tErwartet eine 1 oder 0 als Parameter. 1 = USB ist an.\r\n\
 \terdsc:\tLiest den im EEPROM gespeicherten USB Hid Descriptor aus.\r\n\
 \tesdsc:\tSpeichert den im RAM vorgehaltenen USB Hid Descriptor in das EEPROM.\r\n\
 \tersd:\tLiest die im EEPROM gespeicherten USB Sequenz-Daten aus.\r\n\

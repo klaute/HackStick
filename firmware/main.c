@@ -193,6 +193,38 @@ void _loadEEPROMConfig()
 /* ------------------------------------------------------------------------- */
 
 #ifdef WITH_INTERPRETER
+/*
+
+Interpreter-Funktion der USB Daten Sequenzen.
+
+Byte:   Bedeutung:
+0       Maximale Anzahl des USB Daten Paketes, die gesendet werden sollen.
+        Diese werden beim Start der Interpretation einmal initialisiert.
+1       Delay in ms vor dem Start der Interpretation.
+2       Delay in ms zwischen dem Senden der einzelnen Datenpakete.
+3       Anzahl der zu sendenden Datenpakete (Blöcke).
+4       Anzahl der Tupel im ersten Datenpaket, z.B. 2
+5       Erstes Tupel: Index im Datenpaket, die Maximale Grüße darf nicht
+        überschritten werden.
+6       Wert, der an der Stelle des zuvor angegebenen Index übertragen werden
+        soll.
+7       Zweites Tupel: Index im Datenpaket
+8       Wert, der an der zuvor angegebenen Stelle übertragen werden soll.
+9       Neuer Block, mit der Anzahl der Tupel...
+...
+
+Da durch die Angabe eines Tupel, in einem Block, wird der aktuell im
+Datenpaket vorhandene Wert überschrieben. Dadurch müssen in jedem Block
+nut die Veränderungen zu dem vorherigen Datenpaket (Block) angegeben werden.
+Beim Start wird das initiale Datenpaket, an allen Positionen des Array, mit
+dem Wert 0x00 initialisiert.
+
+Die Datenmenge wird bei sich wiederholenden Datenpaketen entsprechend reduziert.
+
+TODO Hier sollte es möglich sein auch komplette Blöcke, ohne Angabe von Indizes
+abzulegen. Diese Art der Daetnhaltung macht nur bei wenigen Änderungen Sinn.
+
+*/
 void interpretUSBDataSequence()
 {
 /**/
@@ -218,6 +250,12 @@ void interpretUSBDataSequence()
     _delay_ms(delayStart); // Pause vor dem Start ausführen
 
     usbPoll();
+
+    uint8_t j;
+    for ( j = 0; j < maxUSBDataBytes; j++ )
+    {
+        dataBytes[j] = 0x00;
+    }
     
     // Bytes beginnen zu interpretieren
     uint8_t i;
@@ -254,7 +292,7 @@ void interpretUSBDataSequence()
 #endif
         _delay_ms(delay + USB_CFG_INTR_POLL_INTERVAL);
 
-        usbPoll();
+        usbPoll(); // Damit die Verbindung nicht abbricht.
 
     }
     LED_YELLOW_PORT = LED_YELLOW_PORT & ~(1 << LED_YELLOW_PIN); // Gelbe LED aus

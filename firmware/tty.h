@@ -79,9 +79,9 @@ extern uint8_t maxUSBHidReportDescriptorBytes;
 extern char usbHidReportDescriptor[];
 extern char usbDescriptorConfiguration[];
 
-extern int  usbDescriptorStringVendor[];
-extern int  usbDescriptorStringDevice[];
-extern int  usbDescriptorStringSerialNumber[];
+extern int usbDescriptorStringVendor[];
+extern int usbDescriptorStringDevice[];
+extern int usbDescriptorStringSerialNumber[];
 
 extern volatile USB_Status_t usb_status;
 
@@ -135,8 +135,9 @@ struct tty_config_t {
     uint8_t read_mode:2;
     // TTY_ECHO_ON = TTY echo eingeschaltet;
     // TTY_ECHO_OFF = TTY echo ausgeschalte
-    uint8_t echo:1;
-    uint8_t empty:5; // Frei für weiter Konfigurationszwecke.
+    uint8_t echo:1; // Eingaben werden nicht zurück gesendet
+    uint8_t bin:1; // TODO Diesen Modus implementieren
+    uint8_t empty:4; // Frei für weiter Konfigurationszwecke.
 } tty_config;
 
 unsigned char tty_cb_pos; // Position im Kommando Buffer
@@ -150,8 +151,8 @@ char tty_buff[TTY_MAX_CMD_LINE_LEN];
 typedef struct
 {
    void (*func)(int); // Zeiger auf die auszuführende Funktion
-   int type;         // das Argument, das mitübergeben wird
-   char *command;    // Zeiger auf das Kommando im FLASH
+   int type;         // Das Argument, dass mit übergeben wird TTY_CMD_* oder EEP_CFG_USB_* + TTY_EEP_CFG_USB_OFFSET
+   char *command;    // Fn-Zeiger auf das Kommando im FLASH
 } tty_command_t;
 
 /*----------------------------------------------------------------------------*/
@@ -163,6 +164,7 @@ static int _uart_putc(char c, FILE *stream);
 
 void tty_pollTerminal(void); // Muss kontinuierlich aufgerufen werden, für das Terminal
 
+// Wird von pollTerminal aufgerufen zum ausführen von Kommandos.
 int tty_executeCmd(const char*);
 
 /*----------------------------------------------------------------------------*/
@@ -216,6 +218,8 @@ void tty_Help(void);
 
 void tty_startBootloader(void);
 
+void tty_usbActive(char*);
+
 void tty_setEcho(char*);
 
 void tty_toggleProveReceiveData(void);
@@ -261,6 +265,7 @@ const prog_char _yledoff[] = "yledoff";
 const prog_char _gledon[]  = "gledon";
 const prog_char _gledoff[] = "gledoff";
 
+const prog_char _ua[]   = "ua";
 const prog_char _urst[] = "urst";
 
 const prog_char _sint[]  = "sint";
@@ -306,21 +311,21 @@ const prog_char _essn[]  = "essn";
 
 const prog_char _ervid[] = "ervid";
 const prog_char _esvid[] = "esvid";
-const prog_char _erdid[]  = "erdid";
-const prog_char _esdid[]  = "esdid";
+const prog_char _erdid[] = "erdid";
+const prog_char _esdid[] = "esdid";
 
-const prog_char _tlsdsc[]  = "tlsdsc";
+const prog_char _tlsdsc[] = "tlsdsc";
 #ifdef WITH_INTERPRETER
-const prog_char _tlssd[]   = "tlssd";
-const prog_char _tlsrd[]   = "tlsrd";
+const prog_char _tlssd[]  = "tlssd";
+const prog_char _tlsrd[]  = "tlsrd";
 #endif
-const prog_char _tlsvn[]   = "tlsvn";
-const prog_char _tlsn[]    = "tlsn";
-const prog_char _tlssn[]   = "tlssn";
-const prog_char _tlsvid[]  = "tlsvid";
-const prog_char _tlsdid[]  = "tlsdid";
+const prog_char _tlsvn[]  = "tlsvn";
+const prog_char _tlsn[]   = "tlsn";
+const prog_char _tlssn[]  = "tlssn";
+const prog_char _tlsvid[] = "tlsvid";
+const prog_char _tlsdid[] = "tlsdid";
 #ifdef WITH_INTERPRETER
-const prog_char _tissd[]   = "tissd";
+const prog_char _tissd[]  = "tissd";
 const prog_char _tprd[]   = "tprd";
 #endif
 
@@ -361,7 +366,8 @@ const tty_command_t tty_commands[] PROGMEM = {
     { tty_ledGreenOn,   TTY_CMD_WITHOUT_PARAMETER, _gledon  },
     { tty_ledGreenOff,  TTY_CMD_WITHOUT_PARAMETER, _gledoff },
 
-    { usbReset, TTY_CMD_WITHOUT_PARAMETER, _urst },
+    { tty_usbActive, TTY_CMD_WITH_STRING_PARAMETER, _ua   },
+    { usbReset,      TTY_CMD_WITHOUT_PARAMETER,     _urst },
 
     { tty_setInterrupt,  TTY_CMD_WITHOUT_PARAMETER, _sint  },
 

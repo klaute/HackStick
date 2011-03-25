@@ -96,24 +96,22 @@ extern void eep_readUSBCfgDeviceID(void);
 extern void eep_readUSBCfgDeviceID(void);
 
 /*----------------------------------------------------------------------------*/
-/* USB */
+// USB spezifische Variablen
 
-// Maximale Anzahl der zu übertragenden DatenBytes festlegen
-uint8_t maxUSBDataBytes;
-#ifdef WITH_INTERPRETER
-// Vorhandene Anzahl von Sequenzbytes
-uint8_t usbDataSequenceBytes;
-#endif
-
-// Statusvariable zum steuern der übertragenen Bytes.
-static uchar bytesRemaining;
-
+// Für Maus Descriptoren
 static uchar idleRate; // in 4 ms units
 static uchar protocolVer = 1;
 
+// Statusvariable zum steuern der übertragenen Bytes.
+static uchar bytesRemaining;
+// Maximale Anzahl der zu übertragenden DatenBytes festlegen
+uint8_t maxUSBDataBytes;
 // Daten die an den Host gesendet werden.
 uint8_t dataBytes[USB_MAX_DATA_BYTES];
+
 #ifdef WITH_INTERPRETER
+// Vorhandene Anzahl von Sequenzbytes
+uint8_t usbDataSequenceBytes;
 // Sequence der Daten die an den Host gesendet werden sollen.
 uint8_t usbDataSequence[USB_MAX_DATA_SEQ_SIZE];
 uint8_t usbReceiveData[USB_RECEIVE_DATA_SIZE];
@@ -128,11 +126,10 @@ volatile USB_Status_t usb_status;
 
 typedef struct USB_Descr
 {
-    // TODO In EEPROM ablegen und per Kommandozeile konfigurierbar machen.
-    // Hid Informationen
+    // Für den HiD Descriptor
     uint8_t USBCfgDeviceClass;
     uint8_t USBCfgDeviceSubClass;
-    // Für die Device Configuration
+    // Für den Device Configuration Descriptor
     uint8_t USBCfgInterfaceClass; // 3
     uint8_t USBCfgInterfaceSubClass;
     uint8_t USBCfgInterfaceProtocol;

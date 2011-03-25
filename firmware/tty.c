@@ -615,6 +615,24 @@ void tty_startBootloader()
     while(1) {};
 }
 
+void tty_usbActive(char* t)
+{
+    uint16_t tmp = 0;
+    if ( sscanf_P((char*)t, _str_decimal, &tmp) )
+    {
+        if ( tmp )
+        {
+            usbDeviceConnect();
+            printf_P(_str_on);
+        }
+        else
+        {
+            usbDeviceDisconnect();
+            printf_P(_str_off);
+        }
+    }
+}
+
 void tty_setEcho(char* t)
 {
     uint16_t tmp = 0;
