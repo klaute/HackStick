@@ -236,14 +236,45 @@
 <node CREATED="1299169631316" ID="ID_990054520" MODIFIED="1299169644828" TEXT="Einige Kommandos wuden umbenannt"/>
 <node CREATED="1299169655756" ID="ID_1349026329" MODIFIED="1299169732304" TEXT="Kommandos zum verabreiten von Sequenzen verf&#xfc;gbar&#xa;mit zus&#xe4;tzliicher Option zum Ausf&#xfc;hren beim Start, aus dem EEPROM."/>
 <node CREATED="1300210268520" ID="ID_1929326643" MODIFIED="1300210486155" TEXT="Konfigurationsm&#xf6;glichkeit um Sequenzen von USB Daten,&#xa;getriggert durch empfangene Daten, zu senden."/>
+<node CREATED="1301156017154" ID="ID_1618129917" MODIFIED="1301156020704" TEXT="ua">
+<node CREATED="1301156021220" ID="ID_799867006" MODIFIED="1301156033162" TEXT="zum aktivieren/deaktivieren der USB Verbindung"/>
+<node CREATED="1301156037700" ID="ID_435881807" MODIFIED="1301156052776" TEXT="Erwartet den Status als Parameter 1 = ein; 0 = aus"/>
+</node>
 </node>
 <node CREATED="1300269613865" ID="ID_1990842740" MODIFIED="1300269648332" TEXT="Neueste Version der UART Library von Peter Fleury verwendet,&#xa;mit Anpassungen f&#xfc;r den Mega328."/>
+<node CREATED="1301150627485" ID="ID_1990042759" MODIFIED="1301150651948" TEXT="Erkennt ob das Host-System das USB Ger&#xe4;t korrekt erkannt hat.">
+<node CREATED="1301150653076" ID="ID_825408471" MODIFIED="1301150760575" TEXT="Dazu wird eine Status-Variable (usb_status.connected) verwendet."/>
+<node CREATED="1301150762835" ID="ID_845808899" MODIFIED="1301150774001" TEXT="TODO">
+<node CREATED="1301150774660" ID="ID_693150716" MODIFIED="1301164496752" TEXT="Der Wert in connected ist abh&#xe4;ngig vom verwendeten Betriebssystem.">
+<node CREATED="1301150796979" ID="ID_808600325" MODIFIED="1301150810093" TEXT="Dieser Muss eindeutig sein."/>
+<node CREATED="1301150816483" ID="ID_1985912974" MODIFIED="1301150930860" TEXT="Ubuntu 10.10">
+<node CREATED="1301150893356" ID="ID_1903413127" MODIFIED="1301150918223" TEXT="Reihenfolge ist immer identisch."/>
+<node CREATED="1301150933140" ID="ID_315300518" MODIFIED="1301150951954" TEXT="Jeder Descriptor wird genau einmal angefordert.">
+<node CREATED="1301151444443" ID="ID_477098627" MODIFIED="1301151452823" TEXT="7 S&#xfc;ck"/>
+</node>
+</node>
+<node CREATED="1301150840076" ID="ID_309355078" MODIFIED="1301150855393" TEXT="Windows 7 x86 Professional kein SP">
+<node CREATED="1301150856700" ID="ID_1156167230" MODIFIED="1301150861901" TEXT="1. config"/>
+<node CREATED="1301150863292" ID="ID_1704302623" MODIFIED="1301150870124" TEXT="2. str_sn"/>
+<node CREATED="1301150871412" ID="ID_323453347" MODIFIED="1301150875772" TEXT="3. str_device"/>
+<node CREATED="1301150876228" ID="ID_1332137236" MODIFIED="1301150879950" TEXT="4. config"/>
+<node CREATED="1301150880540" ID="ID_1566979862" MODIFIED="1301150889455" TEXT="6. hid_report"/>
+<node CREATED="1301151460211" ID="ID_390899270" MODIFIED="1301151464191" TEXT="6 von 7"/>
+</node>
+<node CREATED="1301156199092" ID="ID_531199263" MODIFIED="1301156206830" TEXT="Win7 x86 unter VMWare">
+<node CREATED="1301156207316" ID="ID_1402477907" MODIFIED="1301156245351" TEXT="Wild durcheinander, unz&#xe4;hlige Anforderungen nacheinander."/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1298307208145" ID="ID_1496767637" MODIFIED="1298307211577" TEXT="v0.7">
 <node CREATED="1298307230591" ID="ID_391451052" MODIFIED="1298307232688" TEXT="Ideen">
 <node CREATED="1298302457599" ID="ID_123431349" MODIFIED="1298302566425" TEXT="CDC (Communicatins Device Class) m&#xf6;glich,&#xa;durch Implementierung weiterer Logik in den&#xa;USB Function-/Device-Setup Funktionen."/>
 </node>
-<node CREATED="1300269659174" ID="ID_1252170806" MODIFIED="1300269664748" TEXT="Bluetooth Support"/>
+<node CREATED="1300269659174" ID="ID_1252170806" MODIFIED="1300269664748" TEXT="Bluetooth Support">
+<node CREATED="1301164471971" ID="ID_1825479906" MODIFIED="1301164478999" TEXT="per BTM-222"/>
+</node>
 </node>
 </node>
 </node>
