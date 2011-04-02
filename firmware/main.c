@@ -32,12 +32,30 @@ int __attribute__((noreturn)) main(void)
         _delay_ms(10);
 
 #ifdef DEBUG
-        printf_P(PSTR("\rconnected=%d"), usb_status.connected);
+        printf_P(PSTR("\r%d %d "), usb_status.descr_sent, usb_status.sub_status);
+        //printf_P(PSTR("\rconnected=%d"), usb_status.connected);
 #endif
-        if ( usb_status.isd == 1 && usb_status.connected >= 6 )
+	    if ( usb_status.connected == 0 )
+        { 
+            if ( usb_status.descr_sent == USB_LINUX_CONNECTED )
+            {
+                printf_P(PSTR("\rconnected to Linux os"));
+    		    usb_status.connected = 1;
+                printf_P( _str_ret );
+                printf_P( _str_ret_gt );
+            } else if ( usb_status.descr_sent == USB_WIN7_CONNECTED )
+            {
+                printf_P(PSTR("\rconnected to win7 (x64)"));
+    		    usb_status.connected = 1;
+                printf_P( _str_ret );
+                printf_P( _str_ret_gt );
+            }
+    	}
+	
+        if ( usb_status.isd == 1 && usb_status.connected == 1 )
         {
             //printf("%d\r\n",usb_status.connected);
-            printf_P( PSTR("\r\nsending USB Data Sequence...") );
+            printf_P( PSTR("\rsending USB Data Sequence...") );
             interpretUSBDataSequence();
             usb_status.isd = 0;
             printf_P( _str_ret );
@@ -237,8 +255,11 @@ void interpretUSBDataSequence()
     uint8_t delay      = usbDataSequence[2];
     uint8_t blockCnt   = usbDataSequence[3];
 
-    // Die maximale/minimale Anzahl der auszugebenden Daten ist ungültig oder keine Blöcke in den Daten vorhanden.
-    if ( maxUSBDataBytes > USB_MAX_DATA_BYTES || !maxUSBDataBytes || !blockCnt )
+    // Die maximale/minimale Anzahl der auszugebenden Daten
+	// ist ungültig oder keine Blöcke in den Daten vorhanden.
+    if ( maxUSBDataBytes > USB_MAX_DATA_BYTES ||
+		 !maxUSBDataBytes ||
+		 !blockCnt )
         return; 
 
     uint16_t arrayPos = 3; // Index ab dem die Blöcke gelesen werden
@@ -282,6 +303,7 @@ void interpretUSBDataSequence()
             arrayPos++;
             if ( index < maxUSBDataBytes ) // ungültige indizes werden übersprungen
                 dataBytes[ index ] = usbDataSequence[arrayPos];
+
         }
 
 #if (USB_CFG_HAVE_INTRIN_ENDPOINT3 != 0)
@@ -303,14 +325,16 @@ void interpretUSBDataSequence()
 #endif
 
 /* ------------------------------------------------------------------------- */
-/* Simulieren eines USB disconnect */
+/* Simulieren eines USB disconnect mit anschließendem reconnect */
 void usbReset( void )
 {
 
     LED_GREEN_PORT = LED_GREEN_PORT & ~(1 << LED_GREEN_PIN);
     usbDeviceDisconnect();
 
-    usb_status.connected = 0;
+	usb_status.connected  = 0;
+    usb_status.descr_sent = 0;
+    usb_status.sub_status = 0;
 
     uchar i = 13;
     do
@@ -427,13 +451,12 @@ uchar usbFunctionWrite(uchar *data, uchar len)
 uchar usbFunctionDescriptor(usbRequest_t *rq)
 {
 
-    if ( usb_status.connected == 15 )
-        usb_status.connected = 7; // stay connected
-
-
     if ( rq->wValue.bytes[1] == USBDESCR_HID )
     {
-        usb_status.connected += 1;
+		if ( ! (usb_status.descr_sent & USB_HID_DESCRIPTOR_DONE) )
+			usb_status.descr_sent |= USB_HID_DESCRIPTOR_DONE;
+		else
+			usb_status.sub_status++;
 
 #ifdef DEBUG
         printf("hid\r\n");
@@ -443,7 +466,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
         return 9 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3;
     } else if ( rq->wValue.bytes[1] == USBDESCR_CONFIG )
     {
-        usb_status.connected += 1;
+		if ( ! (usb_status.descr_sent & USB_CONFIG_DESCRIPTOR_DONE) )
+			usb_status.descr_sent |= USB_CONFIG_DESCRIPTOR_DONE;
+		else
+			usb_status.sub_status++;
 
 #ifdef DEBUG
         printf("config\r\n");
@@ -453,8 +479,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
         return sizeof(usbDescriptorConfiguration);
     } else if ( rq->wValue.bytes[1] == USBDESCR_DEVICE )
     {
-        usb_status.connected += 1;
-
+		if ( ! (usb_status.descr_sent & USB_DEVICE_DESCRIPTOR_DONE) )
+			usb_status.descr_sent |= USB_DEVICE_DESCRIPTOR_DONE;
+		else
+			usb_status.sub_status++;
 #ifdef DEBUG
         printf("device\r\n");
 #endif
@@ -463,8 +491,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
         return sizeof(usbDescriptorDevice);
     } else if ( rq->wValue.bytes[1] == USBDESCR_HID_REPORT )
     {
-        usb_status.connected += 1;
-
+		if ( ! (usb_status.descr_sent & USB_HID_REPORT_DESCRIPTOR_DONE) )
+			usb_status.descr_sent |= USB_HID_REPORT_DESCRIPTOR_DONE;
+		else
+			usb_status.sub_status++;
 #ifdef DEBUG
         printf("hid_report\r\n");
 #endif
@@ -476,8 +506,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
     {
         if ( rq->wValue.bytes[0] == 1 ) // Vendor
         {
-            usb_status.connected += 1;
-
+			if ( ! (usb_status.descr_sent & USB_STRING_VENDOR_DESCRIPTOR_DONE) )
+				usb_status.descr_sent |= USB_STRING_VENDOR_DESCRIPTOR_DONE;
+			else
+				usb_status.sub_status++;
 #ifdef DEBUG
             printf("str_vendor\r\n");
 #endif
@@ -486,8 +518,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
             return USB_PROP_LENGTH(usbDescriptorStringVendor[0]);
         } else if ( rq->wValue.bytes[0] == 2 ) // Device
         {
-            usb_status.connected += 1;
-
+			if ( ! (usb_status.descr_sent & USB_STRING_DEVICE_DESCRIPTOR_DONE) )
+				usb_status.descr_sent |= USB_STRING_DEVICE_DESCRIPTOR_DONE;
+			else
+				usb_status.sub_status++;
 #ifdef DEBUG
             printf("str_device\r\n");
 #endif
@@ -496,8 +530,10 @@ uchar usbFunctionDescriptor(usbRequest_t *rq)
             return USB_PROP_LENGTH(usbDescriptorStringDevice[0]);
         } else if ( rq->wValue.bytes[0] == 3 ) // SerialNumber
         {
-            usb_status.connected += 1;
-
+			if ( ! (usb_status.descr_sent & USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE) )
+				usb_status.descr_sent |= USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE;
+			else
+				usb_status.sub_status++;
 #ifdef DEBUG
             printf("str_sn\r\n");
 #endif

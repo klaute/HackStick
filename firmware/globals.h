@@ -94,17 +94,44 @@
 
 /*----------------------------------------------------------------------------*/
 
+// Bit in USB_Status.os_type
+#define USB_HID_DESCRIPTOR_DONE                  (1 << 0) // =   1
+#define USB_CONFIG_DESCRIPTOR_DONE               (1 << 1) // =   2
+#define USB_DEVICE_DESCRIPTOR_DONE               (1 << 2) // =   4
+#define USB_HID_REPORT_DESCRIPTOR_DONE           (1 << 3) // =   8
+#define USB_STRING_DEVICE_DESCRIPTOR_DONE        (1 << 4) // =  16
+#define USB_STRING_VENDOR_DESCRIPTOR_DONE        (1 << 5) // =  32
+#define USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE (1 << 6) // =  64
+
+// Vergleichswerte, die in usb_status.descr_sent und optional in
+// usb_status.sub_status enthalten sein müssen, um den Verbindungs-Status
+// in usb_status.connected auf Verbunden (1) zu setzen.
+#define USB_LINUX_CONNECTED  ( USB_CONFIG_DESCRIPTOR_DONE | \
+							   USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE | \
+							   USB_STRING_DEVICE_DESCRIPTOR_DONE | \
+							   USB_STRING_VENDOR_DESCRIPTOR_DONE | \
+							   USB_HID_REPORT_DESCRIPTOR_DONE ) && \
+		                    usb_status.sub_status == 0x02
+#define USB_WIN7_CONNECTED  ( USB_CONFIG_DESCRIPTOR_DONE | \
+							  USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE | \
+							  USB_STRING_DEVICE_DESCRIPTOR_DONE | \
+							  USB_HID_REPORT_DESCRIPTOR_DONE ) && \
+		                    usb_status.sub_status == 0x02
+
 typedef struct USB_Status
 {
     // isd ist das Status-Bit welches in der main Hauptschleife geprüft wird um
     // die Interpretation der aktuell vorgehaltenen Sequenz-Daten zu starten.
-    uint8_t isd       : 1;
+    uint16_t isd        : 1;
     // "prd" wird in der Funktion zum Empfang von USB Daten dazu verwendet um
     // die Prüfung dieser zu veranlassen. 1 = aktiviert.
-    uint8_t prd       : 1;
+    uint16_t prd        : 1;
     // Hier wird der Verbindungsstatus eingetragen. TODO Betriebssystemabhängig
     // müssen hier Werte festgelegt werden.
-    uint8_t connected : 6;
+    uint16_t connected  : 1;
+	// Ein Byte zum erkennen des OS
+	uint16_t descr_sent : 7;
+	uint16_t sub_status : 6;
 } USB_Status_t;
 
 /*----------------------------------------------------------------------------*/
