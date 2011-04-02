@@ -56,7 +56,7 @@
 
 /*----------------------------------------------------------------------------*/
 
-const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6.1 (by klaute)\r\n>";
+const char WELCOME_MSG[] PROGMEM = "\r\n\r\nklaute's HackStick\r\nv0.6.1 (by klaute)\r\n";
 
 const char HELP_MSG[] PROGMEM = _MSG_HELP_;
 

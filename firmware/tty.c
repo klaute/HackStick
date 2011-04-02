@@ -65,11 +65,11 @@ void tty_pollTerminal(void)
     // zeichen erreicht wurde
     if ( c != 0 && c != '\r' ) 
     {
-		if ( c == 0x7f && tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
-		{ // Backspace
-			printf_P(_str_bb); // Zeichen mit Space auf der Ausgabe überschreiben
-			tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
-			tty_cb_pos--;
+        if ( c == 0x7f && tty_cb_pos > 0 && tty_config.echo ) // Wenn Zeichen vorhanden sind wird das letzte gelöscht.
+        { // Backspace
+            printf_P(_str_bb); // Zeichen mit Space auf der Ausgabe überschreiben
+            tty_buff[tty_cb_pos] = 0x00; // ein Zeichen löschen im Array durch 0x00 ersetzen
+            tty_cb_pos--;
         }
         // Die Anzahl der Zeichen darf TTY_MAX_CMD_LINE_LEN minus '\0' nicht überschreiten.
         // Zudem ist tty_cb_pos immer eins höher als die aktuelle Anzahl der Zeichen im String.
@@ -103,21 +103,21 @@ void tty_pollTerminal(void)
             uart_puts_P("Buffer overflow error: ");
         }
 
-		// Steuerzeichen abfangen
+        // Steuerzeichen abfangen
         if ( c >= 32 && c <= 126 )
         { // Keine Steuerzeichen
-			// Kein lokales Echo auf dem Host nötig, jedes Zeichen wird zurück gesendet.
-			// Es ist auch kein standardisiertes Terminal.
-			if ( tty_config.echo )
-				printf_P(_str_char, c);
+            // Kein lokales Echo auf dem Host nötig, jedes Zeichen wird zurück gesendet.
+            // Es ist auch kein standardisiertes Terminal.
+            if ( tty_config.echo )
+                printf_P(_str_char, c);
 
-			tty_buff[tty_cb_pos] = c;
-			tty_cb_pos++;
-		} else if ( c == 0x09 ) 
+            tty_buff[tty_cb_pos] = c;
+            tty_cb_pos++;
+        } else if ( c == 0x09 ) 
         { // Tab
-			tty_buff[tty_cb_pos] = 32; // durch Space ersetzen
-			tty_cb_pos++;
-		} else if ( c == 0x1b && tty_cb_pos > 0 )
+            tty_buff[tty_cb_pos] = 32; // durch Space ersetzen
+            tty_cb_pos++;
+        } else if ( c == 0x1b && tty_cb_pos > 0 )
         { // ESC
             printf_P(_str_ret_gt);
             tty_cb_pos = 0; // Kommando abbrechen
@@ -179,9 +179,9 @@ void tty_pollTerminal(void)
                 else if ( tty_config.read_mode == TTY_READ_MODE_USB_DATA_SEQ ) //  Länge der Sequenzdaten speichern
                     usbDataSequenceBytes = tty_ud_pos;
 #endif
-				else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA )
-					maxUSBDataBytes = tty_ud_pos;
-				
+                else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA )
+                    maxUSBDataBytes = tty_ud_pos;
+                
                 tty_ud_pos = 0;
                 tty_config.read_mode = TTY_READ_MODE_COMMAND; // In den Kommandomdus zurückspringen
 
@@ -203,9 +203,9 @@ void tty_pollTerminal(void)
                         usbDataSequence[tty_ud_pos] = tmp; // In das Datenarray eintragen.
                     }
 #endif
-					else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA &&
+                    else if ( tty_config.read_mode == TTY_READ_MODE_HID_DATA &&
                               tty_ud_pos < USB_MAX_DATA_BYTES )
-						dataBytes[tty_ud_pos] = tmp;
+                        dataBytes[tty_ud_pos] = tmp;
                     else
                     {
                         // Dateneingabe abbrechen, da die Puffer mit der Maximalen Anzahl der Elemente
@@ -620,6 +620,7 @@ void tty_usbActive(char* t)
     uint16_t tmp = 0;
     if ( sscanf_P((char*)t, _str_decimal, &tmp) )
     {
+    
         if ( tmp )
         {
             usbDeviceConnect();
@@ -629,6 +630,9 @@ void tty_usbActive(char* t)
         {
             usbDeviceDisconnect();
             printf_P(_str_off);
+            usb_status.connected  = 0;
+            usb_status.descr_sent = 0;
+            usb_status.sub_status = 0;
         }
     }
 }
