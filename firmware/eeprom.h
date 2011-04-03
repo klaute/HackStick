@@ -62,8 +62,11 @@ extern int usbDescriptorStringDevice[];
 extern int usbDescriptorStringSerialNumber[];
 
 /*----------------------------------------------------------------------------*/
-
 // Variablen im EEPROM
+// Wird hier die Grüeiner Variablen geaendert, muss beim naechsten Start
+// der Firmware die configuration eep_usbConfig geloescht und alle
+// anderen Daten neu uebertragen werden.
+
 uint16_t eep_usbConfig EEMEM;
 uint8_t  eep_maxUSBHidReportDescriptorBytes EEMEM;
 char     eep_usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LEN] EEMEM;
