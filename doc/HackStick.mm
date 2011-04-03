@@ -244,7 +244,7 @@
 <node CREATED="1300269613865" ID="ID_1990842740" MODIFIED="1300269648332" TEXT="Neueste Version der UART Library von Peter Fleury verwendet,&#xa;mit Anpassungen f&#xfc;r den Mega328."/>
 <node CREATED="1301150627485" ID="ID_1990042759" MODIFIED="1301150651948" TEXT="Erkennt ob das Host-System das USB Ger&#xe4;t korrekt erkannt hat.">
 <node CREATED="1301150653076" ID="ID_825408471" MODIFIED="1301150760575" TEXT="Dazu wird eine Status-Variable (usb_status.connected) verwendet."/>
-<node CREATED="1301150762835" ID="ID_845808899" MODIFIED="1301150774001" TEXT="TODO">
+<node CREATED="1301150762835" ID="ID_845808899" MODIFIED="1301835159869" TEXT="TODO">
 <node CREATED="1301150774660" ID="ID_693150716" MODIFIED="1301164496752" TEXT="Der Wert in connected ist abh&#xe4;ngig vom verwendeten Betriebssystem.">
 <node CREATED="1301150796979" ID="ID_808600325" MODIFIED="1301150810093" TEXT="Dieser Muss eindeutig sein."/>
 <node CREATED="1301150816483" ID="ID_1985912974" MODIFIED="1301734981228" TEXT="Ubuntu 10.10">
@@ -280,6 +280,9 @@
 <node CREATED="1301156207316" ID="ID_1402477907" MODIFIED="1301156245351" TEXT="Wild durcheinander, unz&#xe4;hlige Anforderungen nacheinander."/>
 </node>
 </node>
+<node CREATED="1301835160999" ID="ID_1808198047" MODIFIED="1301835179299" TEXT="Maximale Gr&#xf6;&#xdf;e der String-Descriptoren erh&#xf6;hen"/>
+<node CREATED="1301835181770" ID="ID_890499868" MODIFIED="1301835210694" TEXT="Maximale Anzahl der Zeichen, die auf der Konsole eingegeben werden k&#xf6;nnen erh&#xf6;hen."/>
+<node CREATED="1301835212338" ID="ID_1156473628" MODIFIED="1301835237262" TEXT="Maximale Anzahl der zu sendenden Bytes von 128 Bl&#xf6;cken erh&#xf6;hen."/>
 </node>
 </node>
 </node>
