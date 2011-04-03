@@ -106,16 +106,16 @@
 // Vergleichswerte, die in usb_status.descr_sent und optional in
 // usb_status.sub_status enthalten sein müssen, um den Verbindungs-Status
 // in usb_status.connected auf Verbunden (1) zu setzen.
-#define USB_LINUX_CONNECTED  ( USB_CONFIG_DESCRIPTOR_DONE | \
-							   USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE | \
-							   USB_STRING_DEVICE_DESCRIPTOR_DONE | \
-							   USB_STRING_VENDOR_DESCRIPTOR_DONE | \
-							   USB_HID_REPORT_DESCRIPTOR_DONE ) && \
-		                    usb_status.sub_status == 0x02
-#define USB_WIN7_CONNECTED  ( USB_CONFIG_DESCRIPTOR_DONE | \
+#define USB_LINUX_CONNECTED ( USB_CONFIG_DESCRIPTOR_DONE | \
 							  USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE | \
 							  USB_STRING_DEVICE_DESCRIPTOR_DONE | \
+							  USB_STRING_VENDOR_DESCRIPTOR_DONE | \
 							  USB_HID_REPORT_DESCRIPTOR_DONE ) && \
+		                    usb_status.sub_status == 0x02
+#define USB_WIN7_CONNECTED ( USB_CONFIG_DESCRIPTOR_DONE | \
+							 USB_STRING_SERIAL_NUMBER_DESCRIPTOR_DONE | \
+							 USB_STRING_DEVICE_DESCRIPTOR_DONE | \
+							 USB_HID_REPORT_DESCRIPTOR_DONE ) && \
 		                    usb_status.sub_status == 0x02
 
 typedef struct USB_Status
