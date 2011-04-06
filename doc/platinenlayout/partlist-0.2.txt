@@ -1,0 +1,42 @@
+Partlist
+
+Exported from hackstick-0.2.sch at 06.04.11 13:10
+
+EAGLE Version 5.11.0 Copyright (c) 1988-2010 CadSoft
+
+Part     Value          Device            Package      Library          Sheet
+
+C1       100n           C-EU025-024X044   C025-024X044 rcl              1
+C2       1µ             CPOL-EUE2-5       E2-5         rcl              1
+C3       1µ             CPOL-EUE2-5       E2-5         rcl              1
+C4       1µ             CPOL-EUE2-5       E2-5         rcl              1
+C5       1µ             CPOL-EUE2-5       E2-5         rcl              1
+C6       1µ             CPOL-EUE2-5       E2-5         rcl              1
+C7       100n           C-EU025-025X050   C025-025X050 rcl              1
+C8       27p            C-EU025-024X044   C025-024X044 rcl              1
+C9       27p            C-EU025-024X044   C025-024X044 rcl              1
+C10      100n           C-EU025-025X050   C025-025X050 rcl              1
+D1       3V3            ZENER-DIODEDO34-7 DO34Z7       diode            1
+D2       3V3            ZENER-DIODEDO34-7 DO34Z7       diode            1
+IC1      MAX232         MAX232            DIL16        maxim            1
+IC2      MEGA328P-PU    MEGA328-P         DIL28-3      atmel            1
+JP1                     JP1E              JP1          jumper           1
+LEDGELB                 LED3MM            LED3MM       led              1
+LEDGRUEN                LED3MM            LED3MM       led              1
+LEDROT                  LED3MM            LED3MM       led              1
+Q1       20MHz          XTAL/S            QS           special          1
+R1       22k            R-EU_0207/2V      0207/2V      rcl              1
+R2       1k5            R-EU_0207/2V      0207/2V      rcl              1
+R3       1k5            R-EU_0207/2V      0207/2V      rcl              1
+R4       69             R-EU_0207/2V      0207/2V      rcl              1
+R5       69             R-EU_0207/2V      0207/2V      rcl              1
+R6       1k5            R-EU_0207/2V      0207/2V      rcl              1
+R7       220            R-EU_0207/2V      0207/2V      rcl              1
+R8       220            R-EU_0207/2V      0207/2V      rcl              1
+R9       220            R-EU_0207/2V      0207/2V      rcl              1
+SJ1                     SJ                SJ           jumper           1
+SJ2                     SJ                SJ           jumper           1
+SJ3                     SJ                SJ           jumper           1
+SJ4                     SJ                SJ           jumper           1
+X1                      USB_AWFDIP        USB_AWF      reichelt_usb     1
+X2       RS232          D-SUB9-H3M09RA    H3M09RA      con-thomas-betts 1
