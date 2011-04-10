@@ -1,0 +1,15 @@
+Directories:
+
+firmware:   firmware sourcecode
+
+bootloader: USBASP bootloader sources, documentaion,
+            binary files and testscript
+
+doc:        project documentation files
+
+descriptor: USB Hid descriptor definition files
+
+seq:        USB Data sequences
+
+fuzzer:     some ideas about fuzzing
+
