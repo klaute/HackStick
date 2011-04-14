@@ -81,11 +81,11 @@ void init(void)
     DDRC  |= (1 << PC5); // Gelbe LED als Ausgang
     LED_YELLOW_PORT = LED_YELLOW_PORT | (1 << LED_YELLOW_PIN);
 
-    // PD3, PD2 Eingang ohne PullUp, PD6 mit PullUp
+    // PD3, PD2 Eingang ohne PullUp, PD4 mit PullUp
     // PD3 und PD2 werden für die USB-Verbindung verwendet.
-    // PD6 ist der Jumper.
-    DDRD  |= (0 << PD3) | (0 << PD2) | (0 << PD6);
-    PORTD |= (0 << PD3) | (0 << PD2) | (1 << PD6);
+    // PD4 ist der Jumper.
+    DDRD  |= (0 << PD3) | (0 << PD2) | (0 << PD4);
+    PORTD |= (0 << PD3) | (0 << PD2) | (1 << PD4);
 
     // Anzah der Bytes des Descriptors die in der Firmware eingetragen sind.
     //maxUSBHidReportDescriptorBytes = 22;
