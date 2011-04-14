@@ -1,13 +1,13 @@
 Bootloader
 ==========
 
-1. In das bootloader/USBASPxxxx/firmware verzeichnis wechseln.
+1. In das bootloader/USBaspxxxx/firmware verzeichnis wechseln.
 2. Die Einstellungen zum Programmieradapter für AVRDude im Makefile
    anpassen.
 3. Die Fuses des AVR mit "make fuse" schreiben.
 4. Die Firmware mit "make flaqsh" übertragen.
 5. Den HackStick mit gebrücktem Jumper einstecken und prüfen ob dieser korrekt
-   als USBASP Programmieradapter erkannt wird.
+   als USBasp Programmieradapter erkannt wird.
 6. Das Testscript test_usbasp.sh im bootloader Verzeichnis ausführen.
    Die udev Zugriffsrechte müssen ggf. angepasst werden um als normaler Systembenutzer
    auf die Hardware zugreifen zu können. Ein Beispiel für diese Regel ist unter
