@@ -24,3 +24,15 @@ Firmware
    Die grüne LED sollte nach kurzem konstant leuchten und der Stick korrekt
    vom Betriebssystem erkannt worden sein.
 
+Sperren des Bootloaders
+=======================
+
+Sollte das System korrekt laufen kann mit "make lock" im
+bootloader/USBxxyx/firmware Verzeichnis der Bootloader vor
+Veränderungen gesperrt werden. Die ist in dem Fall notwendig,
+wenn die größe der HackStick-Firmware den Punkt überschreitet, ab dem
+in den Speicherbereich des Bootloaders im Flash geschrieben werden würde.
+Dieser Screibvorgang würde sonst den Bootloader beschädigen, was dazu führt
+das man diesen neu übertragen müsste.
+
+
