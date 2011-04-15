@@ -1,0 +1,21 @@
+AVR zu MAX232 Pads:
+===================
+
+RX_5V <--> DATA0 (R1OUT)
+TX_5V <--> DATA1 (T1IN)
+
+Padverbindungen:
+Hozizontal
+[RX_5V]-[DATA0]
+[TX_5V]-[DATA1]
+
+Max232 zu SUB-D9 Pads:
+===========================
+
+TX_HV <--> DATA0_HV (R1IN)
+RX_HV <--> DATA1_HV (T1OUT)
+
+Padverbindungen:
+Horizontal
+[DATA0_HV]-[TX_HV]
+[DATA1_HV]-[RX_HV]
