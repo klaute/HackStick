@@ -1,1 +1,11 @@
 pcb/*.*\#*
+*.lst
+*.o
+*.eep
+*.elf
+*.hex
+*.lss
+*.lst
+*.map
+*.sym
+nppp.sitzung
